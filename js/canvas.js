@@ -1,7 +1,7 @@
 var ctx;
 var activeCanvas = false;
 
-if ((document.location.href).indexOf("?edit/") === -1) {
+if (!window.location.search.match(/edit/)) {
 
   function createCanvas(parent, width, height) {
     var canvas = {};

@@ -12,9 +12,21 @@
     })
   }
 
-
   if (window.location.search.match(/edit/)) {
 
+    // Call the nicEdit
+    // It doesn't work for a new slide
+    // Make it more abstract
+   bkLib.onDomLoaded(function() {
+      var myNicEditor = new nicEditor();
+      myNicEditor.setPanel('myNicPanel');
+      for (var k = 1; k < 5; k++) {
+        myNicEditor.addInstance('slide' + k);
+      }
+    });
+
+
+    iAPI.showMenu();
     builder.init({
       "goto": iAPI['goto'], //it makes me feel better this way
       creationFunction: iAPI.newStep, //future API method that adds a new step
@@ -30,18 +42,15 @@
 
     }
 
-    if (!window.location.search.match(/preview/)) {
-      iAPI.showMenu();
-    }
-
+    // if (!window.location.search.match(/preview/)) {
+    //   iAPI.showMenu();
+    // }
 
     document.addEventListener("keydown", function (event) {
       
       // Escape button
       if (event.keyCode == 27) {
-
         iAPI.goto("overview");
-
         event.preventDefault();
       }
     }, false);
@@ -82,11 +91,9 @@
   //     timerDom.innerHTML = durationToStr();
   // }, 1000);
 
-
   if ("ontouchstart" in document.documentElement) {
     document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
   }
-
 
   if (window.location.search.match(/print/)) {
     window.print();

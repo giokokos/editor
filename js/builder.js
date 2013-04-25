@@ -147,13 +147,22 @@ builder = (function () {
     $overview = $('#overview');
 
     $menu = $('<div></div>').addClass('builder-main');
-    $('<div></div>').addClass('builder-bt bt-add').appendTo($menu).text('Add new').on('click', addSlide);
+   // $('<div></div>').addClass('builder-bt bt-add').appendTo($menu).text('Add new').on('click', addSlide);
+    $('<div></div>').addClass('builder-bt bt-save').appendTo($menu).text('Save').on('click', saveContent);
     $('<div></div>').addClass('builder-bt bt-overview').appendTo($menu).text('Overview').on('click', function () {
       config['goto']('overview');
     });
-    $('<div></div>').addClass('builder-bt bt-download').appendTo($menu).text('Get file').on('click', downloadResults);
+    $('<div></div>').addClass('builder-bt bt-settings').appendTo($menu).text('Settings').on('click', setMisc);
+
+    // It was Get File
+    $('<div></div>').addClass('builder-bt bt-download').appendTo($menu).text('Export').on('click', downloadResults);
     // $('<div></div>').addClass('builder-bt bt-download').appendTo($menu).text('style.css').on('click',downloadStyle);
 
+    //Add slide button, + plus sign
+    $('<span></span>').html('+').addClass('plus').wrap('<div/>').parent().addClass('bt-add-slide').appendTo('body').on('click', addSlide);
+
+    //Add return to presentation mode button
+    $('<span></span>').html('Presentation').wrap('<a href="#">◄ </a>').parent().addClass('back-button').appendTo('body').on('click', gotoPresentation);
 
     var $c = $('<div></div>').addClass('bt-text').appendTo($menu);
 
@@ -202,11 +211,16 @@ builder = (function () {
 
     $controls = $('<div></div>').addClass('builder-controls').hide();
 
+    $('<div></div>').addClass('bt-delete').attr('title', 'Delete').click(deleteContents).appendTo($controls);
+    // TO DO
+    // implement the delete function
+
     $('<div></div>').addClass('bt-move').attr('title', 'Move').data('func', 'move').appendTo($controls);
     $('<div></div>').addClass('bt-rotate').attr('title', 'Rotate').data('func', 'rotate').appendTo($controls);
     $('<div></div>').addClass('bt-scale').attr('title', 'Scale').data('func', 'scale').appendTo($controls);
 
-    $('<span></span>').addClass('builder-bt').text('Edit').appendTo($controls).click(editContents);
+
+    //$('<span></span>').addClass('builder-bt').text('Edit').appendTo($controls).click(editContents);
     //$('<span></span>').addClass('builder-bt').text('Wrap').appendTo($controls).click(wrapContents);
 
 
@@ -274,6 +288,7 @@ builder = (function () {
   })()
 
     function addSlide() {
+      console.log('add')
       //query slide id
       var id, $step;
       id = 'builderAutoSlide' + sequence();
@@ -391,6 +406,26 @@ builder = (function () {
       $("#ms").attr("value", state.data.scale || 0);
     }
 
+    // TO DO
+
+    function deleteContents() {
+      // code
+    }
+
+    function saveContent () {
+      // code
+    }
+
+    function setMisc () {
+      // code
+    }
+
+    function gotoPresentation () {
+      var re = /([^?]+).*/;
+      var result = re.exec(document.location.href);
+      document.location.href = result[1];
+    }
+
 
     function loadData() {
       //state.data=state.$node[0].dataset;
@@ -450,7 +485,6 @@ builder = (function () {
     function handleMouseMove(e) {
       e.preventDefault();
       e.stopPropagation();
-
 
       var x = e.pageX - mouse.prevX,
         y = e.pageY - mouse.prevY;

@@ -925,13 +925,37 @@
     var timer = null;
     return function () {
       var context = this,
-        args = arguments;
+          args = arguments;
       clearTimeout(timer);
       timer = setTimeout(function () {
         fn.apply(context, args);
       }, delay);
     };
   };
+
+
+/* TESTING -> DELETE */
+  // document.addEventListener("click", function (event) {
+  //     var target = event.target;
+  //   //  console.log(target)
+
+  //     // find closest step element that is not active
+  //     while (!(target.classList.contains("step") )) {
+  //       target = target.parentNode;
+  //       console.log(target);
+  //     }
+      
+  //     bkLib.onDomLoaded(function(){
+  //       target.addEvent('focus', function() {
+  //         console.log('WORKS!!!');
+  //       });
+  //     });
+
+  //     // if (api.goto(target)) {
+  //     //   event.preventDefault();
+  //     // }
+  //   }, false);
+  /* TESTING -> DELETE */
 
   // wait for impress.js to be initialized
   document.addEventListener("impress:init", function (event) {
@@ -945,6 +969,17 @@
 
     // Prevent default keydown action when one of supported key is pressed.
     document.addEventListener("keydown", function (event) {
+      // PATCH for input elements
+      var target = event.target;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+        return;
+      } // END PATCH
+
+       // PATCH for editing slides
+      if (target.classList.contains('nicEdit-selected')) {
+        return;
+      } // END PATCH
+
       if (event.keyCode === 9 || (event.keyCode >= 32 && event.keyCode <= 34) || (event.keyCode >= 37 && event.keyCode <= 40)) {
         event.preventDefault();
       }
@@ -966,6 +1001,18 @@
     //   as another way to moving to next step... And yes, I know that for the sake of
     //   consistency I should add [shift+tab] as opposite action...
     document.addEventListener("keyup", function (event) {
+      
+      // PATCH for input elements
+      var target = event.target;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+        return;
+      } // END PATCH
+
+      // PATCH for editing slides
+      if (target.classList.contains('nicEdit-selected')) {
+        return;
+      } // END PATCH
+
       if (event.keyCode === 9 || (event.keyCode >= 32 && event.keyCode <= 34) || (event.keyCode >= 37 && event.keyCode <= 40)) {
         switch (event.keyCode) {
         case 33:
