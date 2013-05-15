@@ -64,7 +64,14 @@ body {
 
   color: #000;
 
-  background-color: #C9E6ED;
+  background: #feffff; /* Old browsers */
+  background: -moz-radial-gradient(center, ellipse cover,  #feffff 0%, #ddf1f9 35%, #a0d8ef 100%); /* FF3.6+ */
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#feffff), color-stop(35%,#ddf1f9), color-stop(100%,#a0d8ef)); /* Chrome,Safari4+ */
+  background: -webkit-radial-gradient(center, ellipse cover,  #feffff 0%,#ddf1f9 35%,#a0d8ef 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-radial-gradient(center, ellipse cover,  #feffff 0%,#ddf1f9 35%,#a0d8ef 100%); /* Opera 12+ */
+  background: -ms-radial-gradient(center, ellipse cover,  #feffff 0%,#ddf1f9 35%,#a0d8ef 100%); /* IE10+ */
+  background: radial-gradient(ellipse at center,  #feffff 0%,#ddf1f9 35%,#a0d8ef 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#a0d8ef',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
   -webkit-font-smoothing: antialiased;
 }
@@ -534,11 +541,11 @@ rect:hover {stroke:#fff;}
 .step.flash.future {opacity:0}
 .step.flash.past {opacity:0}
 
-.menu-item {font-size:0.5em}
+.menu-item {font-size:0.7em}
 .menu-item:target {text-decoration: underline}
 .menu-item {display:inline}
 .menu {position: absolute; bottom: 0;}
-.menu-button iframe {width:200px; height:200px; }
+.menu-button iframe {width:200px; height:200px;}
 .menu-item {opacity:0.25}
 .menu-item.past {opacity:0.5}
 .menu-item.present {opacity:1}

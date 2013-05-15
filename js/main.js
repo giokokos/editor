@@ -20,6 +20,7 @@
    bkLib.onDomLoaded(function() {
       var myNicEditor = new nicEditor();
       myNicEditor.setPanel('myNicPanel');
+      // make the nicEdit to work for arbitrary ids
       for (var k = 1; k < 5; k++) {
         myNicEditor.addInstance('slide' + k);
       }
@@ -31,6 +32,8 @@
       "goto": iAPI['goto'], //it makes me feel better this way
       creationFunction: iAPI.newStep, //future API method that adds a new step
       redrawFunction: iAPI.initStep, //future API method that (re)draws the step
+      deleteStep:iAPI.deleteStep,
+      showMenu: iAPI.showMenu,
       setTransformationCallback: iAPI.setTransformationCallback //future API method that lets me know when transformations change
     });
   } else {

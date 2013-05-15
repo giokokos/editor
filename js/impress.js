@@ -437,6 +437,20 @@
       transformationCallback = callback;
     }
 
+    //function to delete a step, by number, id or dom
+    var deleteStep = function(callback){
+      var fhalf,shalf,i;
+    //  console.log(getStep(callback));
+      for (i in steps){
+        if(getStep(callback)==steps[i]){
+          fhalf=steps.slice(0,i)
+          shalf=steps.slice(i*1+1,steps.length);
+          steps=fhalf.concat(shalf);
+          
+        }
+      }
+    }
+
     // `goto` API function that moves to step given with `el` parameter (by index, id or element),
     // with a transition `duration` optionally given as second parameter.
     var goto = function (el, duration) {
@@ -625,6 +639,7 @@
       arrayify(byId('impress').firstElementChild.children).forEach(function (child, index) {
 
         if (!child.classList.contains('step')) return;
+        if (child.getAttribute('id') == 'overview') return;
 
         var newEl = el.cloneNode(),
           i = index + 1, // We don't want to start at 0
@@ -641,8 +656,10 @@
             goto(index);
           });
           newEl.addEventListener('mouseover', function () {
-            var baseURL = document.URL.substring(0, document.URL.search('#/'));
-            button.innerHTML = '<iframe src="' + baseURL + "?preview#/" + id + '">';
+            var baseURL = document.URL.substring(0, document.URL.search('/?edit'));
+            // get the url with a ? at the end
+            // so no need of ?preview
+            button.innerHTML = '<iframe src="' + baseURL + "preview#/" + id + '">';
           });
           newEl.addEventListener('mouseout', function () {
             button.innerHTML = "";
@@ -898,6 +915,7 @@
       initStep: initStep,
       newStep: newStep,
       setTransformationCallback: setTransformationCallback,
+      deleteStep:deleteStep,
       showMenu: showMenu
     });
 
@@ -933,30 +951,6 @@
     };
   };
 
-
-/* TESTING -> DELETE */
-  // document.addEventListener("click", function (event) {
-  //     var target = event.target;
-  //   //  console.log(target)
-
-  //     // find closest step element that is not active
-  //     while (!(target.classList.contains("step") )) {
-  //       target = target.parentNode;
-  //       console.log(target);
-  //     }
-      
-  //     bkLib.onDomLoaded(function(){
-  //       target.addEvent('focus', function() {
-  //         console.log('WORKS!!!');
-  //       });
-  //     });
-
-  //     // if (api.goto(target)) {
-  //     //   event.preventDefault();
-  //     // }
-  //   }, false);
-  /* TESTING -> DELETE */
-
   // wait for impress.js to be initialized
   document.addEventListener("impress:init", function (event) {
     // Getting API from event data.
@@ -969,8 +963,10 @@
 
     // Prevent default keydown action when one of supported key is pressed.
     document.addEventListener("keydown", function (event) {
-      // PATCH for input elements
+      
       var target = event.target;
+
+      // PATCH for input elements
       if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
         return;
       } // END PATCH
@@ -1002,8 +998,9 @@
     //   consistency I should add [shift+tab] as opposite action...
     document.addEventListener("keyup", function (event) {
       
-      // PATCH for input elements
       var target = event.target;
+
+      // PATCH for input elements
       if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
         return;
       } // END PATCH

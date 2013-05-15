@@ -5,7 +5,10 @@ builder = (function () {
     data: {
       x: 0,
       y: 0,
+      z:0, //new
       rotate: 0,
+      rotateX:0, //new
+      rotateY:0, //new
       scale: 0
     }
   },
@@ -21,6 +24,7 @@ builder = (function () {
     defaults = {
       x: 0,
       y: 0,
+      z: 0, //new
       rotate: 0,
       scale: 1
     },
@@ -35,7 +39,7 @@ builder = (function () {
     $menu, $controls, $controls2, $impress, $overview;
 
   selection.hasstate = function (s) {
-    console.log('Checking ' + s.$node.attr('id'));
+    //console.log('Checking ' + s.$node.attr('id'));
     for (var i = 0; i < this.length; i++) {
       if (this[i].$node.attr('id') === s.$node.attr('id'))
         return true;
@@ -122,6 +126,15 @@ builder = (function () {
     state.data.rotate -= -x * config.rotateStep % 360;
   };
 
+  //new
+  handlers.rotateX=function(x,y){
+    var v = fixVector(x, y);
+
+    // selection.length ???
+
+    state.data.rotateX += -v.y * config.rotateStep;
+    state.data.rotateY += v.x * config.rotateStep;
+  };//new
 
   function init(conf) {
     config = $.extend(config, conf);
@@ -152,7 +165,7 @@ builder = (function () {
     $('<div></div>').addClass('builder-bt bt-overview').appendTo($menu).text('Overview').on('click', function () {
       config['goto']('overview');
     });
-    $('<div></div>').addClass('builder-bt bt-settings').appendTo($menu).text('Settings').on('click', setMisc);
+    $('<div></div>').addClass('builder-bt bt-settings').appendTo($menu).text('Settings').on('click', openMyModal);
 
     // It was Get File
     $('<div></div>').addClass('builder-bt bt-download').appendTo($menu).text('Export').on('click', downloadResults);
@@ -212,13 +225,11 @@ builder = (function () {
     $controls = $('<div></div>').addClass('builder-controls').hide();
 
     $('<div></div>').addClass('bt-delete').attr('title', 'Delete').click(deleteContents).appendTo($controls);
-    // TO DO
-    // implement the delete function
 
     $('<div></div>').addClass('bt-move').attr('title', 'Move').data('func', 'move').appendTo($controls);
     $('<div></div>').addClass('bt-rotate').attr('title', 'Rotate').data('func', 'rotate').appendTo($controls);
     $('<div></div>').addClass('bt-scale').attr('title', 'Scale').data('func', 'scale').appendTo($controls);
-
+    $('<div></div>').addClass('bt-rotateX').attr('title', 'RotateX').data('func', 'rotateX').appendTo($controls);
 
     //$('<span></span>').addClass('builder-bt').text('Edit').appendTo($controls).click(editContents);
     //$('<span></span>').addClass('builder-bt').text('Wrap').appendTo($controls).click(wrapContents);
@@ -247,6 +258,8 @@ builder = (function () {
       $(document).off('mousemove.handler1');
     });
 
+
+    // MULTIPLE SELECTION OF STEPS
     $('body').on('mouseenter', '.step', function (e) {
       var shift = (e.shiftKey == 1);
       var $t = $(this);
@@ -281,24 +294,26 @@ builder = (function () {
   }
 
   var sequence = (function () {
-    var s = 2;
+    var s = 1;
     return function () {
       return s++;
     }
   })()
 
     function addSlide() {
-      console.log('add')
+      //console.log('add')
       //query slide id
       var id, $step;
-      id = 'builderAutoSlide' + sequence();
+      id = 'NewSlide' + sequence();
       $step = $('<div></div>').addClass('step builder-justcreated').html('<h1>This is a new step. </h1> How about some contents?');
       $step[0].id = id;
-      $step[0].dataset.scale = 3;
+      $step[0].dataset.scale = 2;
+      //console.log($('.step:last'))
+      // works when the overview div is the first child of impress main div
       $step.insertAfter($('.step:last')); //not too performant, but future proof
       config.creationFunction($step[0]);
-      // jump to the overview slide to make some room to look around
-      config['goto']('overview');
+      // jump to the new slide to make some room to look around
+      config['goto']($step[0]);
     }
 
 
@@ -409,18 +424,95 @@ builder = (function () {
     // TO DO
 
     function deleteContents() {
-      // code
+
+      var el = state.$node[0];
+
+      if(el.getAttribute("id") !== "overview") {
+        var r = confirm("Are you sure you want to delete this slide?");
+
+        //console.log($(this))
+        if (r == true) {
+          config.deleteStep(el.getAttribute("id"));
+          //console.log(  config)
+          el.remove();
+          // make showmenu not to display the deleted slides
+          config.showMenu();
+
+          config['goto']("overview");
+        }
+      }
+
+
     }
 
     function saveContent () {
       // code
     }
 
-    function setMisc () {
-      // code
+
+    var modalWindow = {  
+      parent:"body",  
+      windowId:null,  
+      content:null,  
+      width:null,  
+      height:null,  
+      close:function()  
+      {  
+          $(".modal-window").remove();  
+          $(".modal-overlay").remove();  
+      },  
+      open:function()  
+      {  
+          var modal = "";  
+          modal += "<div class=\"modal-overlay\"></div>";  
+          modal += "<div id=\"" + this.windowId + "\" class=\"modal-window\" style=\"width:" + this.width + "px; height:" + this.height + "px; margin-top:-" + (this.height / 2) + "px; margin-left:-" + (this.width / 2) + "px; background: #fff;\">";  
+          modal += this.content;  
+          modal += "</div>";      
+    
+          $(this.parent).append(modal);  
+    
+          $(".modal-window").append("<a class=\"close-window\"></a>");  
+          $(".close-window").click(function(){modalWindow.close();});  
+          $(".modal-overlay").click(function(){modalWindow.close();});  
+      }  
+    }; 
+
+
+
+    // Modal window with Color Background 
+    // TO DO add the position of steps
+    function openMyModal () {
+
+      modalWindow.windowId = "myModal";  
+      modalWindow.width = 850;  
+      modalWindow.height = 505;  
+      modalWindow.content = "<div class=\"theme\">Theme <span><img data-color=\"black\" src=\"http://placehold.it/150x170/595A59\">";
+      modalWindow.content += "<img data-color=\"blue\" src=\"http://placehold.it/150x170/D9EFF8\"><img data-color=\"silver\" src=\"http://placehold.it/150x170/EFF2D9\">";
+      modalWindow.content += "<img data-color=\"white\" src=\"http://placehold.it/150x170/FAFAFA\"><img data-color=\"yellow\" src=\"http://placehold.it/150x170/F9EFA9\">";
+      modalWindow.content += "</span></div>";
+      modalWindow.open();  
+
+      $(".theme span").delegate('img', 'click', function() {
+        
+       var $body = $("body"),
+        currentColor = $body.data("currentColor"),
+        newColor = $(this).data("color");
+
+        $body.removeClass(currentColor);
+
+        if (currentColor === newColor)
+            $body.data("currentColor","none");
+        else
+          $body.addClass(newColor).data("currentColor", newColor);
+
+      });
     }
 
+
+    // go to presentation mode 
+    // remove the query from the url
     function gotoPresentation () {
+
       var re = /([^?]+).*/;
       var result = re.exec(document.location.href);
       document.location.href = result[1];
@@ -434,8 +526,11 @@ builder = (function () {
 
       state.data.x = parseFloat(state.$node[0].dataset.x) || defaults.x;
       state.data.y = parseFloat(state.$node[0].dataset.y) || defaults.y;
+      state.data.z=parseFloat(state.$node[0].dataset.z) || defaults.z; //new   
       state.data.scale = parseFloat(state.$node[0].dataset.scale) || defaults.scale;
       state.data.rotate = parseFloat(state.$node[0].dataset.rotate) || defaults.rotate;
+      state.data.rotateX=parseFloat(state.$node[0].dataset.rotateX) || defaults.rotate; //new
+      state.data.rotateY=parseFloat(state.$node[0].dataset.rotateY) || defaults.rotate; //new
 
     }
 
@@ -451,14 +546,18 @@ builder = (function () {
             selection[i].$node[0].dataset.rotate = selection[i].data.rotate;
             selection[i].$node[0].dataset.scale = selection[i].data.scale;
 
+
             config.redrawFunction(selection[i].$node[0]);
           }
         }
 
         state.$node[0].dataset.scale = state.data.scale;
         state.$node[0].dataset.rotate = state.data.rotate;
+        state.$node[0].dataset.rotateX = state.data.rotateX; //new
+        state.$node[0].dataset.rotateY = state.data.rotateY; //new
         state.$node[0].dataset.x = state.data.x;
         state.$node[0].dataset.y = state.data.y;
+        state.$node[0].dataset.z = state.data.z; //new
         /**/
         //console.log(state.data,state.$node[0].dataset,state.$node[0].dataset===state.data);
 
