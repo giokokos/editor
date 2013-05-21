@@ -1,4 +1,7 @@
 builder = (function () {
+
+  'use strict';
+  
   var state = {
     editing: false,
     $node: false,
@@ -36,7 +39,7 @@ builder = (function () {
     handlers = {},
     redrawTimeout,
     //nodes
-    $menu, $controls, $controls2, $impress, $overview;
+    $menu, $controls, $controls2, $impress, $overview, $sliders;
 
   selection.hasstate = function (s) {
     //console.log('Checking ' + s.$node.attr('id'));
@@ -159,6 +162,20 @@ builder = (function () {
     $impress = $('#impress');
     $overview = $('#overview');
 
+    $sliders = $('<div></div>').addClass('sliders');
+    $('<p>Controls 1</p>').addClass('toggle-control').appendTo($sliders).on('click', notify);
+    $('<div></div>').addClass('target-div').append('<input type="range" name="quantity" min="1" max="10">')
+                                           .append('<input type="range" name="quantity" min="1" max="10">')
+                                           .append('<input type="range" name="quantity" min="1" max="10">')
+                                           .appendTo($sliders);
+
+    $('<p>Controls 2</p>').addClass('toggle-control').appendTo($sliders).on('click', notify);
+    $('<div></div>').addClass('target-div').append('<input type="range" name="quantity" min="1" max="10">')
+                                           .append('<input type="range" name="quantity" min="1" max="10">')
+                                           .append('<input type="range" name="quantity" min="1" max="10">')
+                                           .appendTo($sliders);
+
+
     $menu = $('<div></div>').addClass('builder-main');
    // $('<div></div>').addClass('builder-bt bt-add').appendTo($menu).text('Add new').on('click', addSlide);
     $('<div></div>').addClass('builder-bt bt-save').appendTo($menu).text('Save').on('click', saveContent);
@@ -221,6 +238,7 @@ builder = (function () {
 
     $menu.appendTo('body');
 
+    $sliders.appendTo('body');
 
     $controls = $('<div></div>').addClass('builder-controls').hide();
 
@@ -292,6 +310,13 @@ builder = (function () {
 
 
   }
+
+
+  function notify () {
+    console.log('hey')
+    $(".target-div").hide();
+    $(this).next().show();
+  };
 
   var sequence = (function () {
     var s = 1;
@@ -378,7 +403,7 @@ builder = (function () {
         }
         e.stopPropagation();
       });
-      $t.after($txt.val(content));
+      $t.after($txt.val(content));   
 
     }
 
@@ -458,22 +483,22 @@ builder = (function () {
       height:null,  
       close:function()  
       {  
-          $(".modal-window").remove();  
-          $(".modal-overlay").remove();  
+        $(".modal-window").remove();  
+        $(".modal-overlay").remove();  
       },  
       open:function()  
       {  
-          var modal = "";  
-          modal += "<div class=\"modal-overlay\"></div>";  
-          modal += "<div id=\"" + this.windowId + "\" class=\"modal-window\" style=\"width:" + this.width + "px; height:" + this.height + "px; margin-top:-" + (this.height / 2) + "px; margin-left:-" + (this.width / 2) + "px; background: #fff;\">";  
-          modal += this.content;  
-          modal += "</div>";      
-    
-          $(this.parent).append(modal);  
-    
-          $(".modal-window").append("<a class=\"close-window\"></a>");  
-          $(".close-window").click(function(){modalWindow.close();});  
-          $(".modal-overlay").click(function(){modalWindow.close();});  
+        var modal = "";  
+        modal += "<div class=\"modal-overlay\"></div>";  
+        modal += "<div id=\"" + this.windowId + "\" class=\"modal-window\" style=\"width:" + this.width + "px; height:" + this.height + "px; margin-top:-" + (this.height / 2) + "px; margin-left:-" + (this.width / 2) + "px; background: #fff;\">";  
+        modal += this.content;  
+        modal += "</div>";      
+  
+        $(this.parent).append(modal);  
+  
+        $(".modal-window").append("<a class=\"close-window\"></a>");  
+        $(".close-window").click(function(){modalWindow.close();});  
+        $(".modal-overlay").click(function(){modalWindow.close();});  
       }  
     }; 
 
@@ -501,12 +526,13 @@ builder = (function () {
         $body.removeClass(currentColor);
 
         if (currentColor === newColor)
-            $body.data("currentColor","none");
+          $body.data("currentColor","none");
         else
           $body.addClass(newColor).data("currentColor", newColor);
 
       });
     }
+
 
 
     // go to presentation mode 

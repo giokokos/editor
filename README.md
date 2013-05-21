@@ -8,9 +8,7 @@ GUI Editor for [impress.js](https://github.com/bartaz/impress.js/issues/5).
 
 There is an [About](https://github.com/giokokos/editor/wiki/About) page too.
 
-**NOTE** 
-
-Everything is done on the client side therefore there isn't any download utility for the moment. 
+**NOTE:** Everything is done on the client side therefore there isn't any download utility for the moment. 
 
 ## FEATURES
 
@@ -33,6 +31,9 @@ Everything is done on the client side therefore there isn't any download utility
 	* Scale
 * Menu of slides
 * Multiple selection of slides
+* Canvas for highlighting context on presentation mode
+
+**NOTE:** Impress.js is extended to support all these features.
 
 ## UPCOMING FEATURES
 
