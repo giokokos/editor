@@ -1,5 +1,3 @@
-
-
 /* builder4impress GUI styles */
 
 body.edit .step:hover{
@@ -21,8 +19,6 @@ body.edit .step.selected{
 .builder-main div.bt-text span {
 	padding-right:2px;
 }
-
-
 
 /* buttons */
 .builder-bt{
@@ -129,27 +125,27 @@ padding-left:0;
 
 
 .bt-move{
-  background: url(move.png) no-repeat center;
+  background: url(../img/move.png) no-repeat center;
   cursor: move;
 }
 
 .bt-rotate{
-  background: url(rotate.png) no-repeat center;
+  background: url(../img/rotate.png) no-repeat center;
   cursor: move;
 }
 
 .bt-scale{
-  background: url(scale.png) no-repeat center;
+  background: url(../img/scale.png) no-repeat center;
   cursor: move;
 }
 
 .bt-delete {
-  background: rgb(255, 129, 129) url(delete.png) no-repeat center;  
+  background: rgb(255, 129, 129) url(../img/delete.png) no-repeat center;  
   cursor: pointer;
 }
 
 .bt-rotateX { 
-  background: url(move.png) no-repeat center;
+  background: url(../img/move.png) no-repeat center;
   cursor: pointer;
 }
 
@@ -309,7 +305,7 @@ a.back-button:hover {
     height:32px;  
     right:8px;  
     top:8px;  
-    background:transparent url('close-button.png') no-repeat scroll right top;  
+    background:transparent url('../img/close-button.png') no-repeat scroll right top;  
     text-indent:-99999px;  
     overflow:hidden;  
     cursor:pointer;  
@@ -398,8 +394,6 @@ a.back-button:hover {
   background: -o-radial-gradient(center, ellipse cover,  #7d7e7d 0%,#0e0e0e 100%); /* Opera 12+ */
   background: -ms-radial-gradient(center, ellipse cover,  #7d7e7d 0%,#0e0e0e 100%); /* IE10+ */
   background: radial-gradient(ellipse at center,  #7d7e7d 0%,#0e0e0e 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-
 }
 
 .blue {
@@ -410,7 +404,6 @@ a.back-button:hover {
   background: -o-radial-gradient(center, ellipse cover,  #feffff 0%,#ddf1f9 35%,#a0d8ef 100%); /* Opera 12+ */
   background: -ms-radial-gradient(center, ellipse cover,  #feffff 0%,#ddf1f9 35%,#a0d8ef 100%); /* IE10+ */
   background: radial-gradient(ellipse at center,  #feffff 0%,#ddf1f9 35%,#a0d8ef 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#a0d8ef',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
 .silver {
@@ -421,7 +414,6 @@ a.back-button:hover {
   background: -o-radial-gradient(center, ellipse cover,  #feffe8 0%,#d6dbbf 100%); /* Opera 12+ */
   background: -ms-radial-gradient(center, ellipse cover,  #feffe8 0%,#d6dbbf 100%); /* IE10+ */
   background: radial-gradient(ellipse at center,  #feffe8 0%,#d6dbbf 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffe8', endColorstr='#d6dbbf',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
 .white {
@@ -432,7 +424,6 @@ a.back-button:hover {
   background: -o-radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%,rgba(225,225,225,1) 0%,rgba(246,246,246,1) 0%,rgba(241,241,241,1) 19%); /* Opera 12+ */
   background: -ms-radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%,rgba(225,225,225,1) 0%,rgba(246,246,246,1) 0%,rgba(241,241,241,1) 19%); /* IE10+ */
   background: radial-gradient(ellipse at center,  rgba(255,255,255,1) 0%,rgba(225,225,225,1) 0%,rgba(246,246,246,1) 0%,rgba(241,241,241,1) 19%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f1f1f1',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
 .yellow {
@@ -443,6 +434,4 @@ a.back-button:hover {
   background: -o-radial-gradient(center, ellipse cover,  rgba(254,252,234,1) 0%,rgba(241,218,54,1) 100%); /* Opera 12+ */
   background: -ms-radial-gradient(center, ellipse cover,  rgba(254,252,234,1) 0%,rgba(241,218,54,1) 100%); /* IE10+ */
   background: radial-gradient(ellipse at center,  rgba(254,252,234,1) 0%,rgba(241,218,54,1) 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fefcea', endColorstr='#f1da36',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-
 }

@@ -1,14 +1,7 @@
-/*
-  
-  author: Georgios Kokosioulis
-
-  Editor based on impress.js for ASQ project
-
-*/
-
-
-
 builder = (function () {
+
+  'use strict';
+  
   var state = {
     editing: false,
     $node: false,
