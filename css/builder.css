@@ -352,6 +352,38 @@ a.back-button:hover {
   white-space:nowrap;
 }
 
+/*
+  Sliders
+*/
+
+.sliders {
+  color: #fff;
+  width: 150px;
+  text-align: center;
+  position: absolute;
+  top: 200;
+  left: 0;
+  padding: 10px;
+  margin: 10px;
+  z-index: 10;
+  background: rgba(0,0,0,.2);
+  opacity: 1;
+  font-size: 17px;
+  border-radius: 2px;
+  border: 1px solid rgba(0,0,0,.1);
+}
+
+.sliders input {
+  margin: 5 0;
+}
+
+.target-div {
+    display: none;
+}
+
+.toggle-control {
+    cursor: pointer;
+}
 
 /* 
   Theme classes 
