@@ -161,7 +161,7 @@ builder = (function () {
 
     $impress = $('#impress');
     $overview = $('#overview');
-
+/*
     $sliders = $('<div></div>').addClass('sliders');
     $('<p>Controls 1</p>').addClass('toggle-control').appendTo($sliders).on('click', notify);
     $('<div></div>').addClass('target-div').append('<input type="range" name="quantity" min="1" max="10">')
@@ -174,7 +174,7 @@ builder = (function () {
                                            .append('<input type="range" name="quantity" min="1" max="10">')
                                            .append('<input type="range" name="quantity" min="1" max="10">')
                                            .appendTo($sliders);
-
+*/
 
     $menu = $('<div></div>').addClass('builder-main');
    // $('<div></div>').addClass('builder-bt bt-add').appendTo($menu).text('Add new').on('click', addSlide);
@@ -238,7 +238,7 @@ builder = (function () {
 
     $menu.appendTo('body');
 
-    $sliders.appendTo('body');
+//    $sliders.appendTo('body');
 
     $controls = $('<div></div>').addClass('builder-controls').hide();
 
