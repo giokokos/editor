@@ -2,9 +2,12 @@
 
 GUI Editor for [impress.js](https://github.com/bartaz/impress.js/issues/5).
 
-(There will be an online version of this soon)
+There is now an online version (may include work in progress). 
 
-> Add the `?edit` query after the .html extension to redirect you to the editing mode.
+[Editor demo](http://giokokos.github.io/editor/demo.html?edit)
+
+
+> Add the `?edit` query after the .html extension to redirect you at the editing mode.
 
 There is an [About](https://github.com/giokokos/editor/wiki/About) page too.
 
