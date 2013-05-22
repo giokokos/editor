@@ -1,6 +1,6 @@
 ## ABOUT
 
-GUI Editor for [impress.js](https://github.com/bartaz/impress.js/issues/5).
+GUI Editor for [impress.js](https://github.com/bartaz/impress.js/).
 
 There is now an online version (may include work in progress). 
 
