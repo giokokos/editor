@@ -37,13 +37,13 @@
       setTransformationCallback: iAPI.setTransformationCallback //future API method that lets me know when transformations change
     });
   } else {
-    if (!window.location.search.match(/print/)) {
-      if (hljs) {
-        hljs.initHighlightingOnLoad();
-      }
-      //impressConsole().init();
+    // if (!window.location.search.match(/print/)) {
+    //   if (hljs) {
+    //     hljs.initHighlightingOnLoad();
+    //   }
+    //   //impressConsole().init();
 
-    }
+    // }
 
     // if (!window.location.search.match(/preview/)) {
     //   iAPI.showMenu();
