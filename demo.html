@@ -1,0 +1,98 @@
+<html lang="en" style="height: 100%;">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Editor Demo</title>
+  <meta name="description" content="Impress.js Editor">
+  <meta name="author" content="George Kokosioulis">
+  <link href="css/logoAnim.css" rel="stylesheet">
+  <link href="css/default.css" rel="stylesheet">
+  <link href="css/builder.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+  </div>
+
+  <div id="canvas"></div> <!-- Init canvas -->
+  <div id="myNicPanel" ></div> <!-- Init nicEdit -->
+
+  <div id="impress" data-transition-duration="500">
+
+    <div id="overview" class="step" data-x="2000" data-y="1000" data-scale="4.5"></div>
+
+    <div id="slide1" class="step" data-x="0" data-y="845" data-scale="1" data-rotate="0">
+      <div style="text-align:center">
+        <div id="welcomeScreen" class="modal hide fade" tabindex="-1" data-focus-on="input:first" style="pointer-events: auto;">
+          <div class="modal-header">
+            <div id="logocontainer">
+              <div class="lettercontainer" id="a">
+                <p class="front">A</p>
+              </div>
+              <div class="lettercontainer" id="s">
+                <p class="front">S</p>
+              </div>
+              <div class="lettercontainer" id="q">
+                <p class="front">Q</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="slide2" class="step" data-x="-2000" data-y="845" data-z="-9000" data-scale="0.2" data-rotate-y="0">
+       <h3>Wysiwyg Editor For Impress</h3>
+
+      <ul>
+        <li>v0.2 Developed by Giorgos Kokosioulis</li>
+        <li>Features
+          <ul>
+            <li>Added delete function</li>
+            <li>Added themes</li>
+            <li>Added 3D dimension</li>
+            <li>Added multiple slide selection</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div id="slide3" class="step" data-x="3000" data-y="-1700" data-scale="1" data-rotate="90">
+      <h3>TO DO</h3>
+
+      <ul>
+        <li>Integration with ASQ</li>
+        <li>Add more features</li>
+        <li><a href="https://github.com/giokokos/editor">@github</a></li>
+      </ul>
+    </div>
+
+    <div id="slide4" class="step" data-x="2000" data-y="1845" data-scale="1" data-rotate="0">
+       <h3>DEMO</h3>
+       <p>Enjoy!</p>
+    </div>
+
+    
+    <div class="hint">
+      <p>Use a spacebar or arrow keys to navigate</p>
+    </div>
+
+  </div>
+
+  <script src="js/jquery.js"></script>
+  <script src="js/lib/nicEdit.js"></script>
+  <script src="js/impress.js"></script>
+  <script src="js/builder.js"></script>
+  <script src="js/canvas.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/highlight.pack.js"></script>
+
+</body>
+
+</html>
+
