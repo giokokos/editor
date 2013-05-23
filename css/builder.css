@@ -16,9 +16,6 @@ body.edit .step.selected{
 .builder-main div.bt-text {
 	width:100%;
 }
-.builder-main div.bt-text span {
-	padding-right:2px;
-}
 
 /* buttons */
 .builder-bt{
@@ -45,7 +42,7 @@ font-size:10pt;
 text-align:left;
 margin:0;
 padding:0;
-width: 80px;
+width: 85px;
 padding-left:0;
 }
 
@@ -56,7 +53,7 @@ padding-left:0;
 .builder-main {
   background-color: #222;
   color: #fff;
-  width: 100px;
+  width: 110px;
   text-align: center;
   position: absolute;
   top: 0;
@@ -140,13 +137,18 @@ padding-left:0;
 }
 
 .bt-delete {
-  background: rgb(255, 129, 129) url(../img/delete.png) no-repeat center;  
+ /* background: rgb(255, 129, 129) url(../img/delete.png) no-repeat center;  */
   cursor: pointer;
+  background: rgb(255, 63, 63);
+}
+
+.bt-delete:hover {
+background:rgb(255, 108, 108);
 }
 
 .bt-rotateX { 
   background: url(../img/move.png) no-repeat center;
-  cursor: pointer;
+  cursor: move;
 }
 
 /*.builder-controls div:before {
@@ -165,6 +167,10 @@ padding-left:0;
 
 .builder-controls span {
   display:block;
+}
+
+.bt-text span:nth-child(-n+9) {
+  padding-right: 8px;
 }
 
 .builder-justcreated {
@@ -352,12 +358,20 @@ a.back-button:hover {
   Sliders
 */
 
+.slidable {
+    border: none;
+    cursor: col-resize;
+}
+.slidable:focus {
+    border: solid 1px #000;
+    cursor: auto;
+}
+
 .sliders {
   color: #fff;
-  width: 150px;
   text-align: center;
   position: absolute;
-  top: 200;
+  top: 150;
   left: 0;
   padding: 10px;
   margin: 10px;
@@ -369,16 +383,9 @@ a.back-button:hover {
   border: 1px solid rgba(0,0,0,.1);
 }
 
-.sliders input {
-  margin: 5 0;
-}
+.bt-text input {
+  width: 60px;
 
-.target-div {
-    display: none;
-}
-
-.toggle-control {
-    cursor: pointer;
 }
 
 /* 

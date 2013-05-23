@@ -14,18 +14,17 @@
 
   if (window.location.search.match(/edit/)) {
 
+    // TO DO
     // Call the nicEdit
     // It doesn't work for a new slide
     // Make it more abstract
    bkLib.onDomLoaded(function() {
       var myNicEditor = new nicEditor();
       myNicEditor.setPanel('myNicPanel');
-      // make the nicEdit to work for arbitrary ids
       for (var k = 1; k < 5; k++) {
         myNicEditor.addInstance('slide' + k);
       }
     });
-
 
     iAPI.showMenu();
     builder.init({
