@@ -16,9 +16,6 @@ body.edit .step.selected{
 .builder-main div.bt-text {
 	width:100%;
 }
-.builder-main div.bt-text span {
-	padding-right:2px;
-}
 
 /* buttons */
 .builder-bt{
@@ -56,7 +53,7 @@ padding-left:0;
 .builder-main {
   background-color: #222;
   color: #fff;
-  width: 100px;
+  width: 110px;
   text-align: center;
   position: absolute;
   top: 0;
@@ -146,7 +143,7 @@ padding-left:0;
 
 .bt-rotateX { 
   background: url(../img/move.png) no-repeat center;
-  cursor: pointer;
+  cursor: move;
 }
 
 /*.builder-controls div:before {
@@ -165,6 +162,10 @@ padding-left:0;
 
 .builder-controls span {
   display:block;
+}
+
+.bt-text span:nth-child(-n+9) {
+  padding-right: 8px;
 }
 
 .builder-justcreated {
