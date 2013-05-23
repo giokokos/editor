@@ -39,7 +39,7 @@ builder = (function () {
     handlers = {},
     redrawTimeout,
     //nodes
-    $menu, $controls, $controls2, $impress, $overview, $sliders;
+    $menu, $controls, $impress, $overview, $sliders;
 
   selection.hasstate = function (s) {
     console.log('Checking ' + s.$node.attr('id'));
@@ -162,20 +162,6 @@ builder = (function () {
     $impress = $('#impress');
     $overview = $('#overview');
 
-    $sliders = $('<div></div>').addClass('sliders');
-    $('<div></div>').addClass('toggle-control').appendTo($sliders).text('Controls').on('click', notify);
-    $('<div></div>').addClass('target-div').append('<input type="range" name="quantity" min="1" max="10">')
-                                           .append('<input type="range" name="quantity" min="1" max="10">')
-                                           .append('<input type="range" name="quantity" min="1" max="10">')
-                                           .appendTo($sliders);
-
-    // $('<p>Controls 2</p>').addClass('toggle-control').appendTo($sliders).on('click', notify);
-    // $('<div></div>').addClass('target-div').append('<input type="range" name="quantity" min="1" max="10">')
-    //                                        .append('<input type="range" name="quantity" min="1" max="10">')
-    //                                        .append('<input type="range" name="quantity" min="1" max="10">')
-    //                                        .appendTo($sliders);
-
-
     $menu = $('<div></div>').addClass('builder-main');
    // $('<div></div>').addClass('builder-bt bt-add').appendTo($menu).text('Add new').on('click', addSlide);
     $('<div></div>').addClass('builder-bt bt-save').appendTo($menu).text('Save').on('click', saveContent);
@@ -188,86 +174,171 @@ builder = (function () {
     $('<div></div>').addClass('builder-bt bt-download').appendTo($menu).text('Export').on('click', downloadResults);
     // $('<div></div>').addClass('builder-bt bt-download').appendTo($menu).text('style.css').on('click',downloadStyle);
 
+    $('<div></div>').addClass('builder-bt bt-delete').appendTo($menu).text('Delete').on('click', deleteContents);
+
     //Add slide button, + plus sign
     $('<span></span>').html('+').addClass('plus').wrap('<div/>').parent().addClass('bt-add-slide').appendTo('body').on('click', addSlide);
 
     //Add return to presentation mode button
     $('<span></span>').html('Presentation').wrap('<a href="#">◄ </a>').parent().addClass('back-button').appendTo('body').on('click', gotoPresentation);
 
-    var $c = $('<div></div>').addClass('bt-text').appendTo($menu);
+   // var $c = $('<div></div>').addClass('bt-text').appendTo($menu);
 
+    $sliders = $('<div></div>').addClass('sliders');
 
+    var $c = $('<div></div>').addClass('bt-text').appendTo($sliders);
+
+    $('<p>Position</p>').appendTo($c)
     $('<span>X:</span>').appendTo($c)
-    $('<input type="text" placeholder="X">').attr('id', 'mx').addClass('bt-text').text('Edit').appendTo($c).on("keyup", function (event) {
-      if (event.keyCode == 13) {
-        //state.$node=$(".active"); loadData(); 
-        state.data.x = parseInt($("#mx").val());
-        selection.setX(state.data.x);
-        redraw();
-      }
-    });
-    $('<span>Y:</span>').appendTo($c)
-    $('<input type="text" placeholder="Y">').attr('id', 'my').addClass('bt-text').text('Edit').appendTo($c).on("keyup", function (event) {
-      if (event.keyCode == 13) {
-        //state.$node=$(".active"); loadData(); 
-        state.data.y = parseInt($("#my").val());
-        selection.setY(state.data.y);
-        redraw();
-      }
-    });
-    $('<span>Z:</span>').appendTo($c)
-    $('<input type="text" placeholder="Z">').attr('id', 'mz').addClass('bt-text').text('Edit').appendTo($c).on("keyup", function (event) {
-      if (event.keyCode == 13) {
-        //state.$node=$(".active"); loadData(); 
-        state.data.z = parseInt($("#mz").val());
-        //selection.setY(state.data.y); // TO DO
-        redraw();
-      }
-    });
-    $('<span>S:</span>').appendTo($c)
-    $('<input type="text" placeholder="S">').attr('id', 'ms').addClass('bt-text').text('Edit').appendTo($c).on("keyup", function (event) {
-      if (event.keyCode == 13) {
-        //state.$node=$(".active"); loadData(); 
-        state.data.scale = parseFloat($("#ms").val());
-        selection.setScale(state.data.scale);
-        redraw();
-      }
-    });
-    $('<span>R:</span>').appendTo($c)
-    $('<input type="text" placeholder="R">').attr('id', 'mr').addClass('bt-text').text('Edit').appendTo($c).on("keyup", function (event) {
-      if (event.keyCode == 13) {
-        //state.$node=$(".active"); loadData(); 
-        state.data.rotate = parseFloat($("#mr").val());
-        selection.setRotate(state.data.rotate);
-        redraw();
-      }
-    });
-    $('<span>Rx:</span>').appendTo($c)
-    $('<input type="text" placeholder="Rx">').attr('id', 'mrx').addClass('bt-text').text('Edit').appendTo($c).on("keyup", function (event) {
-      if (event.keyCode == 13) {
-        //state.$node=$(".active"); loadData(); 
-        state.data.rotateX = parseFloat($("#mrx").val());
-        //selection.setRotate(state.data.rotate); //TO DO
-        redraw();
-      }
-    });
-    $('<span>Ry:</span>').appendTo($c)
-    $('<input type="text" placeholder="Ry">').attr('id', 'mry').addClass('bt-text').text('Edit').appendTo($c).on("keyup", function (event) {
-      if (event.keyCode == 13) {
-        //state.$node=$(".active"); loadData(); 
-        state.data.rotateY = parseFloat($("#mry").val());
-        //selection.setRotate(state.data.rotate); //TO DO
-        redraw();
-      }
-    });
+    $('<input type="text" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="X">').attr('id', 'mx').addClass('bt-text').text('Edit').appendTo($c);
 
+    $('<span>Y:</span>').appendTo($c)
+    $('<input type="text" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="Y">').attr('id', 'my').addClass('bt-text').text('Edit').appendTo($c);
+
+    $('<span>Z:</span>').appendTo($c)
+    $('<input type="text" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="Z">').attr('id', 'mz').addClass('bt-text').text('Edit').appendTo($c);
+
+    $('<p>Scale</p>').appendTo($c)
+    $('<span>S:</span>').appendTo($c)
+    $('<input type="text" class="slidable" step="0.01" min="-100" max="100" placeholder="S">').attr('id', 'ms').addClass('bt-text').text('Edit').appendTo($c);
+
+    $('<p>Rotation</p>').appendTo($c)
+    $('<span>Rz:</span>').appendTo($c)
+    $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="R">').attr('id', 'mr').addClass('bt-text').text('Edit').appendTo($c);
+
+    $('<span>Rx:</span>').appendTo($c)
+    $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="Rx">').attr('id', 'mrx').addClass('bt-text').text('Edit').appendTo($c);
+
+    $('<span>Ry:</span>').appendTo($c)
+    $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="Ry">').attr('id', 'mry').addClass('bt-text').text('Edit').appendTo($c);
+
+
+jQuery.fn.slidingInput = function (opts) {
+
+    var defaults = {
+        step: 1, // Increment value
+        min: 0, // Minimum value
+        max: 100, // Maximum value
+        tolerance: 2 // Mouse movement allowed within a simple click
+    };
+
+    return this.each(function () {
+        var $el = $(this),
+            options = $.extend({}, defaults, opts, this),
+            distance = 0,
+            initialValue = 0;
+
+        function mouseDown() {
+            distance = 0;
+
+            if ($el.val() % 1 === 0) {
+              initialValue = parseInt($el.val(), 10);
+            }
+            else {
+              initialValue = parseFloat($el.val());
+            }
+
+            updateSync($el);
+
+            $(document).on('mousemove', mouseMove).on('mouseup', mouseUp);
+
+            return false;
+        }
+
+        function mouseMove(e) {
+
+            var currentValue;
+            if ($el.val() % 1 === 0) {
+              currentValue = parseInt($el.val(), 10);
+            }
+            else {
+              currentValue = parseFloat($el.val());
+            }
+
+           // var currentValue = parseInt($el.val(), 10),
+             var   event = e.originalEvent,
+                movementX = event.movementX || event.webkitMovementX || event.mozMovementX || 0,
+                movementY = event.movementY || event.webkitMovementY || event.mozMovementY || 0;              
+
+            distance += (movementX - movementY) * options.step;
+
+            $el.val(Math.min(options.max, Math.max(initialValue + distance, options.min)));
+
+            updateSync($el);
+
+        }
+
+        function mouseUp() {
+            $(document).off('mousemove mouseup');
+
+            if (Math.abs(distance) < options.tolerance) {
+                $el.focus();
+            }
+        }
+
+        $el.on('mousedown', mouseDown);
+    });
+};
+
+
+  function updateSync($el) {
+
+    if($el.attr('id') == 'mx') {
+
+      state.data.x = $el.val();
+      selection.setX(state.data.x);
+      redraw();
+    }
+    if ($el.attr('id') == 'my') {
+
+      state.data.y = $el.val();
+      selection.setY(state.data.y);
+      redraw();
+    }
+
+    if ($el.attr('id') == 'mz') {
+
+      state.data.z = $el.val();
+      // selection.setY(state.data.y); // TO DO
+      redraw();
+    }
+
+    if ($el.attr('id') == 'ms') {
+
+      state.data.scale = $el.val();
+      selection.setScale(state.data.scale);
+      redraw();
+    }
+
+    if ($el.attr('id') == 'mr') {
+
+      state.data.rotate = $el.val();
+      selection.setRotate(state.data.rotate);
+      redraw();
+    }
+
+    if ($el.attr('id') == 'mrx') {
+
+      state.data.rotateX = $el.val();
+      //selection.setRotate(state.data.rotate); //TO DO
+      redraw();
+    }
+
+    if ($el.attr('id') == 'mry') {
+
+      state.data.rotateY = $el.val();
+      //selection.setRotate(state.data.rotate); //TO DO
+      redraw();
+    }
+
+  }
 
 
     $menu.appendTo('body');
 
     $sliders.appendTo('body');
 
-    $controls = $('<div></div>').addClass('builder-controls').hide();
+    $controls = $('<div class="builder-controls"></div>').hide();
 
     $('<div></div>').addClass('bt-delete').attr('title', 'Delete').click(deleteContents).appendTo($controls);
 
@@ -280,10 +351,8 @@ builder = (function () {
     //$('<span></span>').addClass('builder-bt').text('Wrap').appendTo($controls).click(wrapContents);
 
 
-
-
-    //$("#my").attr("value",$(".active").attr("data-y") || 0);
-    //$("#mz").attr("value",$(".active").attr("data-z") || 0);
+    // $("#my").attr("value",$(".active").attr("data-y") || 0);
+    // $("#mz").attr("value",$(".active").attr("data-z") || 0);
 
     var showTimer;
 
@@ -291,6 +360,7 @@ builder = (function () {
       e.preventDefault();
       mouse.activeFunction = handlers[$(this).data('func')];
       loadData();
+      //console.log('loadata called')
       mouse.prevX = e.pageX;
       mouse.prevY = e.pageY;
       $(document).on('mousemove.handler1', handleMouseMove);
@@ -304,7 +374,6 @@ builder = (function () {
     });
 
 
-    // MULTIPLE SELECTION OF STEPS
     $('body').on('mouseenter', '.step', function (e) {
       var shift = (e.shiftKey == 1);
       var $t = $(this);
@@ -314,6 +383,7 @@ builder = (function () {
           state.$node = $t;
           loadData();
           showControls(state.$node);
+          // MULTIPLE SELECTION OF STEPS
           if (shift) {
             if (!selection.hasstate(state)) {
               selection.pushstate(state);
@@ -339,12 +409,6 @@ builder = (function () {
   }
 
 
-  function notify () {
-    //console.log('hey')
-    $(".target-div").hide();
-    $(this).next().show();
-  };
-
   var sequence = (function () {
     var s = 1;
     return function () {
@@ -366,6 +430,7 @@ builder = (function () {
       config.creationFunction($step[0]);
       // jump to the new slide to make some room to look around
       config['goto']($step[0]);
+
     }
 
 
@@ -458,23 +523,25 @@ builder = (function () {
 
     function showControls($where) {
       
-      var top, left, pos = $where.offset();
-      //not going out the edges (at least one way)
-      top = (pos.top > 0) ? pos.top + (100 / config.visualScaling) : 0;
-      left = (pos.left > 0) ? pos.left + (100 / config.visualScaling) : 0;
+      // var top, left, pos = $where.offset();
+      // //not going out the edges (at least one way)
+      // top = (pos.top > 0) ? pos.top + (100 / config.visualScaling) : 0;
+      // left = (pos.left > 0) ? pos.left + (100 / config.visualScaling) : 0;
 
-      $controls.show().offset({
-        top: top,
-        left: left
-      });
+      // $controls.show().offset({
+      //   top: top,
+      //   left: left
+      // });
 
-      $("#mx").attr("value", state.data.x || 0);      
-      $("#my").attr("value", state.data.y || 0);
-      $("#mz").attr("value", state.data.z || 0);
-      $("#mr").attr("value", state.data.rotate || 0);
-      $("#ms").attr("value", state.data.scale || 0);
-      $("#mrx").attr("value", state.data.rotateX || 0);
-      $("#mry").attr("value", state.data.rotateY || 0);
+      // difference between attr() and .val()
+      $("#mx").val(state.data.x || 0);      
+      $("#my").val(state.data.y || 0);
+      $("#mz").val(state.data.z || 0);
+      $("#mr").val(state.data.rotate || 0);
+      $("#ms").val(state.data.scale || 0);
+      $("#mrx").val(state.data.rotateX || 0);
+      $("#mry").val(state.data.rotateY || 0);
+
     }
 
     // TO DO
@@ -546,6 +613,7 @@ builder = (function () {
       modalWindow.content += "<img data-color=\"blue\" src=\"http://placehold.it/150x170/D9EFF8\"><img data-color=\"silver\" src=\"http://placehold.it/150x170/EFF2D9\">";
       modalWindow.content += "<img data-color=\"white\" src=\"http://placehold.it/150x170/FAFAFA\"><img data-color=\"yellow\" src=\"http://placehold.it/150x170/F9EFA9\">";
       modalWindow.content += "</span></div>";
+      modalWindow.content += "<div class=\"theme\">Layouts (upcoming) </div>";
       modalWindow.open();  
 
       $(".theme span").delegate('img', 'click', function() {
@@ -579,7 +647,6 @@ builder = (function () {
     function loadData() {
       //state.data=state.$node[0].dataset;
       //add defaults
-
 
       state.data.x = parseFloat(state.$node[0].dataset.x) || defaults.x;
       state.data.y = parseFloat(state.$node[0].dataset.y) || defaults.y;
@@ -661,3 +728,21 @@ builder = (function () {
   };
 
 })();
+
+
+// PLUGINS
+
+$(function () {
+    // Initialise plugin
+    $('.slidable').slidingInput();
+
+    // Accepts options object that override defaults, but step/min/max on input override options
+    /*
+        $('.slidable').slidingInput({
+            step: 1,
+            min: 0,
+            max: 100,
+            tolerance: 2
+        });
+    */
+});
