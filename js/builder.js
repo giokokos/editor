@@ -552,7 +552,7 @@ var builder = (function () {
       state.$node[0].dataset.rotateX = state.data.rotateX; //new
       state.$node[0].dataset.rotateY = state.data.rotateY; //new
       state.$node[0].dataset.x = state.data.x;
-      state.$node[0].dataset.y = state.data.y;
+      state.$node[0].dataset.y = state.data.y; 
       state.$node[0].dataset.z = state.data.z; //new
 
       /**/
