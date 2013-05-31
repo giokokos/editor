@@ -28,7 +28,7 @@ There is an [About](https://github.com/giokokos/editor/wiki/About) page too.
 	* changing the HTML code
 * Choose different themes
 	* Custom CSS background gradients
-* Change position of steps
+* Change position of steps (Sliders and inputs)
 	* Move 
 	* Rotate (also in 3d)
 	* Scale
@@ -40,7 +40,6 @@ There is an [About](https://github.com/giokokos/editor/wiki/About) page too.
 
 ## UPCOMING FEATURES
 
-* Sliders for changing position of slides
 * Layouts including custom algorithms
 
 ## CREDITS
