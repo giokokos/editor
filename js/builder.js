@@ -161,27 +161,9 @@ var builder = (function () {
         , offSetY = 0;//this[0].data.y;
         $.each(this, function(index, obj){
 
-           console.log({'index': index,
-                        'obj.data.x': obj.data.x,
-                        'obj.data.y': obj.data.y,
-
-
-            }) 
-
-
-
           obj.data.x = offSetX +  ((index % settings.gridSize.columns) * settings.gridSize.x); 
           obj.data.y = offSetY + ((Math.floor(index / settings.gridSize.columns)) * settings.gridSize.y);   
-
-          console.log("division: " + (index / settings.gridSize.columns));   
-           console.log("after");   
-          console.log({'index': index,
-                        'obj.data.x': obj.data.x,
-                        'obj.data.y': obj.data.y,
-
-
-            })        
-
+   
           //update node actual properties
           obj.$node[0].dataset.x = obj.data.x;
           obj.$node[0].dataset.y = obj.data.y;
