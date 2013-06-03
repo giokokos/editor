@@ -108,6 +108,93 @@ var builder = (function () {
     this.length = 0;
   }
 
+  /** @function setLayout
+  * Sets layout of slides in presentation
+  * base on predifined themes
+  */
+  selection.setLayout = function (options){
+    if(!this || this.length == 0){
+      console.log("setLayout: empty or null this, aborting");
+    }
+
+    var defaults={
+      margin:{
+        x : 0,
+        y : 0,
+      },
+      gridSize : {
+        columns : 5,
+        x       : 1500,
+        y       : 1500,
+      }
+    }
+
+    var settings = $.extend({}, defaults, options)
+    
+    switch (options.layout){
+      case 'row':
+        //use x and y of first element
+        var newX = this[0].data.x
+        , newY = this[0].data.y;
+
+        $.each(this, function(index, obj){
+          obj.data.x = newX
+          obj.data.y = newY;          
+
+          //update node actual properties
+          obj.$node[0].dataset.x = obj.data.x;
+          obj.$node[0].dataset.y = obj.data.y;
+          obj.$node[0].dataset.rotate = obj.data.rotate;
+          obj.$node[0].dataset.scale = obj.data.scale;
+
+          //prepare for next iteration
+          newX += (obj.$node.eq(0).width() + settings.margin.x);
+
+          //redraw element with external function
+          config.redrawFunction(obj.$node[0]);
+        })
+      break;
+
+      case 'grid':
+        //use x and y offsets from first element
+        var offSetX = 0//this[0].data.x
+        , offSetY = 0;//this[0].data.y;
+        $.each(this, function(index, obj){
+
+           console.log({'index': index,
+                        'obj.data.x': obj.data.x,
+                        'obj.data.y': obj.data.y,
+
+
+            }) 
+
+
+
+          obj.data.x = offSetX +  ((index % settings.gridSize.columns) * settings.gridSize.x); 
+          obj.data.y = offSetY + ((Math.floor(index / settings.gridSize.columns)) * settings.gridSize.y);   
+
+          console.log("division: " + (index / settings.gridSize.columns));   
+           console.log("after");   
+          console.log({'index': index,
+                        'obj.data.x': obj.data.x,
+                        'obj.data.y': obj.data.y,
+
+
+            })        
+
+          //update node actual properties
+          obj.$node[0].dataset.x = obj.data.x;
+          obj.$node[0].dataset.y = obj.data.y;
+          obj.$node[0].dataset.rotate = obj.data.rotate;
+          obj.$node[0].dataset.scale = obj.data.scale;
+
+           //redraw element with external function
+          config.redrawFunction(obj.$node[0]);
+        });
+      break;
+    }
+  }
+
   handlers.move = function (x, y) {
     var v = fixVector(x, y);
     if (selection.length > 1) {
@@ -471,10 +558,11 @@ var builder = (function () {
       $(this.parent).append(modal);  
 
       $(".modal-window").append("<a class=\"close-window\"></a>");  
-      $(".close-window").click(function(){modalWindow.close();});  
+      $(".close-window").click(function(e){e.stopPropagation();modalWindow.close();});  
       $(".modal-overlay").click(function(){modalWindow.close();});  
     }  
   }; 
+
 
 
   // Modal window with body background-color 
@@ -484,13 +572,22 @@ var builder = (function () {
     modalWindow.windowId = "myModal";  
     modalWindow.width = 860;  
     modalWindow.height = 515;  
-    modalWindow.content = "<div class=\"theme\">Themes <hr><span><img data-color=\"black\" src=\"http://placehold.it/150x170/595A59\">";
-    modalWindow.content += "<img data-color=\"blue\" src=\"http://placehold.it/150x170/D9EFF8\"><img data-color=\"silver\" src=\"http://placehold.it/150x170/EFF2D9\">";
-    modalWindow.content += "<img data-color=\"white\" src=\"http://placehold.it/150x170/FAFAFA\"><img data-color=\"yellow\" src=\"http://placehold.it/150x170/F9EFA9\">";
-    modalWindow.content += "</span></div>";
-    modalWindow.content += "<div class=\"theme\">Layouts <hr><span><img src=\"img/row.png\">";
-    modalWindow.content += "</span></div>";
+    modalWindow.content = '<div class="theme">Themes <hr><span><img data-color="black" src="http://placehold.it/150x170/595A59">';
+    modalWindow.content += '<img data-color="blue" src="http://placehold.it/150x170/D9EFF8"><img data-color="silver" src="http://placehold.it/150x170/EFF2D9">';
+    modalWindow.content += '<img data-color="white" src="http://placehold.it/150x170/FAFAFA"><img data-color="yellow" src="http://placehold.it/150x170/F9EFA9">';
+    modalWindow.content += '</span></div>';
+    modalWindow.content += '<div class="theme">Layouts <hr><span><img id="theme-row" src="img/row.png">';
+    modalWindow.content += '</span></div>';
     modalWindow.open();  
+
+    $('#theme-row').on('click', function(event){
+      selection.setLayout({
+        layout:'grid'
+        // margin :{
+        //   x : 100
+        // }
+      });
+    })
 
     $(".theme span").delegate('img', 'click', function() {
       
