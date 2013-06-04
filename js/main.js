@@ -1,4 +1,4 @@
-(function () {
+window.asqEditor = function () {
   'use strict';
 
   var iAPI = impress();
@@ -7,6 +7,18 @@
   // makes the element with the given id editable
   function makeEditable(id){ 
     myNicEditor.addInstance(id);
+  }
+
+  function save(){
+    var $clone = $('#impress').clone();
+    $clone
+      .removeAttr('style')
+      .find('.step')
+        .unwrap()
+        .removeClass('past present future active')
+        .removeAttr('contenteditable')
+        .removeAttr('style');
+    return ($clone.eq(0));
   }
 
   document.addEventListener("keydown", function (event) {
@@ -104,6 +116,10 @@
 
   if (window.location.search.match(/print/)) {
     window.print();
+  }
+
+  return {
+    save: save
   }
 
 }());
