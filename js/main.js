@@ -2,6 +2,20 @@
   'use strict';
 
   var iAPI = impress();
+  var myNicEditor = new nicEditor();
+
+  // makes the element with the given id editable
+  function makeEditable(id){ 
+    myNicEditor.addInstance(id);
+  }
+
+  document.addEventListener("keydown", function (event) {
+    // Escape button
+    if (event.keyCode == 27) {
+      iAPI.goto("overview");
+      event.preventDefault();
+    }
+  }, false);
 
   if (!window.location.search.match(/print/)) {
     iAPI.init();
@@ -14,17 +28,16 @@
 
   if (window.location.search.match(/edit/)) {
 
-    // TO DO
-    // Call the nicEdit
-    // It doesn't work for a new slide
-    // Make it more abstract
-   bkLib.onDomLoaded(function() {
-      var myNicEditor = new nicEditor();
-      myNicEditor.setPanel('myNicPanel');
-      for (var k = 1; k < 5; k++) {
-        myNicEditor.addInstance('slide' + k);
-      }
+  //setup niceditor. We add the current steps
+  // for new slides we call the makeEditable function
+  bkLib.onDomLoaded(function() {
+    myNicEditor.setPanel('myNicPanel');
+
+    //make each step editable
+    $('.step').each(function(){
+      myNicEditor.addInstance(this.id);
     });
+  });
 
     iAPI.showMenu();
     builder.init({
@@ -33,7 +46,8 @@
       redrawFunction: iAPI.initStep, //future API method that (re)draws the step
       deleteStep: iAPI.deleteStep,
       showMenu: iAPI.showMenu,
-      setTransformationCallback: iAPI.setTransformationCallback //future API method that lets me know when transformations change
+      setTransformationCallback: iAPI.setTransformationCallback, //future API method that lets me know when transformations change
+      makeEditable: makeEditable
     });
   } else {
     // if (!window.location.search.match(/print/)) {
@@ -47,15 +61,6 @@
     // if (!window.location.search.match(/preview/)) {
     //   iAPI.showMenu();
     // }
-
-    document.addEventListener("keydown", function (event) {
-      
-      // Escape button
-      if (event.keyCode == 27) {
-        iAPI.goto("overview");
-        event.preventDefault();
-      }
-    }, false);
 
     //Add slide counters
     var forEach = Array.prototype.forEach,

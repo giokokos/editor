@@ -477,6 +477,7 @@ var builder = (function () {
     $step.insertAfter($('.step:last')); //not too performant, but future proof
     config.creationFunction($step[0]);
     // jump to the new slide to make some room to look around
+    config.makeEditable(id);
     config['goto']($step[0]);
 
   }
