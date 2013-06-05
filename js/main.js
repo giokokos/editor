@@ -10,6 +10,7 @@ window.asqEditor = (function () {
   }
 
   function save(){
+
     var $clone = $('#impress').clone();
     $clone
       .removeAttr('style')
@@ -18,7 +19,12 @@ window.asqEditor = (function () {
         .removeClass('past present future active')
         .removeAttr('contenteditable')
         .removeAttr('style');
-    return ($clone.eq(0));
+
+    var content = $clone.eq(0).html();  
+    var blob = new Blob([content], {type: "text/html;charset=utf-8"});
+    saveAs(blob, "presentation.html");   
+
+ //   return ($clone.html());
   }
 
   document.addEventListener("keydown", function (event) {
@@ -41,7 +47,7 @@ window.asqEditor = (function () {
   if (window.location.search.match(/edit/)) {
 
   //setup niceditor. We add the current steps
-  // for new slides we call the makeEditable function
+  //for new slides we call the makeEditable function
   bkLib.onDomLoaded(function() {
     myNicEditor.setPanel('myNicPanel');
 

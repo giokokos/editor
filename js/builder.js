@@ -41,7 +41,6 @@ var builder = (function () {
     //nodes
     $menu, $controls, $overview, $sliders;
 
-
   selection.hasstate = function (s) {
     console.log('Checking ' + s.$node.attr('id'));
     for (var i = 0; i < this.length; i++) {
@@ -155,6 +154,8 @@ var builder = (function () {
         })
       break;
 
+      // case diagonal -> (index / settings.gridSize.columns)) * settings.gridSize.y);
+
       case 'grid':
         //use x and y offsets from first element
         var offSetX = 0//this[0].data.x
@@ -209,6 +210,7 @@ var builder = (function () {
   };//new
 
   function init(conf) {
+
     config = $.extend(config, conf);
 
     if (config.setTransformationCallback) {
@@ -276,6 +278,7 @@ var builder = (function () {
     $('<div class="bt-rotate"></div>').attr('title', 'Rotate').data('func', 'rotate').appendTo($controls);
     $('<div class="bt-scale"></div>').attr('title', 'Scale').data('func', 'scale').appendTo($controls);
     $('<div class="bt-rotateX"></div>').attr('title', 'RotateX').data('func', 'rotateX').appendTo($controls);
+
 
     // $("#my").attr("value",$(".active").attr("data-y") || 0);
     // $("#mz").attr("value",$(".active").attr("data-z") || 0);
@@ -672,16 +675,118 @@ var builder = (function () {
 // PLUGINS
 
 $(function () {
-    // Initialise plugin
-    $('.slidable').slidingInput();
 
-    // Accepts options object that override defaults, but step/min/max on input override options
-    /*
-        $('.slidable').slidingInput({
-            step: 1,
-            min: 0,
-            max: 100,
-            tolerance: 2
-        });
-    */
+  // Initialise plugin
+  $('.slidable').slidingInput();
+
+  // Accepts options object that override defaults, but step/min/max on input override options
+  /*
+      $('.slidable').slidingInput({
+          step: 1,
+          min: 0,
+          max: 100,
+          tolerance: 2
+      });
+  */
+
+  // Draggable
+  $( ".sliders" ).draggable();
+
+  
+  // copied from impress.js Copyright 2011-2012 Bartek Szopka (@bartaz)
+  var pfx = (function() {
+    var style = document.createElement('dummy').style,
+            prefixes = 'Webkit Moz O ms Khtml'.split(' '),
+            memory = {};
+    return function(prop) {
+        if (typeof memory[ prop ] === "undefined") {
+            var ucProp = prop.charAt(0).toUpperCase() + prop.substr(1),
+                    props = (prop + ' ' + prefixes.join(ucProp + ' ') + ucProp).split(' ');
+            memory[ prop ] = null;
+            for (var i in props) {
+                if (style[ props[i] ] !== undefined) {
+                    memory[ prop ] = props[i];
+                    break;
+                }
+            }
+        }
+        return memory[ prop ];
+    };
+  }());
+
+  function getTrans3D() {
+
+    var prefix = (pfx('transform'));
+   // console.log( $("#impress")[0].style);
+    var trans = $("#impress div:first-child")[0].style['' + prefix + ''].match(/.+?\(.+?\)/g);
+    var dico = {};
+    for (var el in trans) {
+        var ele = trans[el];
+        var key = ele.match(/.+?\(/g).join("").match(/[a-zA-Z0-9]/g).join("");
+        var value = ele.match(/\(.+\)/g)[0].split(",");
+        if (value.length <= 1) {
+            value = parseFloat(value[0].match(/-[0-9]+|[0-9]+/g)[0]);
+            dico[key] = value;
+        } else {
+            dico[key] = {};
+            for (val in value) {
+                var vale = parseFloat(value[val].match(/-[0-9]+|[0-9]+/g)[0]);
+                dico[key][val] = vale;
+            }
+        }
+    }
+    return dico;
+
+  }
+
+  // copied from impress.js Copyright 2011-2012 Bartek Szopka (@bartaz)
+  // `translate` builds a translate transform string for given data.
+  function translate(t) {
+    return " translate3d(" + t.translate3d[0] + "px," + t.translate3d[1] + "px," + t.translate3d[2] + "px) ";
+  };
+
+  // copied from impress.js Copyright 2011-2012 Bartek Szopka (@bartaz)
+  // `rotate` builds a rotate transform string for given data.
+  // By default the rotations are in X Y Z order that can be reverted by passing `true`
+  // as second parameter.
+  function rotate(r, revert) {
+    var rX = " rotateX(" + r.rotateX + "deg) ",
+      rY = " rotateY(" + r.rotateY + "deg) ",
+      rZ = " rotateZ(" + r.rotateZ + "deg) ";
+
+    return revert ? rZ + rY + rX : rX + rY + rZ;
+  };
+
+  // copied from impress.js Copyright 2011-2012 Bartek Szopka (@bartaz)
+  // `css` function applies the styles given in `props` object to the element
+  // given as `el`. It runs all property names through `pfx` function to make
+  // sure proper prefixed version of the property is used.
+  function css  (el, props) {
+    var key, pkey;
+    for (key in props) {
+      if (props.hasOwnProperty(key)) {
+        pkey = pfx(key);
+        if (pkey !== null) {
+          el.style[pkey] = props[key];
+        }
+      }
+    }
+    return el;
+  };
+
+
+  $(document).mousewheel(function(event, delta, deltaX, deltaY) {
+    var transform = getTrans3D();
+    transform.translate3d[2] = transform.translate3d[2] + deltaY * 10;
+
+    //set transfor and then
+    //set transition to 0 for fast response. We don' need impress animations when zooming
+    css($('#impress div:first-child')[0], {
+      transform: rotate(transform, true) + translate(transform),
+      transition: "all 0 ease 0" 
+    })
+  }); 
+
+
 });
+
