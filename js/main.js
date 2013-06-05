@@ -1,4 +1,4 @@
-window.asqEditor = function () {
+window.asqEditor = (function () {
   'use strict';
 
   var iAPI = impress();

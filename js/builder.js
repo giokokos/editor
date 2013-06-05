@@ -471,7 +471,7 @@ var builder = (function () {
     id = 'NewSlide' + sequence();
     $step = $('<div></div>').addClass('step builder-justcreated').html('<h1>This is a new step. </h1> How about some contents?');
     $step[0].id = id;
-    $step[0].dataset.scale = 2;
+    $step[0].dataset.scale = 0.5;
     //console.log($('.step:last'))
     // works when the overview div is the first child of impress main div
     $step.insertAfter($('.step:last')); //not too performant, but future proof
@@ -521,30 +521,14 @@ var builder = (function () {
     }
   }
 
-  var modalWindow = {  
-    parent:"body",  
-    windowId:null,  
-    content:null,  
-    width:null,  
-    height:null,  
-    close:function()  {  
-      $(".modal-window").remove();  
-      $(".modal-overlay").remove();  
-    },  
-    open:function()  {  
-      var modal = "";  
-      modal += "<div class=\"modal-overlay\"></div>";  
-      modal += "<div id=\"" + this.windowId + "\" class=\"modal-window\" style=\"width:" + this.width + "px; height:" + this.height + "px; margin-top:-" + (this.height / 2) + "px; margin-left:-" + (this.width / 2) + "px; background: #fff;\">";  
-      modal += this.content;  
-      modal += "</div>";      
 
-      $(this.parent).append(modal);  
-
-      $(".modal-window").append("<a class=\"close-window\"></a>");  
-      $(".close-window").click(function(e){e.stopPropagation();modalWindow.close();});  
-      $(".modal-overlay").click(function(){modalWindow.close();});  
-    }  
-  }; 
+  function closeModal(event){
+    event.stopPropagation();
+    $(".close-window").off('click');
+    $(".modal-overlay").off('click')
+    $(".modal-window").remove();  
+    $(".modal-overlay").remove();  
+  } 
 
 
 
@@ -552,16 +536,18 @@ var builder = (function () {
   // TO DO add the position of steps
   function openMyModal () {
 
-    modalWindow.windowId = "myModal";  
-    modalWindow.width = 860;  
-    modalWindow.height = 515;  
-    modalWindow.content = '<div class="theme">Themes <hr><span><img data-color="black" src="http://placehold.it/150x170/595A59">';
-    modalWindow.content += '<img data-color="blue" src="http://placehold.it/150x170/D9EFF8"><img data-color="silver" src="http://placehold.it/150x170/EFF2D9">';
-    modalWindow.content += '<img data-color="white" src="http://placehold.it/150x170/FAFAFA"><img data-color="yellow" src="http://placehold.it/150x170/F9EFA9">';
-    modalWindow.content += '</span></div>';
-    modalWindow.content += '<div class="theme">Layouts <hr><span><img id="theme-row" src="img/row.png">';
-    modalWindow.content += '</span></div>';
-    modalWindow.open();  
+    var obj = {  
+      width:860,  
+      height:515,
+      marginTop: -515/2,
+      marginLeft: -860/2
+    }
+
+    dust.render('modal', obj, function(err,out){
+      $('body').append(out)
+      $(".close-window").click(closeModal);  
+      $(".modal-overlay").click(closeModal);  
+    })
 
     $('#theme-row').on('click', function(event){
       selection.setLayout({
@@ -699,33 +685,3 @@ $(function () {
         });
     */
 });
-
-
-// LAYOUTS
-
-// var currentX =0,
-// currentY =0,
-
-
-// //row
-// $(selectedElements).each(function(index){
-//   var $el = $(this);
-//   $el.dataset.x = currentX;
-//   $el.dataset.y = currenty;
-//   currentX += paddingX + $el.width();
-// })
-
-// //row
-// $(selectedElements).each(function(index){
-//   var $el = $(this);
-//     $el.dataset.x = currentX;
-//    $el.dataset.y = currenty;
-//    currentY += paddingY + $el.height();
-// })
-
-// //grid
-// $(selectedElements).each(function(index){
-//   var $el = $(this);
-//   $el.dataset.x = (index % itemsPerRow) * rowWidth; 
-//   $el.dataset.y = (index / itemsPerRow) * rowHeight; 
-// })
