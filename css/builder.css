@@ -10,7 +10,7 @@ body.edit .step.selected{
 
 /* Main controls */
 
-.builder-main {
+#builder-main {
   background-color: #222;
   color: #fff;
   width: 110px;
@@ -28,7 +28,7 @@ body.edit .step.selected{
   border: 1px solid rgba(0,0,0,.1);
 }
 
-.builder-main div {
+#builder-main div {
   display: block;
   cursor: pointer;
 }
@@ -66,7 +66,7 @@ body.edit .step.selected{
 
 /* Controls */
 
-.sliders {
+#sliders {
   color: #fff;
   text-align: center;
   position: absolute;
@@ -80,14 +80,19 @@ body.edit .step.selected{
   font-size: 17px;
   border-radius: 2px;
   border: 1px solid rgba(0,0,0,.1);
-  width: 100px;
+  width: 110px;
+  font-family: 'Lato',sans-serif;
 }
 
 .sliders-button {
-  background-color: #686868;
+  background-color: rgb(138, 154, 165);
+  padding: 2px 2px;
+  border: 0px;
+  border-radius: 2px;
+  margin: 8 0;
 }
 
-.sliders span {
+#sliders span {
 
 }
 
@@ -357,6 +362,10 @@ a.back-button:hover {
   white-space:nowrap;
 }
 
+.theme .text {
+  font-size: 14pt;
+}
+
 /*
   Sliders
 */
@@ -364,7 +373,7 @@ a.back-button:hover {
 .slidable {
   border: none;
   cursor: col-resize;
-  width: 100px;
+  width: 80px;
 }
 
 .slidable:focus {

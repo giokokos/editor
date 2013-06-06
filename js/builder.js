@@ -124,7 +124,7 @@ var builder = (function () {
       gridSize : {
         columns : 5,
         x       : 1500,
-        y       : 1500,
+        y       : 1500
       }
     }
 
@@ -137,6 +137,8 @@ var builder = (function () {
         , newY = this[0].data.y;
 
         $.each(this, function(index, obj){
+          console.log(index)
+
           obj.data.x = newX
           obj.data.y = newY;          
 
@@ -153,6 +155,30 @@ var builder = (function () {
           config.redrawFunction(obj.$node[0]);
         })
       break;
+
+      case 'column':
+        //use x and y of first element
+        var newX = this[0].data.x
+        , newY = this[0].data.y;
+
+        $.each(this, function(index, obj){
+          obj.data.x = newX
+          obj.data.y = newY;          
+
+          //update node actual properties
+          obj.$node[0].dataset.x = obj.data.x;
+          obj.$node[0].dataset.y = obj.data.y;
+          obj.$node[0].dataset.rotate = obj.data.rotate;
+          obj.$node[0].dataset.scale = obj.data.scale;
+
+          //prepare for next iteration
+          newY += (obj.$node.eq(0).width() + settings.margin.y);
+
+          //redraw element with external function
+          config.redrawFunction(obj.$node[0]);
+        })
+      break;
+
 
       // case diagonal -> (index / settings.gridSize.columns)) * settings.gridSize.y);
 
@@ -174,6 +200,39 @@ var builder = (function () {
            //redraw element with external function
           config.redrawFunction(obj.$node[0]);
         });
+      break;
+
+      case 'circle':
+
+      // For an element around a centre at (x, y), distance r, the element's centre should be positioned at:
+      // (x + r cos(2kπ/n), y + r sin(2kπ/n))
+      // where n is the number of elements, and k is the "number" of the element you're currently positioning (between 1 and n inclusive).
+
+        // use x and y offsets from first element
+        // center of circle (0, 0)
+        var offSetX = 0 
+        , offSetY = 0
+        , angle = 0
+        , radius = 2000
+        , step = (2 * Math.PI) / this.length;
+
+        $.each(this, function(index, obj){
+
+          obj.data.x = offSetX + Math.round(radius * Math.cos(angle));
+          obj.data.y = offSetY + Math.round(radius * Math.sin(angle));
+   
+          //update node actual properties
+          obj.$node[0].dataset.x = obj.data.x;
+          obj.$node[0].dataset.y = obj.data.y;
+          obj.$node[0].dataset.rotate = obj.data.rotate;
+          obj.$node[0].dataset.scale = obj.data.scale;
+
+          angle += step;
+           //redraw element with external function
+          config.redrawFunction(obj.$node[0]);
+        });
+
+
       break;
     }
   }
@@ -232,8 +291,8 @@ var builder = (function () {
     $overview = $('#overview');
 
     // Main controls
-    $menu = $('<div class="builder-main"></div>');
-    $('<div class="builder-bt"></div>').appendTo($menu).text('Save'); // TODO
+    $menu = $('<div id="builder-main"></div>');
+    $('<div class="builder-bt"></div>').appendTo($menu).text('Save').on('click', SaveContent); // TODO
     $('<div class="builder-bt"></div>').appendTo($menu).text('Preview'); // TODO
     $('<div class="builder-bt"></div>').appendTo($menu).text('Settings').on('click', openMyModal);
     $('<div class="builder-bt"></div>').appendTo($menu).text('Overview').on('click', function () { config['goto']('overview'); });
@@ -246,27 +305,27 @@ var builder = (function () {
     $('<span></span>').wrap('<a href="#" class="back-button">◄ </a>').text('Your presentation').parent().appendTo('body').on('click', gotoPresentation);
 
     // Sliders 
-    $sliders = $('<div class="sliders"></div>');
-    $('<div class="sliders-button"></div>').appendTo($sliders).text('Controls');
-    $('<p>Position</p>').appendTo($sliders);
-    $('<span>&rarr;</span>').appendTo($sliders);
+    $sliders = $('<div id="sliders"></div>');
+    $('<div class="sliders-button">Position</div>').appendTo($sliders);
+    $('<span>X: </span>').appendTo($sliders);
     $('<input type="text" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="X">').attr('id', 'mx').addClass('bt-text').text('Edit').appendTo($sliders);
-    $('<span>&uarr;</span>').appendTo($sliders);
+    $('<span>Y: </span>').appendTo($sliders);
     $('<input type="text" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="Y">').attr('id', 'my').addClass('bt-text').text('Edit').appendTo($sliders);
-    $('<span>&darr;</span>').appendTo($sliders);
+    $('<span>Z: </span>').appendTo($sliders);
     $('<input type="text" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="Z">').attr('id', 'mz').addClass('bt-text').text('Edit').appendTo($sliders);
 
-    $('<p>Scale</p>').appendTo($sliders);
-    $('<span>&harr;</span>').appendTo($sliders);
-    $('<input type="text" class="slidable" step="0.01" min="-100" max="100" placeholder="S">').attr('id', 'ms').addClass('bt-text').text('Edit').appendTo($sliders);
+    $('<div class="sliders-button">Scale</div>').appendTo($sliders);
+    $('<span>S: </span>').appendTo($sliders);
+    $('<input type="text" class="slidable" step="0.01" min="-100" max="100" placeholder="Sz">').attr('id', 'ms').addClass('bt-text').text('Edit').appendTo($sliders);
 
-    $('<p>Rotation</p>').appendTo($sliders);
-    $('<span>&crarr;</span>').appendTo($sliders);
-    $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="R">').attr('id', 'mr').addClass('bt-text').text('Edit').appendTo($sliders);
-    $('<span>&rceil;</span>').appendTo($sliders);
+    $('<div class="sliders-button">Rotation</div>').appendTo($sliders);
+    $('<span>X: </span>').appendTo($sliders);
     $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="Rx">').attr('id', 'mrx').addClass('bt-text').text('Edit').appendTo($sliders);
-    $('<span>&lceil;</span>').appendTo($sliders);
+    $('<span>Y: </span>').appendTo($sliders);
     $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="Ry">').attr('id', 'mry').addClass('bt-text').text('Edit').appendTo($sliders);
+    $('<span>Z: </span>').appendTo($sliders);
+    $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="Rz">').attr('id', 'mr').addClass('bt-text').text('Edit').appendTo($sliders);
+
 
     $menu.appendTo('body');
     $sliders.appendTo('body');
@@ -305,7 +364,9 @@ var builder = (function () {
 
     $('body').on('mouseenter', '.step', function (e) {
       var shift = (e.shiftKey == 1);
+     // if ($(this).attr('id') !== 'overview') 
       var $t = $(this);
+     // console.log($t.attr('id'))
       showTimer = setTimeout(function () {
         if (!mouse.activeFunction) {
           //show controls
@@ -321,7 +382,7 @@ var builder = (function () {
             selection.clear();
           }
         }
-      }, 500);
+      }, 100);
       $t.data('showTimer', showTimer);
     }).on('mouseleave', '.step', function () {
       //not showing when not staying
@@ -508,6 +569,10 @@ var builder = (function () {
 
   }
 
+  function SaveContent() {
+    asqEditor.save()
+  }
+
   function deleteContents() {
     var el = state.$node[0];
     if(el.getAttribute("id") !== "overview") {
@@ -554,7 +619,34 @@ var builder = (function () {
 
     $('#theme-row').on('click', function(event){
       selection.setLayout({
+        layout:'row'
+        // margin :{
+        //   x : 100
+        // }
+      });
+    })
+
+    $('#theme-column').on('click', function(event){
+      selection.setLayout({
+        layout:'column'
+        // margin :{
+        //   x : 100
+        // }
+      });
+    })
+
+    $('#theme-grid').on('click', function(event){
+      selection.setLayout({
         layout:'grid'
+        // margin :{
+        //   x : 100
+        // }
+      });
+    })
+
+    $('#theme-circle').on('click', function(event){
+      selection.setLayout({
+        layout:'circle'
         // margin :{
         //   x : 100
         // }
@@ -689,10 +781,6 @@ $(function () {
       });
   */
 
-  // Draggable
-  $( ".sliders" ).draggable();
-
-  
   // copied from impress.js Copyright 2011-2012 Bartek Szopka (@bartaz)
   var pfx = (function() {
     var style = document.createElement('dummy').style,
