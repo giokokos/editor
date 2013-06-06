@@ -717,7 +717,6 @@ $(function () {
   function getTrans3D() {
 
     var prefix = (pfx('transform'));
-   // console.log( $("#impress")[0].style);
     var trans = $("#impress div:first-child")[0].style['' + prefix + ''].match(/.+?\(.+?\)/g);
     var dico = {};
     for (var el in trans) {
@@ -785,6 +784,134 @@ $(function () {
       transform: rotate(transform, true) + translate(transform),
       transition: "all 0 ease 0" 
     })
+  }); 
+
+  // credits to https://github.com/clairezed/ImpressEdit 
+  // compute the right angle for the position and rotation
+  function angle (obj, e) {
+      var alpha = obj.rotateX * 2 * Math.PI / 360;
+      var beta = obj.rotateY * 2 * Math.PI / 360;
+      var gamma = obj.rotateZ * 2 * Math.PI / 360;
+
+
+      var dReal = {
+          x: e.pageX - $("#impress").data('event').pos.x,
+          y: e.pageY - $("#impress").data('event').pos.y
+      };
+
+      var scale = -1;
+
+      var dVirtuel = {
+          x: 0,
+          y: 0,
+          z: 0
+      };
+
+      //to rotate in Z
+      dVirtuel.x += dReal.x * Math.cos(gamma) + dReal.y * Math.sin(gamma);
+      dVirtuel.y += dReal.y * Math.cos(gamma) - dReal.x * Math.sin(gamma);
+      dVirtuel.z += 0;
+
+      //to rotate in X
+      dVirtuel.x += dReal.x;
+      dVirtuel.y += dReal.y * Math.cos(alpha);
+      dVirtuel.z += -dReal.y * Math.sin(alpha);
+
+      //to rotate in Y
+      dVirtuel.x += dReal.x * Math.cos(beta);
+      dVirtuel.y += dReal.y * Math.cos(beta) - dReal.y * Math.sin(beta);
+      dVirtuel.z += dReal.x * Math.sin(beta);
+
+      var dVirtuel = {
+          x: 0,
+          y: 0,
+          z: 0
+      };
+
+      dVirtuel.x += dReal.x * (Math.cos(gamma) + Math.cos(beta)) + dReal.y * Math.sin(gamma);
+      dVirtuel.y += dReal.y * (Math.cos(gamma) + Math.cos(alpha) + Math.cos(beta) - Math.sin(beta)) - dReal.x * Math.sin(gamma);
+      dVirtuel.z += dReal.x * Math.sin(beta) - dReal.y * Math.sin(alpha);
+      //
+      dVirtuel.x *= scale;
+      dVirtuel.y *= scale;
+      dVirtuel.z *= scale;
+
+      var object = {
+        dVirtuelX : dVirtuel.x,
+        dVirtuelY : dVirtuel.y,
+        dVirtuelZ : dVirtuel.z
+
+      }
+      return object;
+  }
+
+
+  // copied from https://github.com/clairezed/ImpressEdit
+  $(document).mousedown(function(event) {
+
+    $("#impress").data('event', {
+        pos: {
+            x: event.pageX,
+            y: event.pageY
+        }
+    });
+
+    // hold the left click to move the viewport
+    if (event.which === 1) {
+      $(this).on('mousemove.moveView', function(event) {
+
+        var transform = getTrans3D();
+        var obj = angle(transform, event);
+
+        transform.translate3d[0] = parseInt(transform.translate3d[0] - obj.dVirtuelX);
+        transform.translate3d[1] = parseInt(transform.translate3d[1] - obj.dVirtuelY);
+        transform.translate3d[2] = parseInt(transform.translate3d[2] - obj.dVirtuelZ);
+
+        // update the old mouse position 
+        $("#impress").data('event').pos.x = event.pageX;
+        $("#impress").data('event').pos.y = event.pageY;
+        
+        css($('#impress div:first-child')[0], {
+          transform: rotate(transform, true) + translate(transform),
+          transition: "all 0 ease 0" 
+        })
+
+      });
+
+    }
+
+    // hold the middle mouse click to rotate the viewport
+    if (event.which === 2) {
+
+      $(this).on('mousemove.rotateView', function(event) {
+
+        var transform = getTrans3D();
+        var obj = angle(transform, event);
+
+        transform.rotateX = parseInt(transform.rotateX - obj.dVirtuelX);
+        transform.rotateY = parseInt(transform.rotateY - obj.dVirtuelY);
+        transform.rotateZ = parseInt(transform.rotateZ - obj.dVirtuelZ);
+
+        // update the old mouse position 
+        $("#impress").data('event').pos.x = event.pageX;
+        $("#impress").data('event').pos.y = event.pageY;
+        
+        css($('#impress div:first-child')[0], {
+          transform: rotate(transform, true) + translate(transform),
+          transition: "all 0 ease 0" 
+        })
+
+      });
+    }
+
+    // unbind handlers
+    $(this).on("mouseup", function() {
+      $('body').css('cursor', 'default');
+      $(this).off(".moveView");
+      $(this).off(".rotateView");
+    });
+   
+
   }); 
 
 

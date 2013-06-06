@@ -13,6 +13,9 @@
     <div class="theme">Layouts <hr>
     	<span>
     		<img id="theme-row" src="img/row.png">
+            <img id="theme-column" src="img/column.png">
+            <img id="theme-grid" src="img/grid.png">
+            <img id="theme-circle" src="img/circle.png">
     	</span>
     </div>
     <a class="close-window"></a>
