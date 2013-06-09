@@ -210,7 +210,7 @@ var builder = (function () {
 
         // use x and y offsets from first element
         // center of circle (0, 0)
-        var offSetX = 0 
+        var offSetX = 0
         , offSetY = 0
         , angle = 0
         , radius = 2000
