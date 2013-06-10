@@ -1,17 +1,17 @@
-builder = (function () {
+var builder = (function () {
 
   'use strict';
-  
+
   var state = {
     editing: false,
     $node: false,
     data: {
       x: 0,
       y: 0,
-      z:0, //new
+      z: 0, //new
       rotate: 0,
-      rotateX:0, //new
-      rotateY:0, //new
+      rotateX: 0, //new
+      rotateY: 0, //new
       scale: 0
     }
   },
@@ -39,11 +39,12 @@ builder = (function () {
     handlers = {},
     redrawTimeout,
     //nodes
-    $menu, $controls, $impress, $overview, $sliders;
+    $menu, $controls, $overview, $sliders;
 
   selection.hasstate = function (s) {
     console.log('Checking ' + s.$node.attr('id'));
     for (var i = 0; i < this.length; i++) {
+      //console.log(this[i].$node.attr('id'))
       if (this[i].$node.attr('id') === s.$node.attr('id'))
         return true;
     }
@@ -106,8 +107,137 @@ builder = (function () {
     this.length = 0;
   }
 
-  handlers.move = function (x, y) {
+  /** @function setLayout
+  * Sets layout of slides in presentation
+  * base on predifined themes
+  */
+  selection.setLayout = function (options){
+    if(!this || this.length == 0){
+      console.log("setLayout: empty or null this, aborting");
+    }
 
+    var defaults={
+      margin:{
+        x : 0,
+        y : 0,
+      },
+      gridSize : {
+        columns : 5,
+        x       : 1500,
+        y       : 1500
+      }
+    }
+
+    var settings = $.extend({}, defaults, options)
+    
+    switch (options.layout){
+      case 'row':
+        //use x and y of first element
+        var newX = this[0].data.x
+        , newY = this[0].data.y;
+
+        $.each(this, function(index, obj){
+          console.log(index)
+
+          obj.data.x = newX
+          obj.data.y = newY;          
+
+          //update node actual properties
+          obj.$node[0].dataset.x = obj.data.x;
+          obj.$node[0].dataset.y = obj.data.y;
+          obj.$node[0].dataset.rotate = obj.data.rotate;
+          obj.$node[0].dataset.scale = obj.data.scale;
+
+          //prepare for next iteration
+          newX += (obj.$node.eq(0).width() + settings.margin.x);
+
+          //redraw element with external function
+          config.redrawFunction(obj.$node[0]);
+        })
+      break;
+
+      case 'column':
+        //use x and y of first element
+        var newX = this[0].data.x
+        , newY = this[0].data.y;
+
+        $.each(this, function(index, obj){
+          obj.data.x = newX
+          obj.data.y = newY;          
+
+          //update node actual properties
+          obj.$node[0].dataset.x = obj.data.x;
+          obj.$node[0].dataset.y = obj.data.y;
+          obj.$node[0].dataset.rotate = obj.data.rotate;
+          obj.$node[0].dataset.scale = obj.data.scale;
+
+          //prepare for next iteration
+          newY += (obj.$node.eq(0).width() + settings.margin.y);
+
+          //redraw element with external function
+          config.redrawFunction(obj.$node[0]);
+        })
+      break;
+
+
+      // case diagonal -> (index / settings.gridSize.columns)) * settings.gridSize.y);
+
+      case 'grid':
+        //use x and y offsets from first element
+        var offSetX = 0//this[0].data.x
+        , offSetY = 0;//this[0].data.y;
+        $.each(this, function(index, obj){
+
+          obj.data.x = offSetX +  ((index % settings.gridSize.columns) * settings.gridSize.x); 
+          obj.data.y = offSetY + ((Math.floor(index / settings.gridSize.columns)) * settings.gridSize.y);   
+   
+          //update node actual properties
+          obj.$node[0].dataset.x = obj.data.x;
+          obj.$node[0].dataset.y = obj.data.y;
+          obj.$node[0].dataset.rotate = obj.data.rotate;
+          obj.$node[0].dataset.scale = obj.data.scale;
+
+           //redraw element with external function
+          config.redrawFunction(obj.$node[0]);
+        });
+      break;
+
+      case 'circle':
+
+      // For an element around a centre at (x, y), distance r, the element's centre should be positioned at:
+      // (x + r cos(2kπ/n), y + r sin(2kπ/n))
+      // where n is the number of elements, and k is the "number" of the element you're currently positioning (between 1 and n inclusive).
+
+        // use x and y offsets from first element
+        // center of circle (0, 0)
+        var offSetX = 0
+        , offSetY = 0
+        , angle = 0
+        , radius = 2000
+        , step = (2 * Math.PI) / this.length;
+
+        $.each(this, function(index, obj){
+
+          obj.data.x = offSetX + Math.round(radius * Math.cos(angle));
+          obj.data.y = offSetY + Math.round(radius * Math.sin(angle));
+   
+          //update node actual properties
+          obj.$node[0].dataset.x = obj.data.x;
+          obj.$node[0].dataset.y = obj.data.y;
+          obj.$node[0].dataset.rotate = obj.data.rotate;
+          obj.$node[0].dataset.scale = obj.data.scale;
+
+          angle += step;
+           //redraw element with external function
+          config.redrawFunction(obj.$node[0]);
+        });
+
+
+      break;
+    }
+  }
+
+  handlers.move = function (x, y) {
     var v = fixVector(x, y);
     if (selection.length > 1) {
       selection.move(v.x, v.y);
@@ -134,12 +264,12 @@ builder = (function () {
     var v = fixVector(x, y);
 
     // selection.length ???
-
     state.data.rotateX += -v.y * config.rotateStep % 360; // added % 360
     state.data.rotateY += v.x * config.rotateStep % 360;  // added % 360
   };//new
 
   function init(conf) {
+
     config = $.extend(config, conf);
 
     if (config.setTransformationCallback) {
@@ -158,127 +288,183 @@ builder = (function () {
     }
 
     $('body').addClass('edit');
-
-    $impress = $('#impress');
     $overview = $('#overview');
 
-    $menu = $('<div></div>').addClass('builder-main');
-   // $('<div></div>').addClass('builder-bt bt-add').appendTo($menu).text('Add new').on('click', addSlide);
-    $('<div></div>').addClass('builder-bt bt-save').appendTo($menu).text('Save').on('click', saveContent);
-    $('<div></div>').addClass('builder-bt bt-overview').appendTo($menu).text('Overview').on('click', function () {
-      config['goto']('overview');
+    // Main controls
+    $menu = $('<div id="builder-main"></div>');
+    $('<div class="builder-bt"></div>').appendTo($menu).text('Save').on('click', SaveContent); // TODO
+    $('<div class="builder-bt"></div>').appendTo($menu).text('Preview'); // TODO
+    $('<div class="builder-bt"></div>').appendTo($menu).text('Settings').on('click', openMyModal);
+    $('<div class="builder-bt"></div>').appendTo($menu).text('Overview').on('click', function () { config['goto']('overview'); });
+    $('<div class="builder-bt bt-delete"></div>').appendTo($menu).text('Delete').on('click', deleteContents);
+
+    // Add slide
+    $('<span class="plus"></span>').wrap('<div class="bt-add-slide"></div>').text('+').parent().appendTo('body').on('click', addSlide);
+
+    // Return to presentation 
+    $('<span></span>').wrap('<a href="#" class="back-button">◄ </a>').text('Your presentation').parent().appendTo('body').on('click', gotoPresentation);
+
+    // Sliders 
+    $sliders = $('<div id="sliders"></div>');
+    $('<div class="sliders-button">Position</div>').appendTo($sliders);
+    $('<span>X: </span>').appendTo($sliders);
+    $('<input type="text" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="X">').attr('id', 'mx').addClass('bt-text').text('Edit').appendTo($sliders);
+    $('<span>Y: </span>').appendTo($sliders);
+    $('<input type="text" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="Y">').attr('id', 'my').addClass('bt-text').text('Edit').appendTo($sliders);
+    $('<span>Z: </span>').appendTo($sliders);
+    $('<input type="text" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="Z">').attr('id', 'mz').addClass('bt-text').text('Edit').appendTo($sliders);
+
+    $('<div class="sliders-button">Scale</div>').appendTo($sliders);
+    $('<span>S: </span>').appendTo($sliders);
+    $('<input type="text" class="slidable" step="0.01" min="-100" max="100" placeholder="Sz">').attr('id', 'ms').addClass('bt-text').text('Edit').appendTo($sliders);
+
+    $('<div class="sliders-button">Rotation</div>').appendTo($sliders);
+    $('<span>X: </span>').appendTo($sliders);
+    $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="Rx">').attr('id', 'mrx').addClass('bt-text').text('Edit').appendTo($sliders);
+    $('<span>Y: </span>').appendTo($sliders);
+    $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="Ry">').attr('id', 'mry').addClass('bt-text').text('Edit').appendTo($sliders);
+    $('<span>Z: </span>').appendTo($sliders);
+    $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="Rz">').attr('id', 'mr').addClass('bt-text').text('Edit').appendTo($sliders);
+
+
+    $menu.appendTo('body');
+    $sliders.appendTo('body');
+
+    $controls = $('<div class="builder-controls"></div>').hide();
+
+    $('<div class="bt-delete"></div>').attr('title', 'Delete').click(deleteContents).appendTo($controls);
+    $('<div class="bt-move"></div>').attr('title', 'Move').data('func', 'move').appendTo($controls);
+    $('<div class="bt-rotate"></div>').attr('title', 'Rotate').data('func', 'rotate').appendTo($controls);
+    $('<div class="bt-scale"></div>').attr('title', 'Scale').data('func', 'scale').appendTo($controls);
+    $('<div class="bt-rotateX"></div>').attr('title', 'RotateX').data('func', 'rotateX').appendTo($controls);
+
+
+    // $("#my").attr("value",$(".active").attr("data-y") || 0);
+    // $("#mz").attr("value",$(".active").attr("data-z") || 0);
+
+    var showTimer;
+
+    $controls.appendTo('body').on('mousedown', 'div', function (e) {
+      e.preventDefault();
+      mouse.activeFunction = handlers[$(this).data('func')];
+      loadData();
+      //console.log('loadata called')
+      mouse.prevX = e.pageX;
+      mouse.prevY = e.pageY;
+      $(document).on('mousemove.handler1', handleMouseMove);
+      return false;
+    }).on('mouseenter', function () {
+      clearTimeout(showTimer);
     });
-    $('<div></div>').addClass('builder-bt bt-settings').appendTo($menu).text('Settings').on('click', openMyModal);
-
-    // It was Get File
-    $('<div></div>').addClass('builder-bt bt-download').appendTo($menu).text('Export').on('click', downloadResults);
-    // $('<div></div>').addClass('builder-bt bt-download').appendTo($menu).text('style.css').on('click',downloadStyle);
-
-    $('<div></div>').addClass('builder-bt bt-delete').appendTo($menu).text('Delete').on('click', deleteContents);
-
-    //Add slide button, + plus sign
-    $('<span></span>').html('+').addClass('plus').wrap('<div/>').parent().addClass('bt-add-slide').appendTo('body').on('click', addSlide);
-
-    //Add return to presentation mode button
-    $('<span></span>').html('Presentation').wrap('<a href="#">◄ </a>').parent().addClass('back-button').appendTo('body').on('click', gotoPresentation);
-
-   // var $c = $('<div></div>').addClass('bt-text').appendTo($menu);
-
-    $sliders = $('<div></div>').addClass('sliders');
-
-    var $c = $('<div></div>').addClass('bt-text').appendTo($sliders);
-
-    $('<p>Position</p>').appendTo($c)
-    $('<span>X:</span>').appendTo($c)
-    $('<input type="text" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="X">').attr('id', 'mx').addClass('bt-text').text('Edit').appendTo($c);
-
-    $('<span>Y:</span>').appendTo($c)
-    $('<input type="text" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="Y">').attr('id', 'my').addClass('bt-text').text('Edit').appendTo($c);
-
-    $('<span>Z:</span>').appendTo($c)
-    $('<input type="text" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="Z">').attr('id', 'mz').addClass('bt-text').text('Edit').appendTo($c);
-
-    $('<p>Scale</p>').appendTo($c)
-    $('<span>S:</span>').appendTo($c)
-    $('<input type="text" class="slidable" step="0.01" min="-100" max="100" placeholder="S">').attr('id', 'ms').addClass('bt-text').text('Edit').appendTo($c);
-
-    $('<p>Rotation</p>').appendTo($c)
-    $('<span>Rz:</span>').appendTo($c)
-    $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="R">').attr('id', 'mr').addClass('bt-text').text('Edit').appendTo($c);
-
-    $('<span>Rx:</span>').appendTo($c)
-    $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="Rx">').attr('id', 'mrx').addClass('bt-text').text('Edit').appendTo($c);
-
-    $('<span>Ry:</span>').appendTo($c)
-    $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="Ry">').attr('id', 'mry').addClass('bt-text').text('Edit').appendTo($c);
-
-
-jQuery.fn.slidingInput = function (opts) {
-
-    var defaults = {
-        step: 1, // Increment value
-        min: 0, // Minimum value
-        max: 100, // Maximum value
-        tolerance: 2 // Mouse movement allowed within a simple click
-    };
-
-    return this.each(function () {
-        var $el = $(this),
-            options = $.extend({}, defaults, opts, this),
-            distance = 0,
-            initialValue = 0;
-
-        function mouseDown() {
-            distance = 0;
-
-            if ($el.val() % 1 === 0) {
-              initialValue = parseInt($el.val(), 10);
-            }
-            else {
-              initialValue = parseFloat($el.val());
-            }
-
-            updateSync($el);
-
-            $(document).on('mousemove', mouseMove).on('mouseup', mouseUp);
-
-            return false;
-        }
-
-        function mouseMove(e) {
-
-            var currentValue;
-            if ($el.val() % 1 === 0) {
-              currentValue = parseInt($el.val(), 10);
-            }
-            else {
-              currentValue = parseFloat($el.val());
-            }
-
-           // var currentValue = parseInt($el.val(), 10),
-             var   event = e.originalEvent,
-                movementX = event.movementX || event.webkitMovementX || event.mozMovementX || 0,
-                movementY = event.movementY || event.webkitMovementY || event.mozMovementY || 0;              
-
-            distance += (movementX - movementY) * options.step;
-
-            $el.val(Math.min(options.max, Math.max(initialValue + distance, options.min)));
-
-            updateSync($el);
-
-        }
-
-        function mouseUp() {
-            $(document).off('mousemove mouseup');
-
-            if (Math.abs(distance) < options.tolerance) {
-                $el.focus();
-            }
-        }
-
-        $el.on('mousedown', mouseDown);
+    $(document).on('mouseup', function () {
+      mouse.activeFunction = false;
+      $(document).off('mousemove.handler1');
     });
-};
+
+
+    $('body').on('mouseenter', '.step', function (e) {
+      var shift = (e.shiftKey == 1);
+     // if ($(this).attr('id') !== 'overview') 
+      var $t = $(this);
+     // console.log($t.attr('id'))
+      showTimer = setTimeout(function () {
+        if (!mouse.activeFunction) {
+          //show controls
+          state.$node = $t;
+          loadData();
+          showControls(state.$node);
+          // MULTIPLE SELECTION OF STEPS
+          if (shift) {
+            if (!selection.hasstate(state)) {
+              selection.pushstate(state);
+            }
+          } else {
+            selection.clear();
+          }
+        }
+      }, 100);
+      $t.data('showTimer', showTimer);
+    }).on('mouseleave', '.step', function () {
+      //not showing when not staying
+      clearTimeout($(this).data('showTimer'));
+    });
+
+    $(window).on('beforeunload', function () {
+      return 'All changes will be lost';
+    });
+
+    config['goto']('start');
+
+  }
+
+  // PLUGIN
+  jQuery.fn.slidingInput = function (opts) {
+
+      var defaults = {
+          step: 1, // Increment value
+          min: 0, // Minimum value
+          max: 100, // Maximum value
+          tolerance: 2 // Mouse movement allowed within a simple click
+      };
+
+      return this.each(function () {
+          var $el = $(this),
+              options = $.extend({}, defaults, opts, this),
+              distance = 0,
+              initialValue = 0;
+
+          function mouseDown() {
+              distance = 0;
+
+              // check for integer numbers
+              if ($el.val() % 1 === 0) {
+                initialValue = parseInt($el.val(), 10);
+              }
+              else {
+                initialValue = parseFloat($el.val());
+              }
+
+              updateSync($el);
+
+              $(document).on('mousemove', mouseMove).on('mouseup', mouseUp);
+
+              return false;
+          }
+
+          function mouseMove(e) {
+
+              var currentValue;
+              if ($el.val() % 1 === 0) {
+                currentValue = parseInt($el.val(), 10);
+              }
+              else {
+                currentValue = parseFloat($el.val());
+              }
+
+             // var currentValue = parseInt($el.val(), 10),
+               var event = e.originalEvent,
+                  movementX = event.movementX || event.webkitMovementX || event.mozMovementX || 0,
+                  movementY = event.movementY || event.webkitMovementY || event.mozMovementY || 0;              
+
+              distance += (movementX - movementY) * options.step;
+
+              $el.val(Math.min(options.max, Math.max(initialValue + distance, options.min)));
+
+              updateSync($el);
+
+          }
+
+          function mouseUp() {
+              $(document).off('mousemove mouseup');
+
+              if (Math.abs(distance) < options.tolerance) {
+                  $el.focus();
+              }
+          }
+
+          $el.on('mousedown', mouseDown);
+      });
+  };
 
 
   function updateSync($el) {
@@ -334,81 +520,6 @@ jQuery.fn.slidingInput = function (opts) {
   }
 
 
-    $menu.appendTo('body');
-
-    $sliders.appendTo('body');
-
-    $controls = $('<div class="builder-controls"></div>').hide();
-
-    $('<div></div>').addClass('bt-delete').attr('title', 'Delete').click(deleteContents).appendTo($controls);
-
-    $('<div></div>').addClass('bt-move').attr('title', 'Move').data('func', 'move').appendTo($controls);
-    $('<div></div>').addClass('bt-rotate').attr('title', 'Rotate').data('func', 'rotate').appendTo($controls);
-    $('<div></div>').addClass('bt-scale').attr('title', 'Scale').data('func', 'scale').appendTo($controls);
-    $('<div></div>').addClass('bt-rotateX').attr('title', 'RotateX').data('func', 'rotateX').appendTo($controls);
-
-    //$('<span></span>').addClass('builder-bt').text('Edit').appendTo($controls).click(editContents);
-    //$('<span></span>').addClass('builder-bt').text('Wrap').appendTo($controls).click(wrapContents);
-
-
-    // $("#my").attr("value",$(".active").attr("data-y") || 0);
-    // $("#mz").attr("value",$(".active").attr("data-z") || 0);
-
-    var showTimer;
-
-    $controls.appendTo('body').on('mousedown', 'div', function (e) {
-      e.preventDefault();
-      mouse.activeFunction = handlers[$(this).data('func')];
-      loadData();
-      //console.log('loadata called')
-      mouse.prevX = e.pageX;
-      mouse.prevY = e.pageY;
-      $(document).on('mousemove.handler1', handleMouseMove);
-      return false;
-    }).on('mouseenter', function () {
-      clearTimeout(showTimer);
-    });
-    $(document).on('mouseup', function () {
-      mouse.activeFunction = false;
-      $(document).off('mousemove.handler1');
-    });
-
-
-    $('body').on('mouseenter', '.step', function (e) {
-      var shift = (e.shiftKey == 1);
-      var $t = $(this);
-      showTimer = setTimeout(function () {
-        if (!mouse.activeFunction) {
-          //show controls
-          state.$node = $t;
-          loadData();
-          showControls(state.$node);
-          // MULTIPLE SELECTION OF STEPS
-          if (shift) {
-            if (!selection.hasstate(state)) {
-              selection.pushstate(state);
-            }
-          } else {
-            selection.clear();
-          }
-        }
-      }, 500);
-      $t.data('showTimer', showTimer);
-    }).on('mouseleave', '.step', function () {
-      //not showing when not staying
-      clearTimeout($(this).data('showTimer'));
-    });
-
-    $(window).on('beforeunload', function () {
-      return 'All changes will be lost';
-    });
-
-    config['goto']('start');
-
-
-  }
-
-
   var sequence = (function () {
     var s = 1;
     return function () {
@@ -416,316 +527,239 @@ jQuery.fn.slidingInput = function (opts) {
     }
   })()
 
-    function addSlide() {
-      //console.log('add')
-      //query slide id
-      var id, $step;
-      id = 'NewSlide' + sequence();
-      $step = $('<div></div>').addClass('step builder-justcreated').html('<h1>This is a new step. </h1> How about some contents?');
-      $step[0].id = id;
-      $step[0].dataset.scale = 2;
-      //console.log($('.step:last'))
-      // works when the overview div is the first child of impress main div
-      $step.insertAfter($('.step:last')); //not too performant, but future proof
-      config.creationFunction($step[0]);
-      // jump to the new slide to make some room to look around
-      config['goto']($step[0]);
 
-    }
+  function addSlide() {
+    //console.log('add')
+    //query slide id
+    var id, $step;
+    id = 'NewSlide' + sequence();
+    $step = $('<div class="step"></div>').html('<h1>This is a new step. </h1> How about some contents?');
+    $step[0].id = id;
+    $step[0].dataset.scale = 1;
+    //console.log($('.step:last'))
+    // works when the overview div is the first child of impress main div
+    $step.insertAfter($('.step:last')); //not too performant, but future proof
+    config.creationFunction($step[0]);
+    // jump to the new slide to make some room to look around
+    config.makeEditable(id);
+    config['goto']($step[0]);
 
+  }
 
-    function downloadStyle() {
-      var uriContent, content, $doc;
+  function showControls($where) {
+    
+    // var top, left, pos = $where.offset();
+    // //not going out the edges (at least one way)
+    // top = (pos.top > 0) ? pos.top + (100 / config.visualScaling) : 0;
+    // left = (pos.left > 0) ? pos.left + (100 / config.visualScaling) : 0;
 
-      var BlobBuilder = (function (w) {
-        return w.BlobBuilder || w.WebKitBlobBuilder || w.MozBlobBuilder;
-      })(window);
-      $.get('style.css', function (content) {
-        var bb = new BlobBuilder;
-        bb.append(content);
-        saveAs(bb.getBlob("text/css;charset=utf-8"), "style.css");
-      });
+    // $controls.show().offset({
+    //   top: top,
+    //   left: left
+    // });
 
-    }
+    // difference between attr() and .val()
+    $("#mx").val(state.data.x || 0);      
+    $("#my").val(state.data.y || 0);
+    $("#mz").val(state.data.z || 0);
+    $("#mr").val(state.data.rotate || 0);
+    $("#ms").val(state.data.scale || 0);
+    $("#mrx").val(state.data.rotateX || 0);
+    $("#mry").val(state.data.rotateY || 0);
 
-    function downloadResults() {
-      var uriContent, content, $doc;
+  }
 
-      var BlobBuilder = (function (w) {
-        return w.BlobBuilder || w.WebKitBlobBuilder || w.MozBlobBuilder;
-      })(window);
-      $doc = $(document.documentElement).clone();
-      //remove all scripting
-      //$doc.find('script').remove();
-      //remove all current transforms
-      $doc.find('.step, body, #impress, #impress>div').removeAttr('style');
-      $doc.find('body').removeAttr('class');
-      //remove gui
-      $doc.find('.builder-controls, .builder-main, .counter').remove();
+  function SaveContent() {
+    asqEditor.save()
+  }
 
-      $doc.find('.previous').each(function (index, element) {
-        element.classList.remove('previous');
-      });
-      $doc.find('.active').each(function (index, element) {
-        element.classList.remove('active');
-      });
-      $doc.find('.present').each(function (index, element) {
-        element.classList.remove('present');
-      });
-      $doc.find('.past').each(function (index, element) {
-        element.classList.remove('past');
-      });
-      $doc.find('.future').each(function (index, element) {
-        element.classList.remove('future');
-      });
-      //put overview at the end
-      //$doc.find('#overview').appendTo($doc.find('#impress'));
-      //add impress.js simple init
-      //$doc.find('body').attr('class','impress-not-supported')[0].innerHTML+='<script src="https://raw.github.com/bartaz/impress.js/master/js/impress.js"></script><script>impress().init()</script>';
-      content = $doc[0].outerHTML;
-      //remove stuff
-      //var bb = new BlobBuilder;
-      //bb.append(content);
-      //saveAs(bb.getBlob("text/html;charset=utf-8"), "presentation.html");
-
-      var $t = $(this);
-      var $txt = $('<textarea>').on('keydown keyup', function (e) {
-        if (e.keyCode == 27) {
-          $txt.remove();
-        }
-        e.stopPropagation();
-      });
-      $t.after($txt.val(content));   
-
-    }
-
-    function editContents() {
-      var $t = $(this);
-      if (state.editing === true) {
-        state.editing = false;
-        state.$node.html($t.parent().find('textarea').val());
-        state.$node.removeClass('builder-justcreated');
-        $t.parent().find('textarea').remove();
-        $t.text('Edit');
-      } else {
-        var $txt = $('<textarea>').on('keydown keyup', function (e) {
-          e.stopPropagation();
-        });
-        $t.text('OK');
-        state.editing = true;
-        $t.after($txt.val(state.$node.html()));
+  function deleteContents() {
+    var el = state.$node[0];
+    if(el.getAttribute("id") !== "overview") {
+      var r = confirm("Are you sure you want to delete this slide?");
+      //console.log($(this))
+      if (r == true) {
+        config.deleteStep(el.getAttribute("id"));
+        //console.log(  config)
+        el.remove();
+        // make showmenu not to display the deleted slides
+        config.showMenu();
+        config['goto']("overview");
       }
     }
+  }
 
-    function wrapContents() {
-      state.$node.toggleClass('slide');
+
+  function closeModal(event){
+    event.stopPropagation();
+    $(".close-window").off('click');
+    $(".modal-overlay").off('click')
+    $(".modal-window").remove();  
+    $(".modal-overlay").remove();  
+  } 
+
+
+
+  // Modal window with body background-color 
+  // TO DO add the position of steps
+  function openMyModal () {
+
+    var obj = {  
+      width:860,  
+      height:515,
+      marginTop: -515/2,
+      marginLeft: -860/2
     }
 
-    function showControls($where) {
+    dust.render('modal', obj, function(err,out){
+      $('body').append(out)
+      $(".close-window").click(closeModal);  
+      $(".modal-overlay").click(closeModal);  
+    })
+
+    $('#theme-row').on('click', function(event){
+      selection.setLayout({
+        layout:'row'
+        // margin :{
+        //   x : 100
+        // }
+      });
+    })
+
+    $('#theme-column').on('click', function(event){
+      selection.setLayout({
+        layout:'column'
+        // margin :{
+        //   x : 100
+        // }
+      });
+    })
+
+    $('#theme-grid').on('click', function(event){
+      selection.setLayout({
+        layout:'grid'
+        // margin :{
+        //   x : 100
+        // }
+      });
+    })
+
+    $('#theme-circle').on('click', function(event){
+      selection.setLayout({
+        layout:'circle'
+        // margin :{
+        //   x : 100
+        // }
+      });
+    })
+
+    $(".theme span").delegate('img', 'click', function() {
       
-      // var top, left, pos = $where.offset();
-      // //not going out the edges (at least one way)
-      // top = (pos.top > 0) ? pos.top + (100 / config.visualScaling) : 0;
-      // left = (pos.left > 0) ? pos.left + (100 / config.visualScaling) : 0;
+     var $body = $("body"),
+      currentColor = $body.data("currentColor"),
+      newColor = $(this).data("color");
 
-      // $controls.show().offset({
-      //   top: top,
-      //   left: left
-      // });
+      $body.removeClass(currentColor);
 
-      // difference between attr() and .val()
-      $("#mx").val(state.data.x || 0);      
-      $("#my").val(state.data.y || 0);
-      $("#mz").val(state.data.z || 0);
-      $("#mr").val(state.data.rotate || 0);
-      $("#ms").val(state.data.scale || 0);
-      $("#mrx").val(state.data.rotateX || 0);
-      $("#mry").val(state.data.rotateY || 0);
+      if (currentColor === newColor)
+        $body.data("currentColor","none");
+      else
+        $body.addClass(newColor).data("currentColor", newColor);
 
-    }
+    });
+  }
 
-    // TO DO
 
-    function deleteContents() {
+  // go to presentation mode 
+  // remove the query from the url
+  function gotoPresentation () {
+    var re = /([^?]+).*/;
+    var result = re.exec(document.location.href);
+    document.location.href = result[1];
+  }
 
-      var el = state.$node[0];
 
-      if(el.getAttribute("id") !== "overview") {
-        var r = confirm("Are you sure you want to delete this slide?");
+  function loadData() {
+    //state.data=state.$node[0].dataset;
+    //add defaults
+    state.data.x = parseFloat(state.$node[0].dataset.x) || defaults.x;
+    state.data.y = parseFloat(state.$node[0].dataset.y) || defaults.y;
+    state.data.z=parseFloat(state.$node[0].dataset.z) || defaults.z; //new   
+    state.data.scale = parseFloat(state.$node[0].dataset.scale) || defaults.scale;
+    state.data.rotate = parseFloat(state.$node[0].dataset.rotate) || defaults.rotate;
+    state.data.rotateX=parseFloat(state.$node[0].dataset.rotateX) || defaults.rotate; //new
+    state.data.rotateY=parseFloat(state.$node[0].dataset.rotateY) || defaults.rotate; //new
+  }
 
-        //console.log($(this))
-        if (r == true) {
-          config.deleteStep(el.getAttribute("id"));
-          //console.log(  config)
-          el.remove();
-          // make showmenu not to display the deleted slides
-          config.showMenu();
 
-          config['goto']("overview");
+  function redraw() {
+    clearTimeout(redrawTimeout);
+    redrawTimeout = setTimeout(function () {
+      //state.$node[0].dataset=state.data;
+
+      if (selection.length > 1) {
+        for (var i = 0; i < selection.length; i++) {
+          selection[i].$node[0].dataset.x = selection[i].data.x;
+          selection[i].$node[0].dataset.y = selection[i].data.y;
+          selection[i].$node[0].dataset.rotate = selection[i].data.rotate;
+          selection[i].$node[0].dataset.scale = selection[i].data.scale;
+
+          config.redrawFunction(selection[i].$node[0]);
         }
       }
 
+      state.$node[0].dataset.scale = state.data.scale;
+      state.$node[0].dataset.rotate = state.data.rotate;
+      state.$node[0].dataset.rotateX = state.data.rotateX; //new
+      state.$node[0].dataset.rotateY = state.data.rotateY; //new
+      state.$node[0].dataset.x = state.data.x;
+      state.$node[0].dataset.y = state.data.y; 
+      state.$node[0].dataset.z = state.data.z; //new
 
+      /**/
+      //console.log(state.data,state.$node[0].dataset,state.$node[0].dataset===state.data);
+
+      config.redrawFunction(state.$node[0]);
+      showControls(state.$node);
+      //console.log(['redrawn',state.$node[0].dataset]);
+    }, 20);
+  }
+
+  function fixVector(x, y) {
+    var result = {
+      x: 0,
+      y: 0
+    },
+      angle = (config.rotation / 180) * Math.PI,
+      cs = Math.cos(angle),
+      sn = Math.sin(angle);
+
+    result.x = (x * cs - y * sn) * config.visualScaling;
+    result.y = (x * sn + y * cs) * config.visualScaling;
+    return result;
+  }
+
+  function handleMouseMove(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    var x = e.pageX - mouse.prevX,
+      y = e.pageY - mouse.prevY;
+
+    mouse.prevX = e.pageX;
+    mouse.prevY = e.pageY;
+    if (mouse.activeFunction) {
+      mouse.activeFunction(x, y);
+      redraw();
     }
 
-    function saveContent () {
-      // code
-    }
-
-
-    var modalWindow = {  
-      parent:"body",  
-      windowId:null,  
-      content:null,  
-      width:null,  
-      height:null,  
-      close:function()  
-      {  
-        $(".modal-window").remove();  
-        $(".modal-overlay").remove();  
-      },  
-      open:function()  
-      {  
-        var modal = "";  
-        modal += "<div class=\"modal-overlay\"></div>";  
-        modal += "<div id=\"" + this.windowId + "\" class=\"modal-window\" style=\"width:" + this.width + "px; height:" + this.height + "px; margin-top:-" + (this.height / 2) + "px; margin-left:-" + (this.width / 2) + "px; background: #fff;\">";  
-        modal += this.content;  
-        modal += "</div>";      
-  
-        $(this.parent).append(modal);  
-  
-        $(".modal-window").append("<a class=\"close-window\"></a>");  
-        $(".close-window").click(function(){modalWindow.close();});  
-        $(".modal-overlay").click(function(){modalWindow.close();});  
-      }  
-    }; 
-
-
-
-    // Modal window with Color Background 
-    // TO DO add the position of steps
-    function openMyModal () {
-
-      modalWindow.windowId = "myModal";  
-      modalWindow.width = 850;  
-      modalWindow.height = 505;  
-      modalWindow.content = "<div class=\"theme\">Theme <span><img data-color=\"black\" src=\"http://placehold.it/150x170/595A59\">";
-      modalWindow.content += "<img data-color=\"blue\" src=\"http://placehold.it/150x170/D9EFF8\"><img data-color=\"silver\" src=\"http://placehold.it/150x170/EFF2D9\">";
-      modalWindow.content += "<img data-color=\"white\" src=\"http://placehold.it/150x170/FAFAFA\"><img data-color=\"yellow\" src=\"http://placehold.it/150x170/F9EFA9\">";
-      modalWindow.content += "</span></div>";
-      modalWindow.content += "<div class=\"theme\">Layouts (upcoming) </div>";
-      modalWindow.open();  
-
-      $(".theme span").delegate('img', 'click', function() {
-        
-       var $body = $("body"),
-        currentColor = $body.data("currentColor"),
-        newColor = $(this).data("color");
-
-        $body.removeClass(currentColor);
-
-        if (currentColor === newColor)
-          $body.data("currentColor","none");
-        else
-          $body.addClass(newColor).data("currentColor", newColor);
-
-      });
-    }
-
-
-
-    // go to presentation mode 
-    // remove the query from the url
-    function gotoPresentation () {
-
-      var re = /([^?]+).*/;
-      var result = re.exec(document.location.href);
-      document.location.href = result[1];
-    }
-
-
-    function loadData() {
-      //state.data=state.$node[0].dataset;
-      //add defaults
-
-      state.data.x = parseFloat(state.$node[0].dataset.x) || defaults.x;
-      state.data.y = parseFloat(state.$node[0].dataset.y) || defaults.y;
-      state.data.z=parseFloat(state.$node[0].dataset.z) || defaults.z; //new   
-      state.data.scale = parseFloat(state.$node[0].dataset.scale) || defaults.scale;
-      state.data.rotate = parseFloat(state.$node[0].dataset.rotate) || defaults.rotate;
-      state.data.rotateX=parseFloat(state.$node[0].dataset.rotateX) || defaults.rotate; //new
-      state.data.rotateY=parseFloat(state.$node[0].dataset.rotateY) || defaults.rotate; //new
-
-    }
-
-    function redraw() {
-      clearTimeout(redrawTimeout);
-      redrawTimeout = setTimeout(function () {
-        //state.$node[0].dataset=state.data;
-
-        if (selection.length > 1) {
-          for (var i = 0; i < selection.length; i++) {
-            selection[i].$node[0].dataset.x = selection[i].data.x;
-            selection[i].$node[0].dataset.y = selection[i].data.y;
-            selection[i].$node[0].dataset.rotate = selection[i].data.rotate;
-            selection[i].$node[0].dataset.scale = selection[i].data.scale;
-
-
-            config.redrawFunction(selection[i].$node[0]);
-          }
-        }
-
-        state.$node[0].dataset.scale = state.data.scale;
-        state.$node[0].dataset.rotate = state.data.rotate;
-        state.$node[0].dataset.rotateX = state.data.rotateX; //new
-        state.$node[0].dataset.rotateY = state.data.rotateY; //new
-        state.$node[0].dataset.x = state.data.x;
-        state.$node[0].dataset.y = state.data.y;
-        state.$node[0].dataset.z = state.data.z; //new
-
-        /**/
-        //console.log(state.data,state.$node[0].dataset,state.$node[0].dataset===state.data);
-
-        config.redrawFunction(state.$node[0]);
-        showControls(state.$node);
-        //console.log(['redrawn',state.$node[0].dataset]);
-      }, 20);
-    }
-
-    function fixVector(x, y) {
-      var result = {
-        x: 0,
-        y: 0
-      },
-        angle = (config.rotation / 180) * Math.PI,
-        cs = Math.cos(angle),
-        sn = Math.sin(angle);
-
-      result.x = (x * cs - y * sn) * config.visualScaling;
-      result.y = (x * sn + y * cs) * config.visualScaling;
-      return result;
-    }
-
-    function handleMouseMove(e) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      var x = e.pageX - mouse.prevX,
-        y = e.pageY - mouse.prevY;
-
-      mouse.prevX = e.pageX;
-      mouse.prevY = e.pageY;
-      if (mouse.activeFunction) {
-        mouse.activeFunction(x, y);
-        redraw();
-      }
-
-      return false;
-    }
+    return false;
+  }
 
   return {
     init: init
   };
+
 
 })();
 
@@ -733,16 +767,241 @@ jQuery.fn.slidingInput = function (opts) {
 // PLUGINS
 
 $(function () {
-    // Initialise plugin
-    $('.slidable').slidingInput();
 
-    // Accepts options object that override defaults, but step/min/max on input override options
-    /*
-        $('.slidable').slidingInput({
-            step: 1,
-            min: 0,
-            max: 100,
-            tolerance: 2
-        });
-    */
+  // Initialise plugin
+  $('.slidable').slidingInput();
+
+  // Accepts options object that override defaults, but step/min/max on input override options
+  /*
+      $('.slidable').slidingInput({
+          step: 1,
+          min: 0,
+          max: 100,
+          tolerance: 2
+      });
+  */
+
+  // copied from impress.js Copyright 2011-2012 Bartek Szopka (@bartaz)
+  var pfx = (function() {
+    var style = document.createElement('dummy').style,
+            prefixes = 'Webkit Moz O ms Khtml'.split(' '),
+            memory = {};
+    return function(prop) {
+        if (typeof memory[ prop ] === "undefined") {
+            var ucProp = prop.charAt(0).toUpperCase() + prop.substr(1),
+                    props = (prop + ' ' + prefixes.join(ucProp + ' ') + ucProp).split(' ');
+            memory[ prop ] = null;
+            for (var i in props) {
+                if (style[ props[i] ] !== undefined) {
+                    memory[ prop ] = props[i];
+                    break;
+                }
+            }
+        }
+        return memory[ prop ];
+    };
+  }());
+
+  function getTrans3D() {
+
+    var prefix = (pfx('transform'));
+    var trans = $("#impress div:first-child")[0].style['' + prefix + ''].match(/.+?\(.+?\)/g);
+    var dico = {};
+    for (var el in trans) {
+        var ele = trans[el];
+        var key = ele.match(/.+?\(/g).join("").match(/[a-zA-Z0-9]/g).join("");
+        var value = ele.match(/\(.+\)/g)[0].split(",");
+        if (value.length <= 1) {
+            value = parseFloat(value[0].match(/-[0-9]+|[0-9]+/g)[0]);
+            dico[key] = value;
+        } else {
+            dico[key] = {};
+            for (val in value) {
+                var vale = parseFloat(value[val].match(/-[0-9]+|[0-9]+/g)[0]);
+                dico[key][val] = vale;
+            }
+        }
+    }
+    return dico;
+
+  }
+
+  // copied from impress.js Copyright 2011-2012 Bartek Szopka (@bartaz)
+  // `translate` builds a translate transform string for given data.
+  function translate(t) {
+    return " translate3d(" + t.translate3d[0] + "px," + t.translate3d[1] + "px," + t.translate3d[2] + "px) ";
+  };
+
+  // copied from impress.js Copyright 2011-2012 Bartek Szopka (@bartaz)
+  // `rotate` builds a rotate transform string for given data.
+  // By default the rotations are in X Y Z order that can be reverted by passing `true`
+  // as second parameter.
+  function rotate(r, revert) {
+    var rX = " rotateX(" + r.rotateX + "deg) ",
+      rY = " rotateY(" + r.rotateY + "deg) ",
+      rZ = " rotateZ(" + r.rotateZ + "deg) ";
+
+    return revert ? rZ + rY + rX : rX + rY + rZ;
+  };
+
+  // copied from impress.js Copyright 2011-2012 Bartek Szopka (@bartaz)
+  // `css` function applies the styles given in `props` object to the element
+  // given as `el`. It runs all property names through `pfx` function to make
+  // sure proper prefixed version of the property is used.
+  function css  (el, props) {
+    var key, pkey;
+    for (key in props) {
+      if (props.hasOwnProperty(key)) {
+        pkey = pfx(key);
+        if (pkey !== null) {
+          el.style[pkey] = props[key];
+        }
+      }
+    }
+    return el;
+  };
+
+
+  $(document).mousewheel(function(event, delta, deltaX, deltaY) {
+    var transform = getTrans3D();
+    transform.translate3d[2] = transform.translate3d[2] + deltaY * 10;
+
+    //set transfor and then
+    //set transition to 0 for fast response. We don' need impress animations when zooming
+    css($('#impress div:first-child')[0], {
+      transform: rotate(transform, true) + translate(transform),
+      transition: "all 0 ease 0" 
+    })
+  }); 
+
+  // credits to https://github.com/clairezed/ImpressEdit 
+  // compute the right angle for the position and rotation
+  function angle (obj, e) {
+      var alpha = obj.rotateX * 2 * Math.PI / 360;
+      var beta = obj.rotateY * 2 * Math.PI / 360;
+      var gamma = obj.rotateZ * 2 * Math.PI / 360;
+
+
+      var dReal = {
+          x: e.pageX - $("#impress").data('event').pos.x,
+          y: e.pageY - $("#impress").data('event').pos.y
+      };
+
+      var scale = -1;
+
+      var dVirtuel = {
+          x: 0,
+          y: 0,
+          z: 0
+      };
+
+      //to rotate in Z
+      dVirtuel.x += dReal.x * Math.cos(gamma) + dReal.y * Math.sin(gamma);
+      dVirtuel.y += dReal.y * Math.cos(gamma) - dReal.x * Math.sin(gamma);
+      dVirtuel.z += 0;
+
+      //to rotate in X
+      dVirtuel.x += dReal.x;
+      dVirtuel.y += dReal.y * Math.cos(alpha);
+      dVirtuel.z += -dReal.y * Math.sin(alpha);
+
+      //to rotate in Y
+      dVirtuel.x += dReal.x * Math.cos(beta);
+      dVirtuel.y += dReal.y * Math.cos(beta) - dReal.y * Math.sin(beta);
+      dVirtuel.z += dReal.x * Math.sin(beta);
+
+      var dVirtuel = {
+          x: 0,
+          y: 0,
+          z: 0
+      };
+
+      dVirtuel.x += dReal.x * (Math.cos(gamma) + Math.cos(beta)) + dReal.y * Math.sin(gamma);
+      dVirtuel.y += dReal.y * (Math.cos(gamma) + Math.cos(alpha) + Math.cos(beta) - Math.sin(beta)) - dReal.x * Math.sin(gamma);
+      dVirtuel.z += dReal.x * Math.sin(beta) - dReal.y * Math.sin(alpha);
+      //
+      dVirtuel.x *= scale;
+      dVirtuel.y *= scale;
+      dVirtuel.z *= scale;
+
+      var object = {
+        dVirtuelX : dVirtuel.x,
+        dVirtuelY : dVirtuel.y,
+        dVirtuelZ : dVirtuel.z
+
+      }
+      return object;
+  }
+
+
+  // copied from https://github.com/clairezed/ImpressEdit
+  $(document).mousedown(function(event) {
+
+    $("#impress").data('event', {
+        pos: {
+            x: event.pageX,
+            y: event.pageY
+        }
+    });
+
+    // hold the left click to move the viewport
+    if (event.which === 1) {
+      $(this).on('mousemove.moveView', function(event) {
+
+        var transform = getTrans3D();
+        var obj = angle(transform, event);
+
+        transform.translate3d[0] = parseInt(transform.translate3d[0] - obj.dVirtuelX);
+        transform.translate3d[1] = parseInt(transform.translate3d[1] - obj.dVirtuelY);
+        transform.translate3d[2] = parseInt(transform.translate3d[2] - obj.dVirtuelZ);
+
+        // update the old mouse position 
+        $("#impress").data('event').pos.x = event.pageX;
+        $("#impress").data('event').pos.y = event.pageY;
+        
+        css($('#impress div:first-child')[0], {
+          transform: rotate(transform, true) + translate(transform),
+          transition: "all 0 ease 0" 
+        })
+
+      });
+
+    }
+
+    // hold the middle mouse click to rotate the viewport
+    if (event.which === 2) {
+
+      $(this).on('mousemove.rotateView', function(event) {
+
+        var transform = getTrans3D();
+        var obj = angle(transform, event);
+
+        transform.rotateX = parseInt(transform.rotateX - obj.dVirtuelX);
+        transform.rotateY = parseInt(transform.rotateY - obj.dVirtuelY);
+        transform.rotateZ = parseInt(transform.rotateZ - obj.dVirtuelZ);
+
+        // update the old mouse position 
+        $("#impress").data('event').pos.x = event.pageX;
+        $("#impress").data('event').pos.y = event.pageY;
+        
+        css($('#impress div:first-child')[0], {
+          transform: rotate(transform, true) + translate(transform),
+          transition: "all 0 ease 0" 
+        })
+
+      });
+    }
+
+    // unbind handlers
+    $(this).on("mouseup", function() {
+      $('body').css('cursor', 'default');
+      $(this).off(".moveView");
+      $(this).off(".rotateView");
+    });
+   
+
+  }); 
+
+
 });
+
