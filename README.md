@@ -35,12 +35,9 @@ There is an [About](https://github.com/giokokos/editor/wiki/About) page too.
 * Menu of slides
 * Multiple selection of slides
 * Canvas for highlighting context on presentation mode
+* Layouts including custom algorithms
 
 **NOTE:** Impress.js is extended to support all these features.
-
-## UPCOMING FEATURES
-
-* Layouts including custom algorithms
 
 ## CREDITS
 

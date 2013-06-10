@@ -533,7 +533,7 @@ var builder = (function () {
     //query slide id
     var id, $step;
     id = 'NewSlide' + sequence();
-    $step = $('<div></div>').html('<h1>This is a new step. </h1> How about some contents?');
+    $step = $('<div class="step"></div>').html('<h1>This is a new step. </h1> How about some contents?');
     $step[0].id = id;
     $step[0].dataset.scale = 1;
     //console.log($('.step:last'))
