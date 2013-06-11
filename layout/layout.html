@@ -111,48 +111,50 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dbdbdb', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
 }
 
-#align-icons .gradient-holder > a{
-  display:block;
-  width:100%;
-  height: 100%;
-}
+          #spacing {
+             position: relative;
+             float: left;
+             margin-left: 80px;
+             width: 50px;
+             height: 50px;
+          }
 
-#align-row  a{
-  background: url("img/AlignRowCenter.png") center no-repeat;
-}
+          #spacing input {
+            width: 50px;
+            margin-bottom: 4px;
+            margin-top: 5px;
+          }
 
-#align-column {
-  top: 29px;
-  left: 0px;           
-}
+          #offset {
+            position:relative;
+            float:left;
+            margin-left: 13px;
+          }
 
- #align-column a{
-  background: url("img/AlignColumnCenter.png") center no-repeat;
-}
+          #offset-horizontal {
+            position:absolute;
+            width: 25px;
+            height: 25px;
+            top: 0px;
+            left: 0px;
+            border: 1px solid #ccc;
+            background: url("img/EvenRow.png") center no-repeat;
+          }
 
-#spread-row {
-  top: 0px;
-  left: 30px;
-}
-
-#spread-row  a{
-  background: url("img/DistributeRow.png") center no-repeat;
-}
-
-#spread-column {
-  top: 29px;
-  left: 30px;            
-}
-
-#spread-column a{         
-  background: url("img/DistributeColumn.png") center no-repeat;
-}
-
+          #offset-vertical {
+            position:absolute;
+            width: 25px;
+            height: 25px;
+            top: 29px;
+            left: 0px;
+            border: 1px solid #ccc;
+            background: url("img/EvenColumn.png") center no-repeat;
+          }
+  
         </style>
            
     </head>
     <body>
-
 
       <div id="align-circle">
         <a href="#" id="align-top-left" class="align-button" data-vertical="top" data-horizontal="left"></a>
@@ -174,6 +176,15 @@
         <div id="spread-column"><div class="gradient-holder"><a href="#"></a></div></div>
       </div>
 
+      <div id="spacing">
+        <input value="0" id="horizontal"/>
+        <input value="0" id="vertical"/>
+      </div>
+
+      <div id="offset">
+        <a id="offset-horizontal"></a>
+        <a id="offset-vertical"></a>
+      </div>
 
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
@@ -231,6 +242,11 @@
     $(document).on('click',".align-button", function(event){
       event.preventDefault();
       onAlignmentCircleClick($(event.target));
+    });
+
+    $(document).on('keyup', "input", function(event){
+      var value = $(this).val();
+      console.log(value);
     });
 
     $(document).on('mousedown',"#align-icons a", function(event){
