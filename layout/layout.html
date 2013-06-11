@@ -14,7 +14,7 @@
 
         <style>
 
-#align-circle{
+.alignment-circle{
   position:relative;
   float:left;
   width:50px;
@@ -22,7 +22,7 @@
   background: url("img/circle.png") center no-repeat;
 }
 
-.align-button{
+.circle-dot{
   position:absolute;
   display:block;
   width:9px;
@@ -30,51 +30,51 @@
   background: url("img/AlignWidgetD.png");
 }
 
-.align-button.active{
+.circle-dot.active{
   background: url("img/AlignWidgetH.png");
 }
 
-#align-top-left{
+.alignment-circle #top-left{
   top:0px;
   left:0px;
 }
 
-#align-top-center{
+.alignment-circle #top-center{
   top:0px;
   left:21px;
 }
 
-#align-top-right{
+.alignment-circle #top-right{
   top:0px;
   right:0;
 }
 
-#align-center-left{
+.alignment-circle #center-left{
   top:21px;
   left:0px;
 }
 
-#align-center-center{
+.alignment-circle #center-center{
   top:21px;
   left:21px;
 }
 
-#align-center-right{
+.alignment-circle #center-right{
   top:21px;
   right:0;
 }
 
-#align-bottom-left{
+.alignment-circle #bottom-left{
   bottom:0px;
   left:0px;
 }
 
-#align-bottom-center{
+.alignment-circle #bottom-center{
   bottom:0px;
   left:21px;
 }
 
-#align-bottom-right{
+.alignment-circle #bottom-right{
   bottom:0px;
   right:0;
 }
@@ -93,7 +93,7 @@
   background: #000000; /* used to darken on mouse click */
 }
 
-#align-row {
+.alignment-row {
   top: 0px;
   left: 0px;
 }
@@ -117,38 +117,38 @@
   height: 100%;
 }
 
-#align-row  a{
+.alignment-row  a{
   background: url("img/AlignRowCenter.png") center no-repeat;
 }
 
-#align-column {
+.alignment-column {
   top: 29px;
   left: 0px;           
 }
 
- #align-column a{
+ .alignment-column a{
   background: url("img/AlignColumnCenter.png") center no-repeat;
 }
 
-#spread-row {
+.spread-row {
   top: 0px;
   left: 30px;
 }
 
-#spread-row  a{
+.spread-row  a{
   background: url("img/DistributeRow.png") center no-repeat;
 }
 
-#spread-column {
+.spread-column {
   top: 29px;
   left: 30px;            
 }
 
-#spread-column a{         
+.spread-column a{         
   background: url("img/DistributeColumn.png") center no-repeat;
 }
 
-#spacing {
+.spacing {
    position: relative;
    float: left;
    margin-left: 80px;
@@ -156,27 +156,27 @@
    height: 50px;
 }
 
-#spacing input {
+.spacing input {
   width: 50px;
   margin-bottom: 4px;
   margin-top: 5px;
 }
 
-#offset-horizontal {
+.offset-horizontal {
   top: 0px;
   left: 0px;
 }
 
-#offset-horizontal a {
+.offset-horizontal a {
   background: url("img/EvenRow.png") center no-repeat;
 }
 
-#offset-vertical {
+.offset-vertical {
   top: 29px;
   left: 0px;
 }
 
-#offset-vertical a{
+.offset-vertical a{
   background: url("img/EvenColumn.png") center no-repeat;
 }
   
@@ -184,36 +184,37 @@
            
     </head>
     <body>
-
-      <div id="align-circle">
-        <a href="#" id="align-top-left" class="align-button" data-vertical="top" data-horizontal="left"></a>
-        <a href="#" id="align-top-center" class="align-button" data-vertical="top" data-horizontal="center"></a>
-        <a href="#" id="align-top-right" class="align-button" data-vertical="top" data-horizontal="right"></a>
-        <a href="#" id="align-center-left" class="align-button" data-vertical="center" data-horizontal="left"></a>
-        <a href="#" id="align-center-center" class="align-button active" data-vertical="center" data-horizontal="center"></a>
-        <a href="#" id="align-center-right" class="align-button" data-vertical="center" data-horizontal="right"></a>
-        <a href="#" id="align-bottom-left" class="align-button" data-vertical="bottom" data-horizontal="left"></a>
-        <a href="#" id="align-bottom-center" class="align-button" data-vertical="bottom" data-horizontal="center"></a>
-        <a href="#" id="align-bottom-right" class="align-button" data-vertical="bottom" data-horizontal="right"></a>
+    <div class="alignment-inspector">
+      <div class="alignment-circle">
+        <a href="#" id="top-left" class="circle-dot" data-vertical="top" data-horizontal="left"></a>
+        <a href="#" id="top-center" class="circle-dot" data-vertical="top" data-horizontal="center"></a>
+        <a href="#" id="top-right" class="circle-dot" data-vertical="top" data-horizontal="right"></a>
+        <a href="#" id="center-left" class="circle-dot" data-vertical="center" data-horizontal="left"></a>
+        <a href="#" id="center-center" class="circle-dot active" data-vertical="center" data-horizontal="center"></a>
+        <a href="#" id="center-right" class="circle-dot" data-vertical="center" data-horizontal="right"></a>
+        <a href="#" id="bottom-left" class="circle-dot" data-vertical="bottom" data-horizontal="left"></a>
+        <a href="#" id="bottom-center" class="circle-dot" data-vertical="bottom" data-horizontal="center"></a>
+        <a href="#" id="bottom-right" class="circle-dot" data-vertical="bottom" data-horizontal="right"></a>
       </div>
         
-      <div id="align-icons" class="icon-holder">
-        <div id="align-row"><div class="gradient-holder"><a href="#"></a></div></div>
-        <div id="align-column"><div class="gradient-holder"><a href="#"></a></div></div>
+      <div class="icon-holder alignment-icons">
+        <div class="alignment-row"><div class="gradient-holder"><a href="#"></a></div></div>
+        <div class="alignment-column"><div class="gradient-holder"><a href="#"></a></div></div>
 
-        <div id="spread-row"><div class="gradient-holder"><a href="#"></a></div></div>
-        <div id="spread-column"><div class="gradient-holder"><a href="#"></a></div></div>
+        <div class="spread-row"><div class="gradient-holder"><a href="#"></a></div></div>
+        <div class="spread-column"><div class="gradient-holder"><a href="#"></a></div></div>
       </div>
 
-      <div id="spacing">
+      <div class="spacing">
         <input value="0" id="horizontal"/>
         <input value="0" id="vertical"/>
       </div>
 
-      <div id="offset-icons" class="icon-holder">
-        <div id="offset-horizontal"><div class="gradient-holder"><a href="#"></a></div></div>
-        <div id="offset-vertical"><div class="gradient-holder"><a href="#"></a></div></div>
+      <div class="icon-holder offset-icons">
+        <div class="offset-horizontal"><div class="gradient-holder"><a href="#"></a></div></div>
+        <div class="offset-vertical"><div class="gradient-holder"><a href="#"></a></div></div>
       </div>
+    <div>
 
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
@@ -221,11 +222,11 @@
   $(function(){
 
     var alignment = {
-        horizontal: '',
-        vertical: ''
+        horizontal : '' ,
+        vertical : ''
       }
-    , $rowIcon = $('#align-row').find('a')
-    , $columnIcon = $('#align-column').find('a')
+    , $rowIcon = $('#alignment-row').find('a')
+    , $columnIcon = $('#alignment-column').find('a')
     , icons = {
 
         horizontal : {
@@ -245,7 +246,7 @@
     function init(){
       alignment.horizontal = "center";
       alignment.vertical = "center";
-      onAlignmentCircleClick($('align-center-center'))
+      onAlignmentCircleClick($('center-center'))
     }
 
     function setAlignIcons() {
@@ -258,7 +259,7 @@
 
     function onAlignmentCircleClick($target){
 
-      $('.align-button').removeClass('active');
+      $('.circle-dot').removeClass('active');
       $target.addClass('active');
 
       //store alignment setting
@@ -268,7 +269,7 @@
       setAlignIcons()
     }
 
-    $(document).on('click',".align-button", function(event){
+    $(document).on('click',".circle-dot", function(event){
       event.preventDefault();
       onAlignmentCircleClick($(event.target));
     });
