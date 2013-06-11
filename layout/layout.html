@@ -14,116 +14,139 @@
 
         <style>
 
-          #align-circle{
-            position:relative;
-            float:left;
-            width:50px;
-            height:50px;
-            background: url("img/circle.png") center no-repeat;
-          }
+#align-circle{
+  position:relative;
+  float:left;
+  width:50px;
+  height:50px;
+  background: url("img/circle.png") center no-repeat;
+}
 
-          .align-button{
-            position:absolute;
-            display:block;
-            width:9px;
-            height:9px;
-            background: url("img/AlignWidgetD.png");
-          }
+.align-button{
+  position:absolute;
+  display:block;
+  width:9px;
+  height:9px;
+  background: url("img/AlignWidgetD.png");
+}
 
-          .align-button.active{
-            background: url("img/AlignWidgetH.png");
-          }
+.align-button.active{
+  background: url("img/AlignWidgetH.png");
+}
 
-          #align-top-left{
-            top:0px;
-            left:0px;
-          }
+#align-top-left{
+  top:0px;
+  left:0px;
+}
 
-          #align-top-center{
-            top:0px;
-            left:21px;
-          }
+#align-top-center{
+  top:0px;
+  left:21px;
+}
 
-          #align-top-right{
-            top:0px;
-            right:0;
-          }
+#align-top-right{
+  top:0px;
+  right:0;
+}
 
-          #align-center-left{
-            top:21px;
-            left:0px;
-          }
+#align-center-left{
+  top:21px;
+  left:0px;
+}
 
-          #align-center-center{
-            top:21px;
-            left:21px;
-          }
+#align-center-center{
+  top:21px;
+  left:21px;
+}
 
-          #align-center-right{
-            top:21px;
-            right:0;
-          }
+#align-center-right{
+  top:21px;
+  right:0;
+}
 
-          #align-bottom-left{
-            bottom:0px;
-            left:0px;
-          }
+#align-bottom-left{
+  bottom:0px;
+  left:0px;
+}
 
-          #align-bottom-center{
-            bottom:0px;
-            left:21px;
-          }
+#align-bottom-center{
+  bottom:0px;
+  left:21px;
+}
 
-          #align-bottom-right{
-            bottom:0px;
-            right:0;
-          }
+#align-bottom-right{
+  bottom:0px;
+  right:0;
+}
+/* Align icons */
+#align-icons{
+   position:relative;
+   float:left;
+   margin-left: 15px;
+}
 
-          #align-icons{
-             position:relative;
-             float:left;
-             margin-left: 15px;
-          }
-  
-          #align-row {
-            position:absolute;
-            width: 25px;
-            height: 25px;
-            top: 0px;
-            left: 0px;
-            border: 1px solid #ccc;
-            background: url("img/AlignRowCenter.png") center no-repeat;
-          }
-        
-          #align-column {
-            position: absolute;
-            width: 25px;
-            height: 25px;
-            left: 0px;
-            top: 29px;
-            border: 1px solid #ccc;
-            background: url("img/AlignColumnCenter.png") center no-repeat;
-          }
+#align-icons > div{
+  position:absolute;
+  width: 25px;
+  height: 25px;
+  border: 1px solid #ccc;
+  background: #000000; /* used to darken on mouse click */
+}
 
-          #spread-row {
-            position: absolute;
-            width: 25px;
-            height: 25px;
-            top: 0px;
-            left: 30px;
-            border: 1px solid #ccc;
-            background: url("img/DistributeRow.png") center no-repeat;
-          }
+#align-row {
+  top: 0px;
+  left: 0px;
+}
 
-          #spread-column {
-            position: absolute;
-            width: 25px;
-            height: 25px;
-            left: 30px;
-            top: 29px;
-            border: 1px solid #ccc;
-            background: url("img/DistributeColumn.png") center no-repeat;
-          }
+#align-icons .gradient-holder{
+  width:100%;
+  height: 100%;
+  background: rgb(219,219,219); /* Old browsers */
+  background: -moz-linear-gradient(top, rgba(219,219,219,1) 0%, rgba(242,242,242,1) 33%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(219,219,219,1)), color-stop(33%,rgba(242,242,242,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, rgba(219,219,219,1) 0%,rgba(242,242,242,1) 33%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, rgba(219,219,219,1) 0%,rgba(242,242,242,1) 33%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, rgba(219,219,219,1) 0%,rgba(242,242,242,1) 33%,rgba(255,255,255,1) 100%); /* IE10+ */
+  background: linear-gradient(to bottom, rgba(219,219,219,1) 0%,rgba(242,242,242,1) 33%,rgba(255,255,255,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dbdbdb', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+}
+
+#align-icons .gradient-holder > a{
+  display:block;
+  width:100%;
+  height: 100%;
+}
+
+#align-row  a{
+  background: url("img/AlignRowCenter.png") center no-repeat;
+}
+
+#align-column {
+  top: 29px;
+  left: 0px;           
+}
+
+ #align-column a{
+  background: url("img/AlignColumnCenter.png") center no-repeat;
+}
+
+#spread-row {
+  top: 0px;
+  left: 30px;
+}
+
+#spread-row  a{
+  background: url("img/DistributeRow.png") center no-repeat;
+}
+
+#spread-column {
+  top: 29px;
+  left: 30px;            
+}
+
+#spread-column a{         
+  background: url("img/DistributeColumn.png") center no-repeat;
+}
 
         </style>
            
@@ -132,23 +155,23 @@
 
 
       <div id="align-circle">
-        <a id="align-top-left" class="align-button" data-vertical="top" data-horizontal="left"></a>
-        <a id="align-top-center" class="align-button" data-vertical="top" data-horizontal="center"></a>
-        <a id="align-top-right" class="align-button" data-vertical="top" data-horizontal="right"></a>
-        <a id="align-center-left" class="align-button" data-vertical="center" data-horizontal="left"></a>
-        <a id="align-center-center" class="align-button active" data-vertical="center" data-horizontal="center"></a>
-        <a id="align-center-right" class="align-button" data-vertical="center" data-horizontal="right"></a>
-        <a id="align-bottom-left" class="align-button" data-vertical="bottom" data-horizontal="left"></a>
-        <a id="align-bottom-center" class="align-button" data-vertical="bottom" data-horizontal="center"></a>
-        <a id="align-bottom-right" class="align-button" data-vertical="bottom" data-horizontal="right"></a>
+        <a href="#" id="align-top-left" class="align-button" data-vertical="top" data-horizontal="left"></a>
+        <a href="#" id="align-top-center" class="align-button" data-vertical="top" data-horizontal="center"></a>
+        <a href="#" id="align-top-right" class="align-button" data-vertical="top" data-horizontal="right"></a>
+        <a href="#" id="align-center-left" class="align-button" data-vertical="center" data-horizontal="left"></a>
+        <a href="#" id="align-center-center" class="align-button active" data-vertical="center" data-horizontal="center"></a>
+        <a href="#" id="align-center-right" class="align-button" data-vertical="center" data-horizontal="right"></a>
+        <a href="#" id="align-bottom-left" class="align-button" data-vertical="bottom" data-horizontal="left"></a>
+        <a href="#" id="align-bottom-center" class="align-button" data-vertical="bottom" data-horizontal="center"></a>
+        <a href="#" id="align-bottom-right" class="align-button" data-vertical="bottom" data-horizontal="right"></a>
       </div>
         
       <div id="align-icons">
-        <a id="align-row"></a>
-        <a id="align-column"></a>
+        <div id="align-row"><div class="gradient-holder"><a href="#"></a></div></div>
+        <div id="align-column"><div class="gradient-holder"><a href="#"></a></div></div>
 
-        <a id="spread-row"></a>
-        <a id="spread-column"></a>
+        <div id="spread-row"><div class="gradient-holder"><a href="#"></a></div></div>
+        <div id="spread-column"><div class="gradient-holder"><a href="#"></a></div></div>
       </div>
 
 
@@ -206,7 +229,20 @@
     }
 
     $(document).on('click',".align-button", function(event){
+      event.preventDefault();
       onAlignmentCircleClick($(event.target));
+    });
+
+    $(document).on('mousedown',"#align-icons a", function(event){
+      $(event.target)
+        .css("opacity", 0.7)
+        .parent().css("opacity", 0.7)
+    });
+
+    $(document).on('mouseup',"#align-icons a", function(event){
+      $(event.target)
+        .css("opacity", 1)
+        .parent().css("opacity", 1)
     });
 
   })
