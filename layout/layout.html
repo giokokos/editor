@@ -6,100 +6,146 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
     <head>
         <meta charset="utf-8">
-        <meta charset=utf-8>
         <title>title</title>
  
         <!--[if lt IE 9]> HTML5Shiv
             <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
 
-        <style type="text/css">
+        <style>
 
-#align-circle{
-  position:absolute;
-  width:50px;
-  height:50px;
-  background: url("img/circle.png") center center no-repeat;
-}
+          #align-circle{
+            position:absolute;
+            width:50px;
+            height:50px;
+            background: url("img/circle.png") center no-repeat;
+          }
 
-.align-button{
-  position:absolute;
-  display:block;
-  float:left;
-  width:9px;
-  height:9px;
-  background: url("img/AlignWidgetD.png");
-}
+          .align-button{
+            position:absolute;
+            display:block;
+            float:left;
+            width:9px;
+            height:9px;
+            background: url("img/AlignWidgetD.png");
+          }
 
-.align-button.active{
-  background: url("img/AlignWidgetH.png");
-}
+          .align-button.active{
+            background: url("img/AlignWidgetH.png");
+          }
 
-#align-top-left{
-  top:0px;
-  left:0px;
-}
+          #align-top-left{
+            top:0px;
+            left:0px;
+          }
 
-#align-top-center{
-  top:0px;
-  left:21px;
-}
+          #align-top-center{
+            top:0px;
+            left:21px;
+          }
 
-#align-top-right{
-  top:0px;
-  right:0;
-}
+          #align-top-right{
+            top:0px;
+            right:0;
+          }
 
-#align-center-left{
-  top:21px;
-  left:0px;
-}
+          #align-center-left{
+            top:21px;
+            left:0px;
+          }
 
-#align-center-center{
-  top:21px;
-  left:21px;
-}
+          #align-center-center{
+            top:21px;
+            left:21px;
+          }
 
-#align-center-right{
-  top:21px;
-  right:0;
-}
+          #align-center-right{
+            top:21px;
+            right:0;
+          }
 
-#align-bottom-left{
-  bottom:0px;
-  left:0px;
-}
+          #align-bottom-left{
+            bottom:0px;
+            left:0px;
+          }
 
-#align-bottom-center{
-  bottom:0px;
-  left:21px;
-}
+          #align-bottom-center{
+            bottom:0px;
+            left:21px;
+          }
 
-#align-bottom-right{
-  bottom:0px;
-  right:0;
-}
-
-
+          #align-bottom-right{
+            bottom:0px;
+            right:0;
+          }
+  
+          #align-row {
+            position:absolute;
+            width: 25px;
+            height: 25px;
+            left: 62px;
+            border: 1px solid #ccc;
+            background: url("img/AlignRowCenter.png") center no-repeat;
+          }
         
+          #align-column {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            left: 62px;
+            top: 33px;
+            border: 1px solid #ccc;
+            background: url("img/AlignColumnCenter.png") center no-repeat;
+          }
+
+          #spread-row {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            left: 89px;
+            border: 1px solid #ccc;
+            background: url("img/DistributeRow.png") center no-repeat;
+          }
+
+          #spread-column {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            left: 89px;
+            top: 33px;
+            border: 1px solid #ccc;
+            background: url("img/DistributeColumn.png") center no-repeat;
+          }
+
         </style>
- 
+           
     </head>
     <body>
 
+
       <div id="align-circle">
-          <a id="align-top-left" class="align-button" data-vertical="top" data-horizontal="left"></a>
-          <a id="align-top-center" class="align-button" data-vertical="top" data-horizontal="center"></a>
-          <a id="align-top-right" class="align-button" data-vertical="top" data-horizontal="right"></a>
-          <a id="align-center-left" class="align-button" data-vertical="center" data-horizontal="left"></a>
-          <a id="align-center-center" class="align-button" data-vertical="center" data-horizontal="center"></a>
-          <a id="align-center-right" class="align-button" data-vertical="center" data-horizontal="right"></a>
-          <a id="align-bottom-left" class="align-button" data-vertical="bottom" data-horizontal="left"></a>
-          <a id="align-bottom-center" class="align-button" data-vertical="bottom" data-horizontal="center"></a>
-          <a id="align-bottom-right" class="align-button" data-vertical="bottom" data-horizontal="right"></a>
-        </div>
+        <a id="align-top-left" class="align-button" data-vertical="top" data-horizontal="left"></a>
+        <a id="align-top-center" class="align-button" data-vertical="top" data-horizontal="center"></a>
+        <a id="align-top-right" class="align-button" data-vertical="top" data-horizontal="right"></a>
+        <a id="align-center-left" class="align-button" data-vertical="center" data-horizontal="left"></a>
+        <a id="align-center-center" class="align-button active" data-vertical="center" data-horizontal="center"></a>
+        <a id="align-center-right" class="align-button" data-vertical="center" data-horizontal="right"></a>
+        <a id="align-bottom-left" class="align-button" data-vertical="bottom" data-horizontal="left"></a>
+        <a id="align-bottom-center" class="align-button" data-vertical="bottom" data-horizontal="center"></a>
+        <a id="align-bottom-right" class="align-button" data-vertical="bottom" data-horizontal="right"></a>
       </div>
+        
+      <div>
+        <a id="align-row"></a>
+        <a id="align-column"></a>
+
+        <a id="spread-row"></a>
+        <a id="spread-column"></a>
+      </div>
+
+
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
 <script>
   $(function(){
 
@@ -107,17 +153,65 @@
       var $btn = $(event.target);
       $('.align-button').removeClass('active');
       $btn.addClass('active');
-      alignment={
+
+      var alignment = {
         horizontal: $btn.data("horizontal"),
         vertical:  $btn.data("vertical")
       }
 
-      console.log(alignment)
+      var $row = $('#align-row');
+      var $column = $('#align-column');
+
+  // console.log(alignment.horizontal, alignment.vertical) 
+
+    // function to apply the correct images for each column
+    function applyImages() {
+
+        if (alignment.horizontal == 'left') {
+
+          $column.css( 'background-image', 'url("img/AlignColumnLeft.png")' );
+
+        }
+        if (alignment.horizontal == 'center') {
+
+          $column.css( 'background-image', 'url("img/AlignColumnCenter.png")' );
+
+        }
+        if (alignment.horizontal == 'right') {
+
+          $column.css( 'background-image', 'url("img/AlignColumnRight.png")' );
+
+        }
+
+    }
+
+    if (alignment.vertical == 'top') {
+
+        $row.css( 'background-image', 'url("img/AlignRowTop.png")' );
+        applyImages();
+     }
+
+     if (alignment.vertical == 'center') {
+
+        $row.css( 'background-image', 'url("img/AlignRowCenter.png")' );
+        applyImages();
+
+     }
+
+    if (alignment.vertical == 'bottom') {
+
+        $row.css( 'background-image', 'url("img/AlignRowBottom.png")' );
+        applyImages();
+
+     }
+
+    //  console.log(alignment)
     });
 
   })
 
 
 </script>
+
     </body>
 </html>
