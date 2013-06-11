@@ -15,7 +15,8 @@
         <style>
 
           #align-circle{
-            position:absolute;
+            position:relative;
+            float:left;
             width:50px;
             height:50px;
             background: url("img/circle.png") center no-repeat;
@@ -24,7 +25,6 @@
           .align-button{
             position:absolute;
             display:block;
-            float:left;
             width:9px;
             height:9px;
             background: url("img/AlignWidgetD.png");
@@ -78,12 +78,19 @@
             bottom:0px;
             right:0;
           }
+
+          #align-icons{
+             position:relative;
+             float:left;
+             margin-left: 15px;
+          }
   
           #align-row {
             position:absolute;
             width: 25px;
             height: 25px;
-            left: 62px;
+            top: 0px;
+            left: 0px;
             border: 1px solid #ccc;
             background: url("img/AlignRowCenter.png") center no-repeat;
           }
@@ -92,8 +99,8 @@
             position: absolute;
             width: 25px;
             height: 25px;
-            left: 62px;
-            top: 33px;
+            left: 0px;
+            top: 29px;
             border: 1px solid #ccc;
             background: url("img/AlignColumnCenter.png") center no-repeat;
           }
@@ -102,7 +109,8 @@
             position: absolute;
             width: 25px;
             height: 25px;
-            left: 89px;
+            top: 0px;
+            left: 30px;
             border: 1px solid #ccc;
             background: url("img/DistributeRow.png") center no-repeat;
           }
@@ -111,8 +119,8 @@
             position: absolute;
             width: 25px;
             height: 25px;
-            left: 89px;
-            top: 33px;
+            left: 30px;
+            top: 29px;
             border: 1px solid #ccc;
             background: url("img/DistributeColumn.png") center no-repeat;
           }
@@ -135,7 +143,7 @@
         <a id="align-bottom-right" class="align-button" data-vertical="bottom" data-horizontal="right"></a>
       </div>
         
-      <div>
+      <div id="align-icons">
         <a id="align-row"></a>
         <a id="align-column"></a>
 
@@ -149,63 +157,56 @@
 <script>
   $(function(){
 
-    $(document).on('click',".align-button", function(event){
-      var $btn = $(event.target);
-      $('.align-button').removeClass('active');
-      $btn.addClass('active');
-
-      var alignment = {
-        horizontal: $btn.data("horizontal"),
-        vertical:  $btn.data("vertical")
+    var alignment = {
+        horizontal: '',
+        vertical: ''
       }
+    , $row = $('#align-row')
+    , $column = $('#align-column')
+    , icons = {
 
-      var $row = $('#align-row');
-      var $column = $('#align-column');
+        horizontal : {
+          left : "img/AlignColumnLeft.png",
+          center: "img/AlignColumnCenter.png",
+          right: "img/AlignColumnRight.png",
+        },
 
-  // console.log(alignment.horizontal, alignment.vertical) 
-
-    // function to apply the correct images for each column
-    function applyImages() {
-
-        if (alignment.horizontal == 'left') {
-
-          $column.css( 'background-image', 'url("img/AlignColumnLeft.png")' );
-
+        vertical : {
+          top : "img/AlignRowTop.png",
+          center: "img/AlignRowCenter.png",
+          bottom: "img/AlignRowBottom.png",
         }
-        if (alignment.horizontal == 'center') {
-
-          $column.css( 'background-image', 'url("img/AlignColumnCenter.png")' );
-
-        }
-        if (alignment.horizontal == 'right') {
-
-          $column.css( 'background-image', 'url("img/AlignColumnRight.png")' );
-
-        }
-
+       
     }
 
-    if (alignment.vertical == 'top') {
+    function init(){
+      alignment.horizontal = "center";
+      alignment.vertical = "center";
+      onAlignmentCircleClick($('align-center-center'))
+    }
 
-        $row.css( 'background-image', 'url("img/AlignRowTop.png")' );
-        applyImages();
-     }
+    function setAlignIcons() {
 
-     if (alignment.vertical == 'center') {
+      $column.css( 'background-image', 'url("'+ icons.horizontal[alignment.horizontal] +'")' );
 
-        $row.css( 'background-image', 'url("img/AlignRowCenter.png")' );
-        applyImages();
+      $row.css( 'background-image', 'url("'+ icons.vertical[alignment.vertical] +'")' );
+    }
 
-     }
 
-    if (alignment.vertical == 'bottom') {
+    function onAlignmentCircleClick($target){
 
-        $row.css( 'background-image', 'url("img/AlignRowBottom.png")' );
-        applyImages();
+      $('.align-button').removeClass('active');
+      $target.addClass('active');
 
-     }
+      //store alignment setting
+      alignment.horizontal = $target.data("horizontal"),
+      alignment.vertical = $target.data("vertical")
 
-    //  console.log(alignment)
+      setAlignIcons()
+    }
+
+    $(document).on('click',".align-button", function(event){
+      onAlignmentCircleClick($(event.target));
     });
 
   })
