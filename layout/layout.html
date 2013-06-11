@@ -1,0 +1,123 @@
+<!doctype html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta charset=utf-8>
+        <title>title</title>
+ 
+        <!--[if lt IE 9]> HTML5Shiv
+            <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <style type="text/css">
+
+#align-circle{
+  position:absolute;
+  width:50px;
+  height:50px;
+  background: url("img/circle.png") center center no-repeat;
+}
+
+.align-button{
+  position:absolute;
+  display:block;
+  float:left;
+  width:9px;
+  height:9px;
+  background: url("img/AlignWidgetD.png");
+}
+
+.align-button.active{
+  background: url("img/AlignWidgetH.png");
+}
+
+#align-top-left{
+  top:0px;
+  left:0px;
+}
+
+#align-top-center{
+  top:0px;
+  left:21px;
+}
+
+#align-top-right{
+  top:0px;
+  right:0;
+}
+
+#align-center-left{
+  top:21px;
+  left:0px;
+}
+
+#align-center-center{
+  top:21px;
+  left:21px;
+}
+
+#align-center-right{
+  top:21px;
+  right:0;
+}
+
+#align-bottom-left{
+  bottom:0px;
+  left:0px;
+}
+
+#align-bottom-center{
+  bottom:0px;
+  left:21px;
+}
+
+#align-bottom-right{
+  bottom:0px;
+  right:0;
+}
+
+
+        
+        </style>
+ 
+    </head>
+    <body>
+
+      <div id="align-circle">
+          <a id="align-top-left" class="align-button" data-vertical="top" data-horizontal="left"></a>
+          <a id="align-top-center" class="align-button" data-vertical="top" data-horizontal="center"></a>
+          <a id="align-top-right" class="align-button" data-vertical="top" data-horizontal="right"></a>
+          <a id="align-center-left" class="align-button" data-vertical="center" data-horizontal="left"></a>
+          <a id="align-center-center" class="align-button" data-vertical="center" data-horizontal="center"></a>
+          <a id="align-center-right" class="align-button" data-vertical="center" data-horizontal="right"></a>
+          <a id="align-bottom-left" class="align-button" data-vertical="bottom" data-horizontal="left"></a>
+          <a id="align-bottom-center" class="align-button" data-vertical="bottom" data-horizontal="center"></a>
+          <a id="align-bottom-right" class="align-button" data-vertical="bottom" data-horizontal="right"></a>
+        </div>
+      </div>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script>
+  $(function(){
+
+    $(document).on('click',".align-button", function(event){
+      var $btn = $(event.target);
+      $('.align-button').removeClass('active');
+      $btn.addClass('active');
+      alignment={
+        horizontal: $btn.data("horizontal"),
+        vertical:  $btn.data("vertical")
+      }
+
+      console.log(alignment)
+    });
+
+  })
+
+
+</script>
+    </body>
+</html>
