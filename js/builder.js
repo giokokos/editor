@@ -210,7 +210,7 @@ var builder = (function () {
 
         // use x and y offsets from first element
         // center of circle (0, 0)
-        var offSetX = 0 
+        var offSetX = 0
         , offSetY = 0
         , angle = 0
         , radius = 2000
@@ -533,9 +533,9 @@ var builder = (function () {
     //query slide id
     var id, $step;
     id = 'NewSlide' + sequence();
-    $step = $('<div></div>').addClass('step builder-justcreated').html('<h1>This is a new step. </h1> How about some contents?');
+    $step = $('<div class="step"></div>').html('<h1>This is a new step. </h1> How about some contents?');
     $step[0].id = id;
-    $step[0].dataset.scale = 0.5;
+    $step[0].dataset.scale = 1;
     //console.log($('.step:last'))
     // works when the overview div is the first child of impress main div
     $step.insertAfter($('.step:last')); //not too performant, but future proof
