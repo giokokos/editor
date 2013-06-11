@@ -224,8 +224,8 @@
         horizontal: '',
         vertical: ''
       }
-    , $row = $('#align-row')
-    , $column = $('#align-column')
+    , $rowIcon = $('#align-row').find('a')
+    , $columnIcon = $('#align-column').find('a')
     , icons = {
 
         horizontal : {
@@ -250,9 +250,9 @@
 
     function setAlignIcons() {
 
-      $column.css( 'background-image', 'url("'+ icons.horizontal[alignment.horizontal] +'")' );
+      $columnIcon.css( 'background-image', 'url("'+ icons.horizontal[alignment.horizontal] +'")' );
 
-      $row.css( 'background-image', 'url("'+ icons.vertical[alignment.vertical] +'")' );
+      $rowIcon.css( 'background-image', 'url("'+ icons.vertical[alignment.vertical] +'")' );
     }
 
 
