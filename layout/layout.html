@@ -125,11 +125,50 @@
             background: url("img/DistributeColumn.png") center no-repeat;
           }
 
+          #spacing {
+             position: relative;
+             float: left;
+             margin-left: 80px;
+             width: 50px;
+             height: 50px;
+          }
+
+          #spacing input {
+            width: 50px;
+            margin-bottom: 4px;
+            margin-top: 5px;
+          }
+
+          #offset {
+            position:relative;
+            float:left;
+            margin-left: 13px;
+          }
+
+          #offset-horizontal {
+            position:absolute;
+            width: 25px;
+            height: 25px;
+            top: 0px;
+            left: 0px;
+            border: 1px solid #ccc;
+            background: url("img/EvenRow.png") center no-repeat;
+          }
+
+          #offset-vertical {
+            position:absolute;
+            width: 25px;
+            height: 25px;
+            top: 29px;
+            left: 0px;
+            border: 1px solid #ccc;
+            background: url("img/EvenColumn.png") center no-repeat;
+          }
+  
         </style>
            
     </head>
     <body>
-
 
       <div id="align-circle">
         <a id="align-top-left" class="align-button" data-vertical="top" data-horizontal="left"></a>
@@ -151,6 +190,15 @@
         <a id="spread-column"></a>
       </div>
 
+      <div id="spacing">
+        <input value="0" id="horizontal"/>
+        <input value="0" id="vertical"/>
+      </div>
+
+      <div id="offset">
+        <a id="offset-horizontal"></a>
+        <a id="offset-vertical"></a>
+      </div>
 
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
@@ -207,6 +255,11 @@
 
     $(document).on('click',".align-button", function(event){
       onAlignmentCircleClick($(event.target));
+    });
+
+    $(document).on('keyup', "input", function(event){
+      var value = $(this).val();
+      console.log(value);
     });
 
   })
