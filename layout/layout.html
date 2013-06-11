@@ -78,14 +78,14 @@
   bottom:0px;
   right:0;
 }
-/* Align icons */
-#align-icons{
+/* icons */
+.icon-holder{
    position:relative;
    float:left;
    margin-left: 15px;
 }
 
-#align-icons > div{
+.icon-holder > div{
   position:absolute;
   width: 25px;
   height: 25px;
@@ -98,7 +98,7 @@
   left: 0px;
 }
 
-#align-icons .gradient-holder{
+.gradient-holder{
   width:100%;
   height: 100%;
   background: rgb(219,219,219); /* Old browsers */
@@ -111,45 +111,74 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dbdbdb', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
 }
 
-          #spacing {
-             position: relative;
-             float: left;
-             margin-left: 80px;
-             width: 50px;
-             height: 50px;
-          }
+.gradient-holder > a{
+  display:block;
+  width:100%;
+  height: 100%;
+}
 
-          #spacing input {
-            width: 50px;
-            margin-bottom: 4px;
-            margin-top: 5px;
-          }
+#align-row  a{
+  background: url("img/AlignRowCenter.png") center no-repeat;
+}
 
-          #offset {
-            position:relative;
-            float:left;
-            margin-left: 13px;
-          }
+#align-column {
+  top: 29px;
+  left: 0px;           
+}
 
-          #offset-horizontal {
-            position:absolute;
-            width: 25px;
-            height: 25px;
-            top: 0px;
-            left: 0px;
-            border: 1px solid #ccc;
-            background: url("img/EvenRow.png") center no-repeat;
-          }
+ #align-column a{
+  background: url("img/AlignColumnCenter.png") center no-repeat;
+}
 
-          #offset-vertical {
-            position:absolute;
-            width: 25px;
-            height: 25px;
-            top: 29px;
-            left: 0px;
-            border: 1px solid #ccc;
-            background: url("img/EvenColumn.png") center no-repeat;
-          }
+#spread-row {
+  top: 0px;
+  left: 30px;
+}
+
+#spread-row  a{
+  background: url("img/DistributeRow.png") center no-repeat;
+}
+
+#spread-column {
+  top: 29px;
+  left: 30px;            
+}
+
+#spread-column a{         
+  background: url("img/DistributeColumn.png") center no-repeat;
+}
+
+#spacing {
+   position: relative;
+   float: left;
+   margin-left: 80px;
+   width: 50px;
+   height: 50px;
+}
+
+#spacing input {
+  width: 50px;
+  margin-bottom: 4px;
+  margin-top: 5px;
+}
+
+#offset-horizontal {
+  top: 0px;
+  left: 0px;
+}
+
+#offset-horizontal a {
+  background: url("img/EvenRow.png") center no-repeat;
+}
+
+#offset-vertical {
+  top: 29px;
+  left: 0px;
+}
+
+#offset-vertical a{
+  background: url("img/EvenColumn.png") center no-repeat;
+}
   
         </style>
            
@@ -168,7 +197,7 @@
         <a href="#" id="align-bottom-right" class="align-button" data-vertical="bottom" data-horizontal="right"></a>
       </div>
         
-      <div id="align-icons">
+      <div id="align-icons" class="icon-holder">
         <div id="align-row"><div class="gradient-holder"><a href="#"></a></div></div>
         <div id="align-column"><div class="gradient-holder"><a href="#"></a></div></div>
 
@@ -181,9 +210,9 @@
         <input value="0" id="vertical"/>
       </div>
 
-      <div id="offset">
-        <a id="offset-horizontal"></a>
-        <a id="offset-vertical"></a>
+      <div id="offset-icons" class="icon-holder">
+        <div id="offset-horizontal"><div class="gradient-holder"><a href="#"></a></div></div>
+        <div id="offset-vertical"><div class="gradient-holder"><a href="#"></a></div></div>
       </div>
 
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
@@ -249,13 +278,13 @@
       console.log(value);
     });
 
-    $(document).on('mousedown',"#align-icons a", function(event){
+    $(document).on('mousedown',".icon-holder a", function(event){
       $(event.target)
         .css("opacity", 0.7)
         .parent().css("opacity", 0.7)
     });
 
-    $(document).on('mouseup',"#align-icons a", function(event){
+    $(document).on('mouseup',".icon-holder a", function(event){
       $(event.target)
         .css("opacity", 1)
         .parent().css("opacity", 1)
