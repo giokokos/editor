@@ -1,10 +1,17 @@
-$(function(){
+// since this works with selectors this object must be called
+// after the dom has loaded
+
+function LayoutManager ($){
 
   var alignment = {
       horizontal : '' ,
       vertical : ''
-    }
-  , $rowIcon = $('.alignment-row').find('a')
+    };
+
+  // the objects that holds the html nodes to align
+  this.selection = [];
+
+  var $rowIcon = $('.alignment-row').find('a')
   , $columnIcon = $('.alignment-column').find('a')
   , icons = {
 
@@ -22,22 +29,29 @@ $(function(){
      
   }
 
-  function init(){
+  LayoutManager.prototype.setSelection = function(selection){
+    if(!(selection instanceof Array)){
+      throw new Error("layoutManager.js: selection should be an array")
+    }
+
+    this.selection = selection;
+  }
+
+  LayoutManager.prototype.init = function(){
     alignment.horizontal = "center";
     alignment.vertical = "center";
-    onAlignmentCircleClick($('center-center'))
+    this.onAlignmentCircleClick($('center-center'))
+    this.setUpListeners();
   }
 
   // update align icons
-  function setAlignIcons() {
-    console.log($columnIcon)
+  LayoutManager.prototype.setAlignIcons = function() {
     $columnIcon.css( 'background-image', 'url("'+ icons.horizontal[alignment.horizontal] +'")' );
-      console.log($columnIcon.css('background-image'))
     $rowIcon.css( 'background-image', 'url("'+ icons.vertical[alignment.vertical] +'")' );
   }
 
   // update alignment data
-  function onAlignmentCircleClick($target){
+  LayoutManager.prototype.onAlignmentCircleClick = function($target){
 
     $('.circle-dot').removeClass('active');
     $target.addClass('active');
@@ -46,12 +60,14 @@ $(function(){
     alignment.horizontal = $target.data("horizontal"),
     alignment.vertical = $target.data("vertical")
 
-    setAlignIcons()
+    this.setAlignIcons()
   }
 
   // mouse and keyboard listeners
-  $(document)
-    .on('click',".circle-dot", function(event){
+  LayoutManager.prototype.setUpListeners = function(){
+    var that=this;
+    $(document)
+    .on('click:layoutManager',".circle-dot", function(event){
       event.preventDefault();
       onAlignmentCircleClick($(event.target));
     })
@@ -78,7 +94,18 @@ $(function(){
     })
     .on('mousedown mousewheel', '.sidebar', function(event) {
       event.stopPropagation(); // prevent all the handlers of viewport
+    })
+    .on('click', '.alignment-row', function(event) {
+      that.alignRow()
     });
+  }
+
+   LayoutManager.prototype.alignRow = function(){
+    // do stuff
+    console.log("I will align row this selection")
+    console.log(this.selection)
+  }
 
 
-})
+    this.init();
+};

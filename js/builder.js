@@ -237,6 +237,9 @@ var builder = (function () {
     }
   }
 
+  var layoutManager = new LayoutManager(jQuery);
+  layoutManager.setSelection(selection);
+
   handlers.move = function (x, y) {
     var v = fixVector(x, y);
     if (selection.length > 1) {
