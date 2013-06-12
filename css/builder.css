@@ -1,6 +1,8 @@
-/* GUI styles */
+/**********************************************
+            GUI Styles
+***********************************************/
 
-body.edit .step:hover{
+body.edit .step.hover{
   background-color: rgba(255,250,100,0.5) !important;
 }
 
@@ -8,7 +10,9 @@ body.edit .step.selected{
   background-color: rgba(255,200,100,0.25) !important;
 }
 
-/* Main controls */
+/**********************************************
+            Main Controls
+***********************************************/
 
 #builder-main {
   background-color: #222;
@@ -16,8 +20,9 @@ body.edit .step.selected{
   width: 110px;
   text-align: center;
   position: absolute;
-  top: 0;
-  right: 0;
+  /*top: 0;
+  right: 0;*/
+  top:55;/*new*/
   padding: 10px;
   margin: 10px;
   z-index: 10;
@@ -64,13 +69,16 @@ body.edit .step.selected{
   background:rgb(255, 108, 108);
 }
 
-/* Controls */
+/**********************************************
+            Controls
+***********************************************/
 
 #sliders {
   color: #fff;
   text-align: center;
   position: absolute;
-  top: 150;
+  /*top: 150;*/
+  top:300; /*new*/
   left: 0;
   padding: 10px;
   margin: 10px;
@@ -186,8 +194,10 @@ body.edit .step.selected{
 
 .bt-add-slide {
   opacity: .6;
-  right: 10px;
-  top: 400px;
+  /*right: 10px;
+  top: 400px;*/
+  left:10px; /*new*/
+  top:650px; /*new*/
   cursor: pointer;
   position: absolute;
   font-family: 'IconicStroke'!important;
@@ -243,9 +253,9 @@ a.back-button:hover {
   -o-transition: all .15s ease;
 }
 
-/*
-  For nicEdit panel
-*/
+/**********************************************
+            nicEdit Panel
+***********************************************/
 
 #myNicPanel {
   position: absolute;
@@ -263,9 +273,9 @@ a.back-button:hover {
   font-size: 1.5em;
 }
 
-/*
-  For modal window of settings
-*/
+/**********************************************
+            Modal Window
+***********************************************/
 
 .modal-overlay  {
   position:fixed;  
@@ -351,9 +361,9 @@ a.back-button:hover {
   font-size: 14pt;
 }
 
-/*
-  Sliders
-*/
+/**********************************************
+            Sliders
+***********************************************/
 
 .slidable {
   border: none;
@@ -366,9 +376,9 @@ a.back-button:hover {
     cursor: auto;
 }
 
-/* 
-  Theme classes 
-*/
+/**********************************************
+            Themes
+***********************************************/
 
 .black {
   background: #7d7e7d; /* Old browsers */
@@ -418,4 +428,241 @@ a.back-button:hover {
   background: -o-radial-gradient(center, ellipse cover,  rgba(254,252,234,1) 0%,rgba(241,218,54,1) 100%); /* Opera 12+ */
   background: -ms-radial-gradient(center, ellipse cover,  rgba(254,252,234,1) 0%,rgba(241,218,54,1) 100%); /* IE10+ */
   background: radial-gradient(ellipse at center,  rgba(254,252,234,1) 0%,rgba(241,218,54,1) 100%); /* W3C */
+}
+
+/**********************************************
+            Allignment
+***********************************************/
+
+.sidebar {
+  position: absolute;
+  width: 245px;
+  height: 100%;
+  right: 0;
+  top: 0;
+  padding: 0;
+  z-index: 102;
+  background: #222;
+  font-size: 17px;
+  border-right: 1px solid rgba(0,0,0,0.1);
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.primary {
+  width: 100%;
+  margin-top: 10px;
+  padding: 0 10px;
+}
+
+.primary .button {
+  display: inline-block;
+  width: 42%;
+  height: 60px;
+  margin-bottom: 6px;
+  margin: 5;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.button.save {
+  background: #40cb90 url("../img/download.png") no-repeat center;
+}
+
+.button.overview {
+  background: #40cb90 url("../img/eye.png") no-repeat center;
+}
+
+.button:hover {
+  background-color: #68d6a7;
+}
+
+
+.divider {
+  border-bottom: 1px solid #333;
+  margin: 10px 0;
+}
+
+.title {
+  color: #fff;
+  margin: 0 0 10;
+  text-align: center;
+}
+
+
+.alignment-inspector {
+  width: 100%;
+  margin-top: 10px;
+  padding: 0 10px;
+}
+
+.alignment-circle{
+  position:relative;
+  float:left;
+  width:50px;
+  height:50px;
+  background: url("../layout/img/circle.png") center no-repeat;
+}
+
+.circle-dot{
+  position:absolute;
+  display:block;
+  width:9px;
+  height:9px;
+  background: url("../layout/img/AlignWidgetD.png");
+}
+
+.circle-dot.active{
+  background: url("../layout/img/AlignWidgetH.png");
+}
+
+.alignment-circle #top-left{
+  top:1px;
+  left:1px;
+}
+
+.alignment-circle #top-center{
+  top:1px;
+  left:21px;
+}
+
+.alignment-circle #top-right{
+  top:1px;
+  right:1px;
+}
+
+.alignment-circle #center-left{
+  top:21px;
+  left:1px;
+}
+
+.alignment-circle #center-center{
+  top:21px;
+  left:21px;
+}
+
+.alignment-circle #center-right{
+  top:21px;
+  right:1px;
+}
+
+.alignment-circle #bottom-left{
+  bottom:1px;
+  left:1px;
+}
+
+.alignment-circle #bottom-center{
+  bottom:0px;
+  left:21px;
+}
+
+.alignment-circle #bottom-right{
+  bottom:1px;
+  right:1px;
+}
+/* icons */
+.icon-holder{
+   position:relative;
+   float:left;
+   margin-left: 15px;
+}
+
+.icon-holder > div{
+  position:absolute;
+  width: 25px;
+  height: 25px;
+  border: 1px solid #ccc;
+  background: #000000; /* used to darken on mouse click */
+}
+
+.alignment-row {
+  top: 0px;
+  left: 0px;
+}
+
+.gradient-holder{
+  width:100%;
+  height: 100%;
+  background: rgb(219,219,219); /* Old browsers */
+  background: -moz-linear-gradient(top, rgba(219,219,219,1) 0%, rgba(242,242,242,1) 33%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(219,219,219,1)), color-stop(33%,rgba(242,242,242,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, rgba(219,219,219,1) 0%,rgba(242,242,242,1) 33%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, rgba(219,219,219,1) 0%,rgba(242,242,242,1) 33%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, rgba(219,219,219,1) 0%,rgba(242,242,242,1) 33%,rgba(255,255,255,1) 100%); /* IE10+ */
+  background: linear-gradient(to bottom, rgba(219,219,219,1) 0%,rgba(242,242,242,1) 33%,rgba(255,255,255,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dbdbdb', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+}
+
+.gradient-holder > a{
+  display:block;
+  width:100%;
+  height: 100%;
+}
+
+.alignment-row  a{
+  background: url("../layout/img/AlignRowCenter.png") center no-repeat;
+}
+
+.alignment-column {
+  top: 29px;
+  left: 0px;           
+}
+
+ .alignment-column a{
+  background: url("../layout/img/AlignColumnCenter.png") center no-repeat;
+}
+
+.spread-row {
+  top: 0px;
+  left: 30px;
+}
+
+.spread-row  a{
+  background: url("../layout/img/DistributeRow.png") center no-repeat;
+}
+
+.spread-column {
+  top: 29px;
+  left: 30px;            
+}
+
+.spread-column a{         
+  background: url("../layout/img/DistributeColumn.png") center no-repeat;
+}
+
+.spacing {
+   position: relative;
+   float: left;
+   margin-left: 80px;
+   width: 50px;
+   height: 50px;
+}
+
+.spacing input {
+  width: 50px;
+  margin-bottom: 4px;
+  margin-top: 5px;
+}
+
+.offset-horizontal {
+  top: 0px;
+  left: 0px;
+}
+
+.offset-horizontal a {
+  background: url("../layout/img/EvenRow.png") center no-repeat;
+}
+
+.offset-vertical {
+  top: 29px;
+  left: 0px;
+}
+
+.offset-vertical a{
+  background: url("../layout/img/EvenColumn.png") center no-repeat;
 }

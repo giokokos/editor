@@ -64,14 +64,22 @@ body {
 
   color: #000;
 
-  background: #feffff; /* Old browsers */
-  background: -moz-radial-gradient(center, ellipse cover,  #feffff 0%, #ddf1f9 35%, #a0d8ef 100%); /* FF3.6+ */
-  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#feffff), color-stop(35%,#ddf1f9), color-stop(100%,#a0d8ef)); /* Chrome,Safari4+ */
-  background: -webkit-radial-gradient(center, ellipse cover,  #feffff 0%,#ddf1f9 35%,#a0d8ef 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-radial-gradient(center, ellipse cover,  #feffff 0%,#ddf1f9 35%,#a0d8ef 100%); /* Opera 12+ */
-  background: -ms-radial-gradient(center, ellipse cover,  #feffff 0%,#ddf1f9 35%,#a0d8ef 100%); /* IE10+ */
-  background: radial-gradient(ellipse at center,  #feffff 0%,#ddf1f9 35%,#a0d8ef 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#a0d8ef',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+ /* background: #feffff;
+  background: -moz-radial-gradient(center, ellipse cover,  #feffff 0%, #ddf1f9 35%, #a0d8ef 100%); 
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#feffff), color-stop(35%,#ddf1f9), color-stop(100%,#a0d8ef)); 
+  background: -webkit-radial-gradient(center, ellipse cover,  #feffff 0%,#ddf1f9 35%,#a0d8ef 100%); 
+  background: -o-radial-gradient(center, ellipse cover,  #feffff 0%,#ddf1f9 35%,#a0d8ef 100%); 
+  background: -ms-radial-gradient(center, ellipse cover,  #feffff 0%,#ddf1f9 35%,#a0d8ef 100%); 
+  background: radial-gradient(ellipse at center,  #feffff 0%,#ddf1f9 35%,#a0d8ef 100%); 
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#a0d8ef',GradientType=1 ); 
+*/
+  background: rgb(215, 215, 215);
+  background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 500, from(rgb(240, 240, 240)), to(rgb(190, 190, 190)));
+  background: -webkit-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+  background:    -moz-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+  background:     -ms-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+  background:      -o-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
+  background:         radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
 
   -webkit-font-smoothing: antialiased;
 }
@@ -182,14 +190,14 @@ mark {
 }
 
 
-a {
+.step a {
   color: rgb(63,50,158);
   font-weight: normal;
   text-decoration: none;
   padding: 0 0.3em;
 }
 
-a:link {
+.step a:link {
   opacity: 0.8;
 
   -webkit-transition: 0.3s;
@@ -213,7 +221,7 @@ div.final p.p-a { margin-left: -0.6em; }
 div.final p.twitter { margin-top:1em; margin-bottom:0.5em; }
 div.final p.deferred { margin-top: 0.5em; font-size: 1.2em; text-align: center; }
 
-a:link:hover {
+.step a:link:hover {
   background: rgba(255,255,255, 0.2);
 }
 

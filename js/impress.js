@@ -1044,6 +1044,12 @@
       // event delegation with "bubbling"
       // check if event target (or any of its parents is a link)
       var target = event.target;
+
+      // fixed the errors of nicEdit buttons
+      if (target.getAttribute("unselectable") == 'on') {
+        return;
+      }
+
       while ((target.tagName !== "A") &&
         (target !== document.documentElement)) {
         target = target.parentNode;
@@ -1067,6 +1073,12 @@
     // delegated handler for clicking on step elements
     document.addEventListener("click", function (event) {
       var target = event.target;
+
+      // fixed the errors of nicEdit buttons
+      if (target.getAttribute("unselectable") == 'on') {
+        return;
+      }
+
       // find closest step element that is not active
       while (!(target.classList.contains("step") && !target.classList.contains("active")) &&
         (target !== document.documentElement)) {

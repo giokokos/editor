@@ -35,23 +35,23 @@
 }
 
 .alignment-circle #top-left{
-  top:0px;
-  left:0px;
+  top:1px;
+  left:1px;
 }
 
 .alignment-circle #top-center{
-  top:0px;
+  top:1px;
   left:21px;
 }
 
 .alignment-circle #top-right{
-  top:0px;
-  right:0;
+  top:1px;
+  right:1px;
 }
 
 .alignment-circle #center-left{
   top:21px;
-  left:0px;
+  left:1px;
 }
 
 .alignment-circle #center-center{
@@ -61,12 +61,12 @@
 
 .alignment-circle #center-right{
   top:21px;
-  right:0;
+  right:1px;
 }
 
 .alignment-circle #bottom-left{
-  bottom:0px;
-  left:0px;
+  bottom:1px;
+  left:1px;
 }
 
 .alignment-circle #bottom-center{
@@ -75,8 +75,8 @@
 }
 
 .alignment-circle #bottom-right{
-  bottom:0px;
-  right:0;
+  bottom:1px;
+  right:1px;
 }
 /* icons */
 .icon-holder{
@@ -186,35 +186,35 @@
     <body>
     <div class="alignment-inspector">
       <div class="alignment-circle">
-        <a href="#" id="top-left" class="circle-dot" data-vertical="top" data-horizontal="left"></a>
-        <a href="#" id="top-center" class="circle-dot" data-vertical="top" data-horizontal="center"></a>
-        <a href="#" id="top-right" class="circle-dot" data-vertical="top" data-horizontal="right"></a>
-        <a href="#" id="center-left" class="circle-dot" data-vertical="center" data-horizontal="left"></a>
-        <a href="#" id="center-center" class="circle-dot active" data-vertical="center" data-horizontal="center"></a>
-        <a href="#" id="center-right" class="circle-dot" data-vertical="center" data-horizontal="right"></a>
-        <a href="#" id="bottom-left" class="circle-dot" data-vertical="bottom" data-horizontal="left"></a>
-        <a href="#" id="bottom-center" class="circle-dot" data-vertical="bottom" data-horizontal="center"></a>
-        <a href="#" id="bottom-right" class="circle-dot" data-vertical="bottom" data-horizontal="right"></a>
+        <a href="#" id="top-left" class="circle-dot" data-vertical="top" data-horizontal="left" title="Point of Element"></a>
+        <a href="#" id="top-center" class="circle-dot" data-vertical="top" data-horizontal="center" title="Point of Element"></a>
+        <a href="#" id="top-right" class="circle-dot" data-vertical="top" data-horizontal="right" title="Point of Element"></a>
+        <a href="#" id="center-left" class="circle-dot" data-vertical="center" data-horizontal="left" title="Point of Element"></a>
+        <a href="#" id="center-center" class="circle-dot active" data-vertical="center" data-horizontal="center" title="Point of Element"></a>
+        <a href="#" id="center-right" class="circle-dot" data-vertical="center" data-horizontal="right" title="Point of Element"></a>
+        <a href="#" id="bottom-left" class="circle-dot" data-vertical="bottom" data-horizontal="left" title="Point of Element"></a>
+        <a href="#" id="bottom-center" class="circle-dot" data-vertical="bottom" data-horizontal="center" title="Point of Element"></a>
+        <a href="#" id="bottom-right" class="circle-dot" data-vertical="bottom" data-horizontal="right" title="Point of Element"></a>
       </div>
         
       <div class="icon-holder alignment-icons">
-        <div class="alignment-row"><div class="gradient-holder"><a href="#"></a></div></div>
-        <div class="alignment-column"><div class="gradient-holder"><a href="#"></a></div></div>
+        <div class="alignment-row" title="Align horizontal centers"><div class="gradient-holder"><a href="#"></a></div></div>
+        <div class="alignment-column" title="Align vertical centers"><div class="gradient-holder"><a href="#"></a></div></div>
 
-        <div class="spread-row"><div class="gradient-holder"><a href="#"></a></div></div>
-        <div class="spread-column"><div class="gradient-holder"><a href="#"></a></div></div>
+        <div class="spread-row" title="Spread evenly between the left and right slides"><div class="gradient-holder"><a href="#"></a></div></div>
+        <div class="spread-column" title="Spread evenly between the top and bottom slides"><div class="gradient-holder"><a href="#"></a></div></div>
       </div>
 
       <div class="spacing">
-        <input value="0" id="horizontal"/>
-        <input value="0" id="vertical"/>
+        <input value="0" id="horizontal-spacing" title="Horizontal spacing: the space between slides in a row"/>
+        <input value="0" id="vertical-spacing" title="Vertical spacing: the space between slides in a column"/>
       </div>
 
       <div class="icon-holder offset-icons">
-        <div class="offset-horizontal"><div class="gradient-holder"><a href="#"></a></div></div>
-        <div class="offset-vertical"><div class="gradient-holder"><a href="#"></a></div></div>
+        <div class="offset-horizontal" title="Offset horizontally using the horizontal spacing"><div class="gradient-holder"><a href="#"></a></div></div>
+        <div class="offset-vertical" title="Offset vertically using the vertical spacing"><div class="gradient-holder"><a href="#"></a></div></div>
       </div>
-    <div>
+    </div>
 
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
@@ -225,8 +225,8 @@
         horizontal : '' ,
         vertical : ''
       }
-    , $rowIcon = $('#alignment-row').find('a')
-    , $columnIcon = $('#alignment-column').find('a')
+    , $rowIcon = $('.alignment-row').find('a')
+    , $columnIcon = $('.alignment-column').find('a')
     , icons = {
 
         horizontal : {
@@ -289,7 +289,14 @@
         $(event.target)
           .css("opacity", 1)
           .parent().css("opacity", 1)
+      })
+      .on('mouseout',".icon-holder a", function(event){
+        event.preventDefault();
+        $(event.target)
+          .css("opacity", 1)
+          .parent().css("opacity", 1)
       });
+
 
   })
 

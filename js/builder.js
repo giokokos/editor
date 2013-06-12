@@ -42,7 +42,7 @@ var builder = (function () {
     $menu, $controls, $overview, $sliders;
 
   selection.hasstate = function (s) {
-    console.log('Checking ' + s.$node.attr('id'));
+   // console.log('Checking ' + s.$node.attr('id'));
     for (var i = 0; i < this.length; i++) {
       //console.log(this[i].$node.attr('id'))
       if (this[i].$node.attr('id') === s.$node.attr('id'))
@@ -109,7 +109,7 @@ var builder = (function () {
 
   /** @function setLayout
   * Sets layout of slides in presentation
-  * base on predifined themes
+  * base on predefined themes
   */
   selection.setLayout = function (options){
     if(!this || this.length == 0){
@@ -338,6 +338,11 @@ var builder = (function () {
     $('<div class="bt-scale"></div>').attr('title', 'Scale').data('func', 'scale').appendTo($controls);
     $('<div class="bt-rotateX"></div>').attr('title', 'RotateX').data('func', 'rotateX').appendTo($controls);
 
+    //render the layoutUI
+    dust.render('layoutUI', {}, function(err,out){
+      $('body').append(out)
+    })
+
 
     // $("#my").attr("value",$(".active").attr("data-y") || 0);
     // $("#mz").attr("value",$(".active").attr("data-z") || 0);
@@ -388,6 +393,18 @@ var builder = (function () {
       //not showing when not staying
       clearTimeout($(this).data('showTimer'));
     });
+
+
+    // keep hover effect when leaving from a step
+    // the user can see which element is selected
+    $('body').on('mouseenter', '.step', function(e) {
+        $('#impress').find('.hover').removeClass('hover');
+        $(this).addClass('hover')
+    }).on('mouseleave', '.step', function(){
+         $(this).addClass('hover')
+    });
+
+
 
     $(window).on('beforeunload', function () {
       return 'All changes will be lost';
@@ -527,14 +544,22 @@ var builder = (function () {
     }
   })()
 
+  var offset = (function () {
+    var offset = 0;
+    return function () {
+      return offset+=1100;
+    }
+  })()
 
   function addSlide() {
     //console.log('add')
     //query slide id
     var id, $step;
+
     id = 'NewSlide' + sequence();
-    $step = $('<div class="step"></div>').html('<h1>This is a new step. </h1> How about some contents?');
+    $step = $('<div class="step"></div>').html('<h1>This is a new step. </h1> <p>How about some contents?</p>');
     $step[0].id = id;
+    $step[0].dataset.x = offset();
     $step[0].dataset.scale = 1;
     //console.log($('.step:last'))
     // works when the overview div is the first child of impress main div
@@ -614,7 +639,7 @@ var builder = (function () {
     dust.render('modal', obj, function(err,out){
       $('body').append(out)
       $(".close-window").click(closeModal);  
-      $(".modal-overlay").click(closeModal);  
+      $(".modal-overlay").click(closeModal); 
     })
 
     $('#theme-row').on('click', function(event){
@@ -863,6 +888,15 @@ $(function () {
 
 
   $(document).mousewheel(function(event, delta, deltaX, deltaY) {
+
+    // hack similar in the impress.js to deactivate all handlres when editing a step
+    // TODO: not so efficient because of the parentNode
+    var target = event.target;
+
+    if (target.classList.contains('nicEdit-selected') || target.parentNode.classList.contains('nicEdit-selected')) {
+      return;
+    }
+
     var transform = getTrans3D();
     transform.translate3d[2] = transform.translate3d[2] + deltaY * 10;
 
@@ -937,6 +971,14 @@ $(function () {
   // copied from https://github.com/clairezed/ImpressEdit
   $(document).mousedown(function(event) {
 
+    // hack similar in the impress.js to deactivate all handlres when editing a step
+    // TODO: not so efficient because of the parentNode
+    var target = event.target;
+
+    if (target.classList.contains('nicEdit-selected') || target.parentNode.classList.contains('nicEdit-selected')) {
+      return;
+    }
+
     $("#impress").data('event', {
         pos: {
             x: event.pageX,
@@ -947,7 +989,6 @@ $(function () {
     // hold the left click to move the viewport
     if (event.which === 1) {
       $(this).on('mousemove.moveView', function(event) {
-
         var transform = getTrans3D();
         var obj = angle(transform, event);
 
