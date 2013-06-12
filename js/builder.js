@@ -291,12 +291,12 @@ var builder = (function () {
     $overview = $('#overview');
 
     // Main controls
-    $menu = $('<div id="builder-main"></div>');
-    $('<div class="builder-bt"></div>').appendTo($menu).text('Save').on('click', SaveContent); // TODO
-    $('<div class="builder-bt"></div>').appendTo($menu).text('Preview'); // TODO
-    $('<div class="builder-bt"></div>').appendTo($menu).text('Settings').on('click', openMyModal);
-    $('<div class="builder-bt"></div>').appendTo($menu).text('Overview').on('click', function () { config['goto']('overview'); });
-    $('<div class="builder-bt bt-delete"></div>').appendTo($menu).text('Delete').on('click', deleteContents);
+    //$menu = $('<div id="builder-main"></div>');
+   // $('<div class="builder-bt"></div>').appendTo($menu).text('Save').on('click', SaveContent); // TODO
+   // $('<div class="builder-bt"></div>').appendTo($menu).text('Preview'); // TODO
+   // $('<div class="builder-bt"></div>').appendTo($menu).text('Settings').on('click', openMyModal);
+   // $('<div class="builder-bt"></div>').appendTo($menu).text('Overview').on('click', function () { config['goto']('overview'); });
+   // $('<div class="builder-bt bt-delete"></div>').appendTo($menu).text('Delete').on('click', deleteContents);
 
     // Add slide
     $('<span class="plus"></span>').wrap('<div class="bt-add-slide"></div>').text('+').parent().appendTo('body').on('click', addSlide);
@@ -327,12 +327,12 @@ var builder = (function () {
     $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="Rz">').attr('id', 'mr').addClass('bt-text').text('Edit').appendTo($sliders);
 
 
-    $menu.appendTo('body');
+   // $menu.appendTo('body');
     $sliders.appendTo('body');
 
     $controls = $('<div class="builder-controls"></div>').hide();
 
-    $('<div class="bt-delete"></div>').attr('title', 'Delete').click(deleteContents).appendTo($controls);
+  //  $('<div class="bt-delete"></div>').attr('title', 'Delete').click(deleteContents).appendTo($controls);
     $('<div class="bt-move"></div>').attr('title', 'Move').data('func', 'move').appendTo($controls);
     $('<div class="bt-rotate"></div>').attr('title', 'Rotate').data('func', 'rotate').appendTo($controls);
     $('<div class="bt-scale"></div>').attr('title', 'Scale').data('func', 'scale').appendTo($controls);
@@ -342,6 +342,10 @@ var builder = (function () {
     dust.render('layoutUI', {}, function(err,out){
       $('body').append(out)
     })
+
+    $('.button.save').on('click', function () { asqEditor.save(); });
+    $('.button.overview').on('click', function () { config['goto']('overview'); });
+   
 
 
     // $("#my").attr("value",$(".active").attr("data-y") || 0);
@@ -573,15 +577,15 @@ var builder = (function () {
 
   function showControls($where) {
     
-    // var top, left, pos = $where.offset();
-    // //not going out the edges (at least one way)
-    // top = (pos.top > 0) ? pos.top + (100 / config.visualScaling) : 0;
-    // left = (pos.left > 0) ? pos.left + (100 / config.visualScaling) : 0;
+    var top, left, pos = $where.offset();
+    //not going out the edges (at least one way)
+    top = (pos.top > 0) ? pos.top + (100 / config.visualScaling) : 0;
+    left = (pos.left > 0) ? pos.left + (100 / config.visualScaling) : 0;
 
-    // $controls.show().offset({
-    //   top: top,
-    //   left: left
-    // });
+    $controls.show().offset({
+      top: top,
+      left: left
+    });
 
     // difference between attr() and .val()
     $("#mx").val(state.data.x || 0);      
@@ -594,9 +598,9 @@ var builder = (function () {
 
   }
 
-  function SaveContent() {
-    asqEditor.save()
-  }
+  // function SaveContent() {
+  //   asqEditor.save()
+  // }
 
   function deleteContents() {
     var el = state.$node[0];

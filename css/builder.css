@@ -196,8 +196,8 @@ body.edit .step.selected{
   opacity: .6;
   /*right: 10px;
   top: 400px;*/
-  left:10px; /*new*/
-  top:650px; /*new*/
+  left:175px; /*new*/
+  top:0px; /*new*/
   cursor: pointer;
   position: absolute;
   font-family: 'IconicStroke'!important;
@@ -223,7 +223,8 @@ body.edit .step.selected{
 
 .back-button {
   position: absolute;
-  left: 0;
+  /*left: 0;*/
+  left: 215px;
   top: 0;
   padding: 8px 8px 8px 12px;
   margin: 10px;

@@ -1,10 +1,10 @@
 <div class="sidebar">
 
   <div class="primary">
-    <button class="button save">
+    <button class="button save" title="Save">
       <span class="iconic i-disk"></span>
     </button>
-    <button class="button overview">
+    <button class="button overview" title="Overview">
       <span class="iconic i-eye"></span>
     </button>
     <div class="divider"></div>
