@@ -411,9 +411,6 @@ function LayoutManager (options, $){
       });
   }
 
-  LayoutManager.prototype.setGrid = function () {
-    this.selection.setLayout({
-      layout:'grid'
   LayoutManager.prototype.layoutInGrid = function (opt) {
 
     console.log("I will align in grid this selection")
