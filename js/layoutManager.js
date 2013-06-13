@@ -246,17 +246,74 @@ function LayoutManager (options, $){
       });
   }
 
-  LayoutManager.prototype.setGrid = function () {
-    this.selection.setLayout({
-      layout:'grid'
+  LayoutManager.prototype.layoutInGrid = function () {
+
+    console.log("I will align in grid this selection")
+    console.log(this.selection)
+
+
+    if (this.selection.length<2) {
+      console.log("Need two or more selected objects");
+      return;
+    }
+
+    var defaults = {
+          gridSize : {
+            columns : 5,
+                  x : 1500,
+                  y : 1500
+          }
+      };
+
+    var offSetX = 0
+      , offSetY = 0;
+
+    var that = this;
+
+    $.each(this.selection, function(index, obj){
+      obj.data.x = offSetX + ((index % defaults.gridSize.columns) * defaults.gridSize.x); 
+      obj.data.y = offSetY + ((Math.floor(index / defaults.gridSize.columns)) * defaults.gridSize.y);   
+
+      obj.$node[0].dataset.x = obj.data.x;
+      obj.$node[0].dataset.y = obj.data.y;
+
+      that.redrawFunction(obj.$node[0]);
     });
 
   }
 
-  LayoutManager.prototype.setCircle = function () {
-    this.selection.setLayout({
-      layout:'circle'
+  LayoutManager.prototype.layoutInCircle = function () {
+    
+    console.log("I will align in grid this selection")
+    console.log(this.selection)
+
+
+    if (this.selection.length<2) {
+      console.log("Need two or more selected objects");
+      return;
+    }
+
+    var offSetX = 2000
+      , offSetY = 1000
+      , angle = 0
+      , radius = 1500
+      , step = (2 * Math.PI) / this.selection.length;
+
+    var that = this;
+
+    $.each(this.selection, function(index, obj){
+
+      obj.data.x = offSetX + Math.round(radius * Math.cos(angle));
+      obj.data.y = offSetY + Math.round(radius * Math.sin(angle));
+
+      obj.$node[0].dataset.x = obj.data.x;
+      obj.$node[0].dataset.y = obj.data.y;
+
+      angle += step;
+
+      that.redrawFunction(obj.$node[0]);
     });
+
   }
 
 
