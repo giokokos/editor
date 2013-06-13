@@ -456,7 +456,7 @@ var builder = (function () {
     $step.insertAfter($('.step:last')); //not too performant, but future proof
     config.creationFunction($step[0]);
     // jump to the new slide to make some room to look around
-    config.showMenu();
+    //config.showMenu();
     config.makeEditable(id);
     config['goto']($step[0]);
 
@@ -467,7 +467,7 @@ var builder = (function () {
     var top, left, pos = $where.offset();
     //not going out the edges (at least one way)
     top = (pos.top > 0) ? pos.top + (100 / config.visualScaling) : 0;
-    left = (pos.left > 0) ? pos.left + (100 / config.visualScaling) : 0;
+    left = (pos.left > 0) ? pos.left  + (100 / config.visualScaling) : 0;
 
     $controls.show().offset({
       top: top,

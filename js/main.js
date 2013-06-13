@@ -57,7 +57,7 @@ window.asqEditor = (function () {
     });
   });
 
-    iAPI.showMenu();
+  //  iAPI.showMenu();
     builder.init({
       "goto": iAPI['goto'], //it makes me feel better this way
       creationFunction: iAPI.newStep, //future API method that adds a new step
