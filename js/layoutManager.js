@@ -1,17 +1,21 @@
 // since this works with selectors this object must be called
 // after the dom has loaded
 
-function LayoutManager ($){
+function LayoutManager (options, $){
+  this.options = options;
 
-  var alignment = {
+  this.alignment = {
       horizontal : '' ,
       vertical : ''
-    };
+    }
+
+  // externanl function that will redraw the objects
+  , this.redrawFunction = function(){}
 
   // the objects that holds the html nodes to align
-  this.selection = [];
+  ,this.selection = []
 
-  var $rowIcon = $('.alignment-row').find('a')
+  , $rowIcon = $('.alignment-row').find('a')
   , $columnIcon = $('.alignment-column').find('a')
   , icons = {
 
@@ -27,39 +31,48 @@ function LayoutManager ($){
         bottom: "layout/img/AlignRowBottom.png",
       }
      
-  }
+  };
 
-  LayoutManager.prototype.setSelection = function(selection){
-    if(!(selection instanceof Array)){
-      throw new Error("layoutManager.js: selection should be an array")
+  LayoutManager.prototype.validateOptionsAndSetThem = function (options){
+    if (options == null || options == undefined){
+      throw new Error("layoutManager.js: You should pass the redrawFunction and the selection array as options")
     }
 
-    this.selection = selection;
+    if(!(options.selection instanceof Array)){
+      throw new Error("layoutManager.js: selection should be an array");
+    }
+
+    if (!options.redrawFunction || typeof options.redrawFunction != "function"){
+      throw new Error("layoutManager.js: redrawFunction should be a function")
+    }
+    
+    this.selection      = options.selection;
+    this.redrawFunction = options.redrawFunction;
   }
 
   LayoutManager.prototype.init = function(){
-    alignment.horizontal = "center";
-    alignment.vertical = "center";
-    this.onAlignmentCircleClick($('center-center'))
+    this.validateOptionsAndSetThem(this.options)
+
+    //initiate center-center alignment
+    this.onAlignmentCircleClick($('#center-center'))
     this.setUpListeners();
   }
 
   // update align icons
   LayoutManager.prototype.setAlignIcons = function() {
 
-    $columnIcon.css( 'background-image', 'url("'+ icons.horizontal[alignment.horizontal] +'")' );
-    $rowIcon.css( 'background-image', 'url("'+ icons.vertical[alignment.vertical] +'")' );
+    $columnIcon.css( 'background-image', 'url("'+ icons.horizontal[this.alignment.horizontal] +'")' );
+    $rowIcon.css( 'background-image', 'url("'+ icons.vertical[this.alignment.vertical] +'")' );
   }
 
   // update alignment data
   LayoutManager.prototype.onAlignmentCircleClick = function($target){
-
     $('.circle-dot').removeClass('active');
     $target.addClass('active');
 
     //store alignment setting
-    alignment.horizontal = $target.data("horizontal"),
-    alignment.vertical = $target.data("vertical")
+    this.alignment.horizontal = $target.data("horizontal"),
+    this.alignment.vertical = $target.data("vertical")
 
     this.setAlignIcons();
   }
@@ -97,6 +110,7 @@ function LayoutManager ($){
       event.stopPropagation(); // prevent all the handlers of viewport
     })
     .on('click', '.alignment-row', function(event) {
+      event.preventDefault();
       that.alignRow();
     })
     .on('click', '.grid-holder', function(event) {
@@ -110,48 +124,62 @@ function LayoutManager ($){
   }
 
 
-  // var defaults={
-  //   margin:{
-  //     x : 500,
-  //     y : 500,
-  //   },
-  //   gridSize : {
-  //     columns : 5,
-  //     x       : 1500,
-  //     y       : 1500
-  //   }
-  // }
-
-  //var settings = $.extend({}, defaults, options)
-
 
   LayoutManager.prototype.alignRow = function(){
     // do stuff
     console.log("I will align row this selection")
     console.log(this.selection)
+
+
+
+    if (this.selection.length<2) {
+      console.log("We need more than two selected object");
+      return;
+    }
+
+    //calculateY is going to be a function that calculates the
+    // Y coordinate for each element based on the vertical 
+    // alignement setting
+    var calculateY
+
+    // targetY is going to hold the targetY for the top, center, or bottom
+    // of each slide based on the vertical alignment setting
+    , targetY;
+
+    switch(this.alignment.vertical){
+      case "top":
+        targetY = (this.selection[0].data.y - this.selection[0].$node.eq(0).height()/2); 
+        calculateY = function(obj, targetY){
+          return (targetY + (obj.$node.eq(0).height()/2));
+        }
+        break;
+      case "center":
+        targetY = this.selection[0].data.y; 
+        calculateY = function(obj, targetY){
+          return (targetY);
+        }
+        break;
+      case "bottom":
+        targetY = (this.selection[0].data.y + this.selection[0].$node.eq(0).height()/2); 
+        calculateY = function(obj, targetY){
+          return (targetY - (obj.$node.eq(0).height()/2));
+        }
+        break;
+    }
+
+    var that = this;
+
+    $.each(this.selection, function(index, obj){
+        obj.data.y = calculateY(obj, targetY);
+        obj.$node[0].dataset.y = obj.data.y;
+        that.redrawFunction(obj.$node[0]);
+      });
   }
 
   LayoutManager.prototype.setGrid = function () {
     this.selection.setLayout({
       layout:'grid'
     });
-
-    // var offSetX = 0//this[0].data.x
-    //   , offSetY = 0;//this[0].data.y;
-    //   $.each(this, function(index, obj){
-    //     //console.log(obj)
-    //     obj[0].data.x = offSetX +  ((index % defaults.gridSize.columns) * defaults.gridSize.x); 
-    //     obj[0].data.y = offSetY + ((Math.floor(index / defaults.gridSize.columns)) * defaults.gridSize.y);   
- 
-    //     //update node actual properties
-    //     obj[0].$node[0].dataset.x = obj[0].data.x;
-    //     obj[0].$node[0].dataset.y = obj[0].data.y;
-    //     obj[0].$node[0].dataset.rotate = obj[0].data.rotate;
-    //     obj[0].$node[0].dataset.scale = obj[0].data.scale;
-
-    //      //redraw element with external function
-    //     config.redrawFunction(obj[0].$node[0]);
-    //   });
 
   }
 
@@ -166,6 +194,138 @@ function LayoutManager ($){
 
 
 };
+
+
+ // /** @function setLayout
+ //  * Sets layout of slides in presentation
+ //  * base on predefined themes
+ //  */
+ //  selection.setLayout = function (options){
+ //    if(!this || this.length == 0){
+ //      console.log("setLayout: empty or null this, aborting");
+ //    }
+
+ //    var defaults={
+ //      margin:{
+ //        x : 500,
+ //        y : 500,
+ //      },
+ //      gridSize : {
+ //        columns : 5,
+ //        x       : 1500,
+ //        y       : 1500
+ //      }
+ //    }
+
+ //    var settings = $.extend({}, defaults, options)
+    
+ //    switch (options.layout){
+ //      case 'row':
+ //        //use x and y of first element
+ //        var newX = this[0].data.x
+ //        , newY = this[0].data.y;
+
+ //        $.each(this, function(index, obj){
+ //          //console.log(index)
+
+ //          obj.data.x = newX
+ //          obj.data.y = newY;          
+
+ //          //update node actual properties
+ //          obj.$node[0].dataset.x = obj.data.x;
+ //          obj.$node[0].dataset.y = obj.data.y;
+ //          obj.$node[0].dataset.rotate = obj.data.rotate;
+ //          obj.$node[0].dataset.scale = obj.data.scale;
+
+ //          //prepare for next iteration
+ //          newX += (obj.$node.eq(0).width() + settings.margin.x);
+
+ //          //redraw element with external function
+ //          config.redrawFunction(obj.$node[0]);
+ //        })
+ //      break;
+
+ //      case 'column':
+ //        //use x and y of first element
+ //        var newX = this[0].data.x
+ //        , newY = this[0].data.y;
+
+ //        $.each(this, function(index, obj){
+ //          obj.data.x = newX
+ //          obj.data.y = newY;          
+
+ //          //update node actual properties
+ //          obj.$node[0].dataset.x = obj.data.x;
+ //          obj.$node[0].dataset.y = obj.data.y;
+ //          obj.$node[0].dataset.rotate = obj.data.rotate;
+ //          obj.$node[0].dataset.scale = obj.data.scale;
+
+ //          //prepare for next iteration
+ //          newY += (obj.$node.eq(0).width() + settings.margin.y);
+
+ //          //redraw element with external function
+ //          config.redrawFunction(obj.$node[0]);
+ //        })
+ //      break;
+
+
+ //      // case diagonal -> (index / settings.gridSize.columns)) * settings.gridSize.y);
+
+ //      case 'grid':
+ //        //use x and y offsets from first element
+ //        var offSetX = 0//this[0].data.x
+ //        , offSetY = 0;//this[0].data.y;
+ //        $.each(this, function(index, obj){
+ //          console.log(obj)
+ //          obj.data.x = offSetX +  ((index % settings.gridSize.columns) * settings.gridSize.x); 
+ //          obj.data.y = offSetY + ((Math.floor(index / settings.gridSize.columns)) * settings.gridSize.y);   
+   
+ //          //update node actual properties
+ //          obj.$node[0].dataset.x = obj.data.x;
+ //          obj.$node[0].dataset.y = obj.data.y;
+ //          obj.$node[0].dataset.rotate = obj.data.rotate;
+ //          obj.$node[0].dataset.scale = obj.data.scale;
+
+ //           //redraw element with external function
+ //          config.redrawFunction(obj.$node[0]);
+ //        });
+ //      break;
+
+ //      case 'circle':
+
+ //      // For an element around a centre at (x, y), distance r, the element's centre should be positioned at:
+ //      // (x + r cos(2kπ/n), y + r sin(2kπ/n))
+ //      // where n is the number of elements, and k is the "number" of the element you're currently positioning (between 1 and n inclusive).
+
+ //        // use x and y offsets from first element
+ //        // center of circle (0, 0)
+ //        var offSetX = 2000
+ //        , offSetY = 1000
+ //        , angle = 0
+ //        , radius = 1500
+ //        , step = (2 * Math.PI) / this.length;
+
+ //        $.each(this, function(index, obj){
+
+ //          obj.data.x = offSetX + Math.round(radius * Math.cos(angle));
+ //          obj.data.y = offSetY + Math.round(radius * Math.sin(angle));
+   
+ //          //update node actual properties
+ //          obj.$node[0].dataset.x = obj.data.x;
+ //          obj.$node[0].dataset.y = obj.data.y;
+ //          obj.$node[0].dataset.rotate = obj.data.rotate;
+ //          obj.$node[0].dataset.scale = obj.data.scale;
+
+ //          angle += step;
+ //           //redraw element with external function
+ //          config.redrawFunction(obj.$node[0]);
+ //        });
+
+
+ //      break;
+ //    }
+ //  }
+
 
 
 

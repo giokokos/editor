@@ -107,139 +107,6 @@ var builder = (function () {
     this.length = 0;
   }
 
-  /** @function setLayout
-  * Sets layout of slides in presentation
-  * base on predefined themes
-  */
-  selection.setLayout = function (options){
-    if(!this || this.length == 0){
-      console.log("setLayout: empty or null this, aborting");
-    }
-
-    var defaults={
-      margin:{
-        x : 500,
-        y : 500,
-      },
-      gridSize : {
-        columns : 5,
-        x       : 1500,
-        y       : 1500
-      }
-    }
-
-    var settings = $.extend({}, defaults, options)
-    
-    switch (options.layout){
-      case 'row':
-        //use x and y of first element
-        var newX = this[0].data.x
-        , newY = this[0].data.y;
-
-        $.each(this, function(index, obj){
-          //console.log(index)
-
-          obj.data.x = newX
-          obj.data.y = newY;          
-
-          //update node actual properties
-          obj.$node[0].dataset.x = obj.data.x;
-          obj.$node[0].dataset.y = obj.data.y;
-          obj.$node[0].dataset.rotate = obj.data.rotate;
-          obj.$node[0].dataset.scale = obj.data.scale;
-
-          //prepare for next iteration
-          newX += (obj.$node.eq(0).width() + settings.margin.x);
-
-          //redraw element with external function
-          config.redrawFunction(obj.$node[0]);
-        })
-      break;
-
-      case 'column':
-        //use x and y of first element
-        var newX = this[0].data.x
-        , newY = this[0].data.y;
-
-        $.each(this, function(index, obj){
-          obj.data.x = newX
-          obj.data.y = newY;          
-
-          //update node actual properties
-          obj.$node[0].dataset.x = obj.data.x;
-          obj.$node[0].dataset.y = obj.data.y;
-          obj.$node[0].dataset.rotate = obj.data.rotate;
-          obj.$node[0].dataset.scale = obj.data.scale;
-
-          //prepare for next iteration
-          newY += (obj.$node.eq(0).width() + settings.margin.y);
-
-          //redraw element with external function
-          config.redrawFunction(obj.$node[0]);
-        })
-      break;
-
-
-      // case diagonal -> (index / settings.gridSize.columns)) * settings.gridSize.y);
-
-      case 'grid':
-        //use x and y offsets from first element
-        var offSetX = 0//this[0].data.x
-        , offSetY = 0;//this[0].data.y;
-        $.each(this, function(index, obj){
-          console.log(obj)
-          obj.data.x = offSetX +  ((index % settings.gridSize.columns) * settings.gridSize.x); 
-          obj.data.y = offSetY + ((Math.floor(index / settings.gridSize.columns)) * settings.gridSize.y);   
-   
-          //update node actual properties
-          obj.$node[0].dataset.x = obj.data.x;
-          obj.$node[0].dataset.y = obj.data.y;
-          obj.$node[0].dataset.rotate = obj.data.rotate;
-          obj.$node[0].dataset.scale = obj.data.scale;
-
-           //redraw element with external function
-          config.redrawFunction(obj.$node[0]);
-        });
-      break;
-
-      case 'circle':
-
-      // For an element around a centre at (x, y), distance r, the element's centre should be positioned at:
-      // (x + r cos(2kπ/n), y + r sin(2kπ/n))
-      // where n is the number of elements, and k is the "number" of the element you're currently positioning (between 1 and n inclusive).
-
-        // use x and y offsets from first element
-        // center of circle (0, 0)
-        var offSetX = 2000
-        , offSetY = 1000
-        , angle = 0
-        , radius = 1500
-        , step = (2 * Math.PI) / this.length;
-
-        $.each(this, function(index, obj){
-
-          obj.data.x = offSetX + Math.round(radius * Math.cos(angle));
-          obj.data.y = offSetY + Math.round(radius * Math.sin(angle));
-   
-          //update node actual properties
-          obj.$node[0].dataset.x = obj.data.x;
-          obj.$node[0].dataset.y = obj.data.y;
-          obj.$node[0].dataset.rotate = obj.data.rotate;
-          obj.$node[0].dataset.scale = obj.data.scale;
-
-          angle += step;
-           //redraw element with external function
-          config.redrawFunction(obj.$node[0]);
-        });
-
-
-      break;
-    }
-  }
-
-  var layoutManager = new LayoutManager(jQuery);
-  layoutManager.setSelection(selection);
-
   handlers.move = function (x, y) {
     var v = fixVector(x, y);
     if (selection.length > 1) {
@@ -344,6 +211,12 @@ var builder = (function () {
     //render the layout HTML
     dust.render('layout', {}, function(err,out){
       $('body').append(out)
+          //initialize the layoutManager which manages the alignment panel
+      var layoutManager = new LayoutManager(
+      { 
+        selection : selection,
+        redrawFunction : config.redrawFunction
+      }, jQuery);
     })
 
     $('.button.save').on('click', function () { asqEditor.save(); });
