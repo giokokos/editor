@@ -84,8 +84,19 @@ function LayoutManager (options, $){
       event.preventDefault();
       that.onAlignmentCircleClick($(event.target));
     })
-    .on('keyup', "input", function(event){
+    .on('keyup', "#horizontal-spacing", function(event){
       var value = $(this).val();
+    })
+    .on('keyup', "#vertical-spacing", function(event){
+      var value = $(this).val();
+    })
+    .on('keyup', "#grid-value", function(event){
+      var value = $(this).val();
+      that.layoutInGrid(value);
+    })
+    .on('keyup', "#circle-value", function(event){
+      var value = $(this).val();
+      that.layoutInCircle(value);
     })
     .on('mousedown',".icon-holder a", function(event){
       event.preventDefault();
@@ -142,8 +153,7 @@ function LayoutManager (options, $){
     });
   }
 
-
-
+ 
   LayoutManager.prototype.alignHorizontally = function(){
     // do stuff
     console.log("I will align horizontally this selection")
@@ -246,7 +256,7 @@ function LayoutManager (options, $){
       });
   }
 
-  LayoutManager.prototype.layoutInGrid = function () {
+  LayoutManager.prototype.layoutInGrid = function (opt) {
 
     console.log("I will align in grid this selection")
     console.log(this.selection)
@@ -259,7 +269,7 @@ function LayoutManager (options, $){
 
     var defaults = {
           gridSize : {
-            columns : 5,
+            columns : typeof opt !== 'undefined' ? opt : 3,
                   x : 1500,
                   y : 1500
           }
@@ -282,7 +292,7 @@ function LayoutManager (options, $){
 
   }
 
-  LayoutManager.prototype.layoutInCircle = function () {
+  LayoutManager.prototype.layoutInCircle = function (opt) {
     
     console.log("I will align in grid this selection")
     console.log(this.selection)
@@ -296,7 +306,7 @@ function LayoutManager (options, $){
     var offSetX = 2000
       , offSetY = 1000
       , angle = 0
-      , radius = 1500
+      , radius = typeof opt !== 'undefined' ? opt : 1500
       , step = (2 * Math.PI) / this.selection.length;
 
     var that = this;
@@ -316,6 +326,8 @@ function LayoutManager (options, $){
 
   }
 
+
+  
 
   this.init();
 

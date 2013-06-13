@@ -497,7 +497,7 @@ a.back-button:hover {
   position: absolute;
   width: 212px;
   height: 100%;
-  right: 0;
+  left: 0;
   top: 0;
   padding: 0;
   z-index: 102;
@@ -782,7 +782,7 @@ a.back-button:hover {
   position: absolute;
   width: 150px;
   height: 100%;
-  left: 0;
+  right: 0;
   top: 0;
   padding: 0;
   z-index: 102;

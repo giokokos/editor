@@ -34,8 +34,8 @@
     </div>
 
     <div class="spacing">
-      <input value="0" id="horizontal-spacing" title="Horizontal spacing: the space between slides in a row"/>
-      <input value="0" id="vertical-spacing" title="Vertical spacing: the space between slides in a column"/>
+      <input value="100" id="horizontal-spacing" title="Horizontal spacing: the space between slides in a row"/>
+      <input value="100" id="vertical-spacing" title="Vertical spacing: the space between slides in a column"/>
     </div>
 
     <div class="icon-holder offset-icons">
@@ -52,14 +52,14 @@
       <div class="icon-holder">
         <div class="grid-holder" title="Position slides to grid"><div class="gradient-holder"><a href=""></a></div></div>
       </div>
-      <input value="0" id="grid-value" title="Number of slides per row"/>
+      <input value="3" id="grid-value" title="Number of slides per row"/>
     </div>
 
     <div class="circle">
       <div class="icon-holder">
         <div class="circle-holder" title="Position slides to circle"><div class="gradient-holder"><a href=""></a></div></div>
       </div>
-      <input value="0" id="circle-value" title="Size of circle's radius"/>
+      <input value="1500" id="circle-value" title="Size of circle's radius"/>
     </div>
   </div>
   <div class="divider"></div>
@@ -86,14 +86,14 @@
 
 <div class="timeline" id="timeline">
 
-  <div class="primary">
+<!--   <div class="primary">
     <button class="button back" title="Go to presentation">
       <span class="iconic i-arrow"></span>
     </button>
   </div>
-  <div class="divider"></div>
+  <div class="divider"></div> -->
 
-  <div class="secondary">
+  <div class="primary">
     <button class="button add" title="Add new slide">
       <span class="iconic i-plus"></span>
     </button>
