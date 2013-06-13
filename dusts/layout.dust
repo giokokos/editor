@@ -14,17 +14,17 @@
     <div class="title">Alignment</div>
 
     <div class="alignment-circle">
-      <a href="#" id="top-left" class="circle-dot" data-vertical="top" data-horizontal="left" title="Point of Element"></a>
-      <a href="#" id="top-center" class="circle-dot" data-vertical="top" data-horizontal="center" title="Point of Element"></a>
-      <a href="#" id="top-right" class="circle-dot" data-vertical="top" data-horizontal="right" title="Point of Element"></a>
-      <a href="#" id="center-left" class="circle-dot" data-vertical="center" data-horizontal="left" title="Point of Element"></a>
-      <a href="#" id="center-center" class="circle-dot active" data-vertical="center" data-horizontal="center" title="Point of Element"></a>
-      <a href="#" id="center-right" class="circle-dot" data-vertical="center" data-horizontal="right" title="Point of Element"></a>
-      <a href="#" id="bottom-left" class="circle-dot" data-vertical="bottom" data-horizontal="left" title="Point of Element"></a>
-      <a href="#" id="bottom-center" class="circle-dot" data-vertical="bottom" data-horizontal="center" title="Point of Element"></a>
-      <a href="#" id="bottom-right" class="circle-dot" data-vertical="bottom" data-horizontal="right" title="Point of Element"></a>
+      <a href="#" id="top-left" class="circle-dot" data-horizontal="top" data-vertical="left" title="Point of Element"></a>
+      <a href="#" id="top-center" class="circle-dot" data-horizontal="top" data-vertical="center" title="Point of Element"></a>
+      <a href="#" id="top-right" class="circle-dot" data-horizontal="top" data-vertical="right" title="Point of Element"></a>
+      <a href="#" id="center-left" class="circle-dot" data-horizontal="center" data-vertical="left" title="Point of Element"></a>
+      <a href="#" id="center-center" class="circle-dot" data-horizontal="center" data-vertical="center" title="Point of Element"></a>
+      <a href="#" id="center-right" class="circle-dot" data-horizontal="center" data-vertical="right" title="Point of Element"></a>
+      <a href="#" id="bottom-left" class="circle-dot" data-horizontal="bottom" data-vertical="left" title="Point of Element"></a>
+      <a href="#" id="bottom-center" class="circle-dot" data-horizontal="bottom" data-vertical="center" title="Point of Element"></a>
+      <a href="#" id="bottom-right" class="circle-dot" data-horizontal="bottom" data-vertical="right" title="Point of Element"></a>
     </div>
-      
+    
     <div class="icon-holder alignment-icons">
       <div class="alignment-row" title="Align horizontal centers"><div class="gradient-holder"><a href="#"></a></div></div>
       <div class="alignment-column" title="Align vertical centers"><div class="gradient-holder"><a href="#"></a></div></div>

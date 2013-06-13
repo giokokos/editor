@@ -19,13 +19,13 @@ function LayoutManager (options, $){
   , $columnIcon = $('.alignment-column').find('a')
   , icons = {
 
-      horizontal : {
+      vertical : {
         left : "layout/img/AlignColumnLeft.png",
         center: "layout/img/AlignColumnCenter.png",
         right: "layout/img/AlignColumnRight.png",
       },
 
-      vertical : {
+      horizontal : {
         top : "layout/img/AlignRowTop.png",
         center: "layout/img/AlignRowCenter.png",
         bottom: "layout/img/AlignRowBottom.png",
@@ -60,9 +60,8 @@ function LayoutManager (options, $){
 
   // update align icons
   LayoutManager.prototype.setAlignIcons = function() {
-
-    $columnIcon.css( 'background-image', 'url("'+ icons.horizontal[this.alignment.horizontal] +'")' );
-    $rowIcon.css( 'background-image', 'url("'+ icons.vertical[this.alignment.vertical] +'")' );
+    $columnIcon.css( 'background-image', 'url("'+ icons.vertical[this.alignment.vertical] +'")' );
+    $rowIcon.css( 'background-image', 'url("'+ icons.horizontal[this.alignment.horizontal] +'")' );
   }
 
   // update alignment data
@@ -111,42 +110,62 @@ function LayoutManager (options, $){
     })
     .on('click', '.alignment-row', function(event) {
       event.preventDefault();
-      that.alignRow();
+      that.alignHorizontally();
+    })
+    .on('click', '.alignment-column', function(event) {
+      event.preventDefault();
+      that.alignVertically();
+    })
+    .on('click', '.spread-row', function(event) {
+      event.preventDefault();
+      that.spreadHorizontally();
+    })
+    .on('click', '.spread-column', function(event) {
+      event.preventDefault();
+      that.spreadVertically();
+    })
+    .on('click', '.offset-horizontal', function(event) {
+      event.preventDefault();
+      that.offsetHorizontally();
+    })
+    .on('click', '.offset-vertical', function(event) {
+      event.preventDefault();
+      that.offsetVertically();
     })
     .on('click', '.grid-holder', function(event) {
       event.preventDefault();
-      that.setGrid();
+      that.layoutInGrid();
     })
     .on('click', '.circle-holder', function(event) {
       event.preventDefault();
-      that.setCircle();
+      that.layoutInCircle();
     });
   }
 
 
 
-  LayoutManager.prototype.alignRow = function(){
+  LayoutManager.prototype.alignHorizontally = function(){
     // do stuff
-    console.log("I will align row this selection")
+    console.log("I will align horizontally this selection")
     console.log(this.selection)
 
 
 
     if (this.selection.length<2) {
-      console.log("We need more than two selected object");
+      console.log("Need two or more selected objects");
       return;
     }
 
     //calculateY is going to be a function that calculates the
-    // Y coordinate for each element based on the vertical 
+    // Y coordinate for each element based on the horizontal 
     // alignement setting
     var calculateY
 
     // targetY is going to hold the targetY for the top, center, or bottom
-    // of each slide based on the vertical alignment setting
+    // of each slide based on the horizontal alignment setting
     , targetY;
 
-    switch(this.alignment.vertical){
+    switch(this.alignment.horizontal){
       case "top":
         targetY = (this.selection[0].data.y - this.selection[0].$node.eq(0).height()/2); 
         calculateY = function(obj, targetY){
@@ -172,6 +191,57 @@ function LayoutManager (options, $){
     $.each(this.selection, function(index, obj){
         obj.data.y = calculateY(obj, targetY);
         obj.$node[0].dataset.y = obj.data.y;
+        that.redrawFunction(obj.$node[0]);
+      });
+  }
+
+  LayoutManager.prototype.alignVertically = function(){
+    // do stuff
+    console.log("I will align vertically this selection")
+    console.log(this.selection)
+
+
+
+    if (this.selection.length<2) {
+      console.log("Need two or more selected objects");
+      return;
+    }
+
+    //calculateX is going to be a function that calculates the
+    // X coordinate for each element based on the vertical 
+    // alignement setting
+    var calculateX
+
+    // targetX is going to hold the targetX for the top, center, or bottom
+    // of each slide based on the vertical alignment setting
+    , targetX;
+
+    switch(this.alignment.vertical){
+      case "left":
+        targetX = (this.selection[0].data.x - this.selection[0].$node.eq(0).width()/2); 
+        calculateX = function(obj, targetX){
+          return (targetX + (obj.$node.eq(0).width()/2));
+        }
+        break;
+      case "center":
+        targetX = this.selection[0].data.x; 
+        calculateX = function(obj, targetX){
+          return (targetX);
+        }
+        break;
+      case "right":
+        targetX = (this.selection[0].data.x + this.selection[0].$node.eq(0).width()/2); 
+        calculateX = function(obj, targetX){
+          return (targetX - (obj.$node.eq(0).width()/2));
+        }
+        break;
+    }
+
+    var that = this;
+
+    $.each(this.selection, function(index, obj){
+        obj.data.x = calculateX(obj, targetX);
+        obj.$node[0].dataset.x = obj.data.x;
         that.redrawFunction(obj.$node[0]);
       });
   }
