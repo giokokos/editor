@@ -46,6 +46,7 @@ function LayoutManager ($){
 
   // update align icons
   LayoutManager.prototype.setAlignIcons = function() {
+
     $columnIcon.css( 'background-image', 'url("'+ icons.horizontal[alignment.horizontal] +'")' );
     $rowIcon.css( 'background-image', 'url("'+ icons.vertical[alignment.vertical] +'")' );
   }
@@ -60,7 +61,7 @@ function LayoutManager ($){
     alignment.horizontal = $target.data("horizontal"),
     alignment.vertical = $target.data("vertical")
 
-    this.setAlignIcons()
+    this.setAlignIcons();
   }
 
   // mouse and keyboard listeners
@@ -96,16 +97,75 @@ function LayoutManager ($){
       event.stopPropagation(); // prevent all the handlers of viewport
     })
     .on('click', '.alignment-row', function(event) {
-      that.alignRow()
+      that.alignRow();
+    })
+    .on('click', '.grid-holder', function(event) {
+      event.preventDefault();
+      that.setGrid();
+    })
+    .on('click', '.circle-holder', function(event) {
+      event.preventDefault();
+      that.setCircle();
     });
   }
 
-   LayoutManager.prototype.alignRow = function(){
+
+  // var defaults={
+  //   margin:{
+  //     x : 500,
+  //     y : 500,
+  //   },
+  //   gridSize : {
+  //     columns : 5,
+  //     x       : 1500,
+  //     y       : 1500
+  //   }
+  // }
+
+  //var settings = $.extend({}, defaults, options)
+
+
+  LayoutManager.prototype.alignRow = function(){
     // do stuff
     console.log("I will align row this selection")
     console.log(this.selection)
   }
 
+  LayoutManager.prototype.setGrid = function () {
+    this.selection.setLayout({
+      layout:'grid'
+    });
 
-    this.init();
+    // var offSetX = 0//this[0].data.x
+    //   , offSetY = 0;//this[0].data.y;
+    //   $.each(this, function(index, obj){
+    //     //console.log(obj)
+    //     obj[0].data.x = offSetX +  ((index % defaults.gridSize.columns) * defaults.gridSize.x); 
+    //     obj[0].data.y = offSetY + ((Math.floor(index / defaults.gridSize.columns)) * defaults.gridSize.y);   
+ 
+    //     //update node actual properties
+    //     obj[0].$node[0].dataset.x = obj[0].data.x;
+    //     obj[0].$node[0].dataset.y = obj[0].data.y;
+    //     obj[0].$node[0].dataset.rotate = obj[0].data.rotate;
+    //     obj[0].$node[0].dataset.scale = obj[0].data.scale;
+
+    //      //redraw element with external function
+    //     config.redrawFunction(obj[0].$node[0]);
+    //   });
+
+  }
+
+  LayoutManager.prototype.setCircle = function () {
+    this.selection.setLayout({
+      layout:'circle'
+    });
+  }
+
+
+  this.init();
+
+
 };
+
+
+

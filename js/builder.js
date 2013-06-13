@@ -118,8 +118,8 @@ var builder = (function () {
 
     var defaults={
       margin:{
-        x : 0,
-        y : 0,
+        x : 500,
+        y : 500,
       },
       gridSize : {
         columns : 5,
@@ -137,7 +137,7 @@ var builder = (function () {
         , newY = this[0].data.y;
 
         $.each(this, function(index, obj){
-          console.log(index)
+          //console.log(index)
 
           obj.data.x = newX
           obj.data.y = newY;          
@@ -187,7 +187,7 @@ var builder = (function () {
         var offSetX = 0//this[0].data.x
         , offSetY = 0;//this[0].data.y;
         $.each(this, function(index, obj){
-
+          console.log(obj)
           obj.data.x = offSetX +  ((index % settings.gridSize.columns) * settings.gridSize.x); 
           obj.data.y = offSetY + ((Math.floor(index / settings.gridSize.columns)) * settings.gridSize.y);   
    
@@ -210,10 +210,10 @@ var builder = (function () {
 
         // use x and y offsets from first element
         // center of circle (0, 0)
-        var offSetX = 0
-        , offSetY = 0
+        var offSetX = 2000
+        , offSetY = 1000
         , angle = 0
-        , radius = 2000
+        , radius = 1500
         , step = (2 * Math.PI) / this.length;
 
         $.each(this, function(index, obj){
