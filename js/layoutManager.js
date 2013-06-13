@@ -246,6 +246,161 @@ function LayoutManager (options, $){
       });
   }
 
+  LayoutManager.prototype.spreadHorizontally = function(){
+    // do stuff
+    console.log("I will spread horizontally this selection");
+    console.log(this.selection);
+
+    var selLength = this.selection.length;
+    if (selLength<3) {
+      console.log("Need three or more selected objects");
+      return;
+    }
+
+    var leftMost = this.selection[0]
+    , rightMost = this.selection[0]
+
+    $.each(this.selection, function(index, obj){
+      if(obj.data.x < leftMost.data.x){
+        leftMost = obj;
+        return;
+      }
+
+      if(obj.data.x > rightMost.data.x){
+        rightMost = obj;
+      }
+    });
+
+
+    var distance =  rightMost.data.x - (rightMost.$node.eq(0).width()/2) - (leftMost.data.x + (leftMost.$node.eq(0).width()/2) )
+    ,space2Spread = distance
+    //element that are in between
+    , inBetween = this.selection.slice(0)
+    inBetween.splice(inBetween.indexOf(leftMost), 1);
+    inBetween.splice(inBetween.indexOf(rightMost), 1);
+
+    $.each(inBetween, function(index, obj){
+      space2Spread-= obj.$node.eq(0).width()
+    });
+
+    if(space2Spread<0){
+      console.log("Not enough space to spread");
+      return false;
+    }
+
+    var spreadPerEl = space2Spread/(inBetween.length +1)
+    , nextX = leftMost.data.x + (leftMost.$node.eq(0).width()/2) + spreadPerEl
+    , that = this;
+
+    $.each(inBetween, function(index, obj){
+      obj.data.x = nextX + (obj.$node.eq(0).width()/2);
+      obj.$node[0].dataset.x = obj.data.x;
+      nextX = obj.data.x + (obj.$node.eq(0).width()/2) + spreadPerEl;
+      that.redrawFunction(obj.$node[0]);
+    });
+  }
+
+  LayoutManager.prototype.spreadVertically = function(){
+    // do stuff
+    console.log("I will spread vertically this selection");
+    console.log(this.selection);
+
+    var selLength = this.selection.length;
+    if (selLength<3) {
+      console.log("Need three or more selected objects");
+      return;
+    }
+
+    var topMost = this.selection[0]
+    , bottomMost = this.selection[0]
+
+    $.each(this.selection, function(index, obj){
+      if(obj.data.y < topMost.data.y){
+        topMost = obj;
+        return;
+      }
+
+      if(obj.data.y > bottomMost.data.y){
+        bottomMost = obj;
+      }
+    });
+
+
+    var distance =  bottomMost.data.y - (bottomMost.$node.eq(0).height()/2) - (topMost.data.y + (topMost.$node.eq(0).height()/2) )
+    ,space2Spread = distance
+    //element that are in between
+    , inBetween = this.selection.slice(0)
+    inBetween.splice(inBetween.indexOf(topMost), 1);
+    inBetween.splice(inBetween.indexOf(bottomMost), 1);
+
+    $.each(inBetween, function(index, obj){
+      space2Spread-= obj.$node.eq(0).height()
+    });
+
+    if(space2Spread<0){
+      console.log("Not enough space to spread");
+      return false;
+    }
+
+    var spreadPerEl = space2Spread/(inBetween.length +1)
+    , nextX = topMost.data.y + (topMost.$node.eq(0).height()/2) + spreadPerEl
+    , that = this;
+
+
+    $.each(inBetween, function(index, obj){
+      obj.data.y = nextX + (obj.$node.eq(0).height()/2);
+      obj.$node[0].dataset.y = obj.data.y;
+      nextX = obj.data.y + (obj.$node.eq(0).height()/2) + spreadPerEl;
+      that.redrawFunction(obj.$node[0]);
+    });
+  }
+
+  LayoutManager.prototype.offsetHorizontally = function(){
+    // do stuff
+    console.log("I will offset horizontally this selection")
+    console.log(this.selection)
+
+    if (this.selection.length<2) {
+      console.log("Need two or more selected objects");
+      return;
+    }
+
+    var distance = parseInt($("#horizontal-spacing").val());
+
+    var that = this;
+
+    var newX = this.selection[0].data.x - (this.selection[0].$node.eq(0).width()/2);
+    $.each(this.selection, function(index, obj){
+        obj.data.x = newX + (obj.$node.eq(0).width()/2);
+        obj.$node[0].dataset.x = obj.data.x;
+        newX += parseInt(obj.$node.eq(0).width() + distance);
+        that.redrawFunction(obj.$node[0]);
+      });
+  }
+
+  LayoutManager.prototype.offsetVertically = function(){
+    // do stuff
+    console.log("I will offset horizontally this selection")
+    console.log(this.selection)
+
+    if (this.selection.length<2) {
+      console.log("Need two or more selected objects");
+      return;
+    }
+
+    var distance = parseInt($("#vertical-spacing").val());
+
+    var that = this;
+
+    var newX = this.selection[0].data.y - (this.selection[0].$node.eq(0).height()/2);
+    $.each(this.selection, function(index, obj){
+        obj.data.y = newX + (obj.$node.eq(0).height()/2);
+        obj.$node[0].dataset.y = obj.data.y;
+        newX += parseInt(obj.$node.eq(0).height() + distance);
+        that.redrawFunction(obj.$node[0]);
+      });
+  }
+
   LayoutManager.prototype.setGrid = function () {
     this.selection.setLayout({
       layout:'grid'
