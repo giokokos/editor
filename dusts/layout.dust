@@ -7,10 +7,8 @@
     <button class="button overview" title="Overview">
       <span class="iconic i-eye"></span>
     </button>
-    <div class="divider"></div>
   </div>
-
-
+  <div class="divider"></div>
   
   <div class="alignment-inspector">
     <div class="title">Alignment</div>
@@ -45,5 +43,63 @@
       <div class="offset-vertical" title="Offset vertically using the vertical spacing"><div class="gradient-holder"><a href="#"></a></div></div>
     </div>
   </div>
+  <div class="divider"></div>
+
+  <div class="custom-layouts">
+    <div class="title">Layouts</div>
+    
+    <div class="grid">
+      <div class="icon-holder">
+        <div class="grid-holder" title="Position slides to grid"><div class="gradient-holder"><a href=""></a></div></div>
+      </div>
+      <input value="0" id="grid-value" title="Number of slides per row"/>
+    </div>
+
+    <div class="circle">
+      <div class="icon-holder">
+        <div class="circle-holder" title="Position slides to circle"><div class="gradient-holder"><a href=""></a></div></div>
+      </div>
+      <input value="0" id="circle-value" title="Size of circle's radius"/>
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <div id="sliders">
+
+    <div class="sliders-button">Position</div>
+    <span>X: </span><input type="text" id="mx" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="X"/>
+    <span>Y: </span><input type="text" id="my" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="Y"/>
+    <span>Z: </span><input type="text" id="mz" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="Z"/>
+
+    <div class="sliders-button">Scale</div>
+    <span>S: </span><input type="text" id="ms" class="slidable" step="0.01" min="-100" max="100" placeholder="Sz"/>
+
+    <div class="sliders-button">Rotation</div>
+    <span>X: </span><input type="text" id="mrx" class="slidable" step="1" min="-360" max="360" placeholder="Rx"/>
+    <span>Y: </span><input type="text" id="mry" class="slidable" step="1" min="-360" max="360" placeholder="Ry"/>
+    <span>Z: </span><input type="text" id="mr" class="slidable" step="1" min="-360" max="360" placeholder="Rz"/>
+
+  </div>
+  <div class="divider"></div>
 
 </div>
+
+<div class="timeline" id="timeline">
+
+  <div class="primary">
+    <button class="button back" title="Go to presentation">
+      <span class="iconic i-arrow"></span>
+    </button>
+  </div>
+  <div class="divider"></div>
+
+  <div class="secondary">
+    <button class="button add" title="Add new slide">
+      <span class="iconic i-plus"></span>
+    </button>
+  </div>
+  <div class="divider"></div>
+
+
+</div>
+

@@ -549,14 +549,14 @@ rect:hover {stroke:#fff;}
 .step.flash.future {opacity:0}
 .step.flash.past {opacity:0}
 
-.menu-item {font-size:0.7em}
+/*.menu-item {font-size:0.7em}
 .menu-item:target {text-decoration: underline}
 .menu-item {display:inline}
 .menu {position: absolute; bottom: 0;}
 .menu-button iframe {width:200px; height:200px;}
 .menu-item {opacity:0.25}
 .menu-item.past {opacity:0.5}
-.menu-item.present {opacity:1}
+.menu-item.present {opacity:1}*/
 
 /*.wrap { 
  padding-top:10px;	

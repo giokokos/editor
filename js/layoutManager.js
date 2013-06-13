@@ -67,9 +67,9 @@ function LayoutManager ($){
   LayoutManager.prototype.setUpListeners = function(){
     var that=this;
     $(document)
-    .on('click:layoutManager',".circle-dot", function(event){
+    .on('click',".circle-dot", function(event){
       event.preventDefault();
-      onAlignmentCircleClick($(event.target));
+      that.onAlignmentCircleClick($(event.target));
     })
     .on('keyup', "input", function(event){
       var value = $(this).val();

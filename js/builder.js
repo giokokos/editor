@@ -302,53 +302,63 @@ var builder = (function () {
    // $('<div class="builder-bt bt-delete"></div>').appendTo($menu).text('Delete').on('click', deleteContents);
 
     // Add slide
-    $('<span class="plus"></span>').wrap('<div class="bt-add-slide"></div>').text('+').parent().appendTo('body').on('click', addSlide);
+    //$('<span class="plus"></span>').wrap('<div class="bt-add-slide"></div>').text('+').parent().appendTo('body').on('click', addSlide);
 
     // Return to presentation 
-    $('<span></span>').wrap('<a href="#" class="back-button">◄ </a>').text('Your presentation').parent().appendTo('body').on('click', gotoPresentation);
+    //$('<span></span>').wrap('<a href="#" class="back-button">◄ </a>').text('Your presentation').parent().appendTo('body').on('click', gotoPresentation);
 
     // Sliders 
-    $sliders = $('<div id="sliders"></div>');
-    $('<div class="sliders-button">Position</div>').appendTo($sliders);
-    $('<span>X: </span>').appendTo($sliders);
-    $('<input type="text" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="X">').attr('id', 'mx').addClass('bt-text').text('Edit').appendTo($sliders);
-    $('<span>Y: </span>').appendTo($sliders);
-    $('<input type="text" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="Y">').attr('id', 'my').addClass('bt-text').text('Edit').appendTo($sliders);
-    $('<span>Z: </span>').appendTo($sliders);
-    $('<input type="text" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="Z">').attr('id', 'mz').addClass('bt-text').text('Edit').appendTo($sliders);
+    // $sliders = $('<div id="sliders"></div>');
+    // $('<div class="sliders-button">Position</div>').appendTo($sliders);
+    // $('<span>X: </span>').appendTo($sliders);
+    // $('<input type="text" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="X">').attr('id', 'mx').addClass('bt-text').text('Edit').appendTo($sliders);
+    // $('<span>Y: </span>').appendTo($sliders);
+    // $('<input type="text" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="Y">').attr('id', 'my').addClass('bt-text').text('Edit').appendTo($sliders);
+    // $('<span>Z: </span>').appendTo($sliders);
+    // $('<input type="text" class="slidable" step="1" min="-Infinity" max="Infinity" placeholder="Z">').attr('id', 'mz').addClass('bt-text').text('Edit').appendTo($sliders);
 
-    $('<div class="sliders-button">Scale</div>').appendTo($sliders);
-    $('<span>S: </span>').appendTo($sliders);
-    $('<input type="text" class="slidable" step="0.01" min="-100" max="100" placeholder="Sz">').attr('id', 'ms').addClass('bt-text').text('Edit').appendTo($sliders);
+    // $('<div class="sliders-button">Scale</div>').appendTo($sliders);
+    // $('<span>S: </span>').appendTo($sliders);
+    // $('<input type="text" class="slidable" step="0.01" min="-100" max="100" placeholder="Sz">').attr('id', 'ms').addClass('bt-text').text('Edit').appendTo($sliders);
 
-    $('<div class="sliders-button">Rotation</div>').appendTo($sliders);
-    $('<span>X: </span>').appendTo($sliders);
-    $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="Rx">').attr('id', 'mrx').addClass('bt-text').text('Edit').appendTo($sliders);
-    $('<span>Y: </span>').appendTo($sliders);
-    $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="Ry">').attr('id', 'mry').addClass('bt-text').text('Edit').appendTo($sliders);
-    $('<span>Z: </span>').appendTo($sliders);
-    $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="Rz">').attr('id', 'mr').addClass('bt-text').text('Edit').appendTo($sliders);
+    // $('<div class="sliders-button">Rotation</div>').appendTo($sliders);
+    // $('<span>X: </span>').appendTo($sliders);
+    // $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="Rx">').attr('id', 'mrx').addClass('bt-text').text('Edit').appendTo($sliders);
+    // $('<span>Y: </span>').appendTo($sliders);
+    // $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="Ry">').attr('id', 'mry').addClass('bt-text').text('Edit').appendTo($sliders);
+    // $('<span>Z: </span>').appendTo($sliders);
+    // $('<input type="text" class="slidable" step="1" min="-360" max="360" placeholder="Rz">').attr('id', 'mr').addClass('bt-text').text('Edit').appendTo($sliders);
 
 
    // $menu.appendTo('body');
-    $sliders.appendTo('body');
+   // $sliders.appendTo('body');
 
     $controls = $('<div class="builder-controls"></div>').hide();
 
   //  $('<div class="bt-delete"></div>').attr('title', 'Delete').click(deleteContents).appendTo($controls);
-    $('<div class="bt-move"></div>').attr('title', 'Move').data('func', 'move').appendTo($controls);
-    $('<div class="bt-rotate"></div>').attr('title', 'Rotate').data('func', 'rotate').appendTo($controls);
-    $('<div class="bt-scale"></div>').attr('title', 'Scale').data('func', 'scale').appendTo($controls);
+    $('<div class="bt-move border"></div>').attr('title', 'Move').data('func', 'move').appendTo($controls);
+    $('<div class="bt-rotate border"></div>').attr('title', 'Rotate').data('func', 'rotate').appendTo($controls);
+    $('<div class="bt-scale border"></div>').attr('title', 'Scale').data('func', 'scale').appendTo($controls);
     $('<div class="bt-rotateX"></div>').attr('title', 'RotateX').data('func', 'rotateX').appendTo($controls);
 
-    //render the layoutUI
-    dust.render('layoutUI', {}, function(err,out){
+    //render the layout HTML
+    dust.render('layout', {}, function(err,out){
       $('body').append(out)
     })
 
     $('.button.save').on('click', function () { asqEditor.save(); });
     $('.button.overview').on('click', function () { config['goto']('overview'); });
+    $('.button.back').on('click', gotoPresentation);
+    $('.button.add').on('click', addSlide);
    
+
+    // var links = "<ul>";
+    // [].forEach.call(document.querySelectorAll(".step"), function( el, idx ){
+    //     links += "<li><a href='#" + el.id + "'>Step " + idx + "</a></li>";
+    // })
+    // links += "</ul>";
+
+    // $('<nav></nav>').html(links).appendTo(".timeline");
 
 
     // $("#my").attr("value",$(".active").attr("data-y") || 0);
@@ -405,10 +415,10 @@ var builder = (function () {
     // keep hover effect when leaving from a step
     // the user can see which element is selected
     $('body').on('mouseenter', '.step', function(e) {
-        $('#impress').find('.hover').removeClass('hover');
-        $(this).addClass('hover')
+      $('#impress').find('.hover').removeClass('hover');
+      $(this).addClass('hover')
     }).on('mouseleave', '.step', function(){
-         $(this).addClass('hover')
+      $(this).addClass('hover')
     });
 
 
@@ -562,9 +572,9 @@ var builder = (function () {
     //console.log('add')
     //query slide id
     var id, $step;
-
-    id = 'NewSlide' + sequence();
-    $step = $('<div class="step"></div>').html('<h1>This is a new step. </h1> <p>How about some contents?</p>');
+    var seq = sequence();
+    id = 'NewSlide' + seq;
+    $step = $('<div class="step"></div>').html('<h1>This is a new step ' + seq + '</h1> <p>How about some contents?</p>');
     $step[0].id = id;
     $step[0].dataset.x = offset();
     $step[0].dataset.scale = 1;
@@ -573,6 +583,7 @@ var builder = (function () {
     $step.insertAfter($('.step:last')); //not too performant, but future proof
     config.creationFunction($step[0]);
     // jump to the new slide to make some room to look around
+    config.showMenu();
     config.makeEditable(id);
     config['goto']($step[0]);
 
