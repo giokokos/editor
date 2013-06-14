@@ -1,0 +1,20 @@
+{
+  "name": "ASQ-Editor",
+  "version": "0.1.0",
+  "author": "Georgios Kokosioulis <giokokos@gmail.com>, Vasileios Triglianos <vasileios.triglianos@usi.ch>",
+  "description": "WYSIWYG editor for ASQ",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/giokokos/editor"
+  },
+  "dependencies": {
+  },
+  "engines": {
+    "node": "0.8.x",
+    "npm": "1.1.X"
+  },
+  "devDependencies": {
+    "dustjs-linkedin": "1.2.x",
+    "watch": "*"
+  }
+}
