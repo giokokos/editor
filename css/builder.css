@@ -207,17 +207,17 @@ body.edit .step.selected{
 
 
 .bt-move{
-  background: url(../img/move_alt.png) no-repeat center;
+  background: url(../img/move.png) no-repeat center;
   cursor: move;
 }
 
 .bt-rotate{
-  background: url(../img/rotate_alt.png) no-repeat center;
+  background: url(../img/rotate.png) no-repeat center;
   cursor: move;
 }
 
 .bt-scale{
-  background: url(../img/scale_alt.png) no-repeat center;
+  background: url(../img/scale.png) no-repeat center;
   cursor: move;
 }
 
@@ -565,7 +565,7 @@ a.back-button:hover {
   float:left;
   width:50px;
   height:50px;
-  background: url("../layout/img/circle.png") center no-repeat;
+  background: url("../img/circle.png") center no-repeat;
 }
 
 .circle-dot{
@@ -573,11 +573,11 @@ a.back-button:hover {
   display:block;
   width:9px;
   height:9px;
-  background: url("../layout/img/AlignWidgetD.png");
+  background: url("../img/AlignWidgetD.png");
 }
 
 .circle-dot.active{
-  background: url("../layout/img/AlignWidgetH.png");
+  background: url("../img/AlignWidgetH.png");
 }
 
 .alignment-circle #top-left{
@@ -664,7 +664,7 @@ a.back-button:hover {
 }
 
 .alignment-row  a{
-  background: url("../layout/img/AlignRowCenter.png") center no-repeat;
+  background: url("../img/AlignRowCenter.png") center no-repeat;
 }
 
 .alignment-column {
@@ -673,7 +673,7 @@ a.back-button:hover {
 }
 
  .alignment-column a{
-  background: url("../layout/img/AlignColumnCenter.png") center no-repeat;
+  background: url("../img/AlignColumnCenter.png") center no-repeat;
 }
 
 .spread-row {
@@ -682,7 +682,7 @@ a.back-button:hover {
 }
 
 .spread-row  a{
-  background: url("../layout/img/DistributeRow.png") center no-repeat;
+  background: url("../img/DistributeRow.png") center no-repeat;
 }
 
 .spread-column {
@@ -691,7 +691,7 @@ a.back-button:hover {
 }
 
 .spread-column a{         
-  background: url("../layout/img/DistributeColumn.png") center no-repeat;
+  background: url("../img/DistributeColumn.png") center no-repeat;
 }
 
 .spacing {
@@ -718,7 +718,7 @@ a.back-button:hover {
 }
 
 .offset-horizontal a {
-  background: url("../layout/img/EvenRow.png") center no-repeat;
+  background: url("../img/EvenRow.png") center no-repeat;
 }
 
 .offset-vertical {
@@ -727,7 +727,7 @@ a.back-button:hover {
 }
 
 .offset-vertical a{
-  background: url("../layout/img/EvenColumn.png") center no-repeat;
+  background: url("../img/EvenColumn.png") center no-repeat;
 }
 
 /******************** LAYOUTS ***********************/
@@ -741,11 +741,11 @@ a.back-button:hover {
 }
 
 .grid-holder a {
-  background: url("../layout/img/SnapToGrid.png") center no-repeat;
+  background: url("../img/SnapToGrid.png") center no-repeat;
 }
 
 .circle-holder a {
-  background: url("../layout/img/SnapToCircle.png") center no-repeat;
+  background: url("../img/SnapToCircle.png") center no-repeat;
 }
 
 .grid input {
@@ -816,7 +816,7 @@ a.back-button:hover {
 }
 
 .button.add {
-  background: url("../img/plus_alt.png") no-repeat center;
+  background: url("../img/plus.png") no-repeat center;
 }
 
 .button.add:hover {
