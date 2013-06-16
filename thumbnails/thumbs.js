@@ -6,10 +6,11 @@ $("#impress").on("impress:init" , function(){
 
 var init = function(){
   $(function(){
-    $("#timeline").prepend('<div id="dragbar"></div><div id="thumbs"></>');
+    $("#timeline").prepend('<div id="dragbar"></div><div id="thumbs"></div>');
 
     $('#dragbar').on("mousedown.dragbar",function(e){
       e.preventDefault();
+      console.log("prospathw")
       var $document = $(document)
 
       $document.on('mouseup.dragbar',function(e){
@@ -23,8 +24,7 @@ var init = function(){
      
       
       $document.on('mousemove.dragbar',function(e){
-        var newWidth = $document.innerWidth() - e.clientX;
-
+        var newWidth = $(window).innerWidth() - e.clientX;
         //return if too big or too small
         if(newWidth > 500 || newWidth < 100) return;
 
