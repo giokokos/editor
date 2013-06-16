@@ -1,7 +1,7 @@
 var ThumbManager = function (options, $){
-  this.options = options;
+  this.options = options
 
-  this.$thumbs = $([])
+  , this.$thumbs = $([])
 
   // external function that will redraw all the slides
   , this.redrawSlideShow = function(){}

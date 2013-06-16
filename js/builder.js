@@ -231,11 +231,19 @@ var builder = (function () {
       }, jQuery);
     })
 
+
+    //GIORGOS: Edw sou epistrefw sto slideRefId to id tou step
+    // pou antistoixei sto thumb pou patithike
+    // To mono pou prepei na kaneis einai na to kaneis highlight
+    // kai pithanws na to valeis sto selection
     $(document).on('thumbmanager:thumb-clicked', function(event){
       console.log(event.originalEvent.detail.thumbId)
       console.log(event.originalEvent.detail.slideRefId)
     });
 
+    //GIORGOS: Auto einai etoimo aplws sou exw console log
+    // ta properties pou epistrefei to event. svhsta otan 
+    // katalaveis ti ginetai
     $(document).on('thumbmanager:thumb-sorted', function(event){
       console.log(event.originalEvent.detail.thumbId)
       console.log(event.originalEvent.detail.slideRefId)
