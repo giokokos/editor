@@ -1,74 +1,128 @@
+var $thumbs = $([]);
+
 $("#impress").on("impress:init" , function(){
-  init()
+ init()
 });
 
 var init = function(){
   $(function(){
-    $("#timeline")
-      .css('width', "230px")
-      .css('overflow-x', "hidden")
-      .css('overflow-y', "scroll")
+    $("#timeline").prepend('<div id="dragbar"></div><div id="thumbs"></>');
 
+    $('#dragbar').on("mousedown.dragbar",function(e){
+      e.preventDefault();
+      var $document = $(document)
 
-    var extCSS = [];
-    var $steps = $('.step');
+      $document.on('mouseup.dragbar',function(e){
+        setTimeout(function(){
+          resizeThumbs();
+        },100)
+        
+        $document.off('mousemove.dragbar');
+        $document.off('mouseup.dragbar');
+      });
+     
+      
+      $document.on('mousemove.dragbar',function(e){
+        var newWidth = $document.innerWidth() - e.clientX;
 
-    deepCopyStyles($steps.eq(3))
+        //return if too big or too small
+        if(newWidth > 500 || newWidth < 100) return;
 
-    var thumbs = [];
+        $('#timeline').css("width",newWidth);
+      })
+    });
+    
+    //choose all elements except from overview
+    var $steps = $('.step:not(#overview)');
+
     $steps.each(function(){
-     thumbs.push(deepCopyStyles($(this)))
+     $thumbs = $thumbs.add(createThumb($(this)))
     })
 
-
-    // var $thumbs = $steps.clone();
-    
-    $.each(thumbs, function(index){
-      $("#timeline").append($(this))
-      $(this)
-        .attr("id", $(this).attr("id") + "-thumb")
-        //.removeClass('step')
-        //.attr('style', "")
-        .wrap('<div style="position:relative; background:white; border:2px solid white; margin: 5px;"></div>')
-
-     // $(this).css(extCSS[index]);
-      var scaleFactor =  180 / $steps.eq(index).width();
-      //console.log("scaleFactor: " + scaleFactor)
-     this.style["-webkit-transform"] = "scale("+scaleFactor+")";
+    $thumbs.each( function(index){
+      var $this = $(this);
+      $("#timeline #thumbs").append($this)
+      $this
+        .wrap('<div class="thumb"></div>')
       this.style["-webkit-transform-origin"] = "0 0";
-       $(this).parent().css("background", $('body').css('background'));
-       $(this).parent().css("padding",  "10px"  )
-      $(this).parent().css("width",  parseInt($steps.eq(index).width() * scaleFactor) + "px"  )
-      $(this).parent().css("height",  parseInt($steps.eq(index).height() * scaleFactor) + "px" )
-
-      //console.log($(this).css('transform'))
+       $this.parent()
+        .css("background", $('body').css('background'));
     })
-    
-     //$("#timeline .step").wrap('<div style="position:relative; border:2px solid white; margin: 5px;"></div>');
 
-    // for (var i=0; i<=10; i++){
-    //   $("#timeline").append('<div style="width:200px; height:160px; border:2px solid white; margin: 5px;"></div>');
-    // }
+    resizeThumbs();
+
+    $("#thumbs").sortable({
+      stop: function(event, ui)
+      {
+        var $thumbStep = $(ui.item).find('.thumbstep')
+        console.log( $thumbStep.data('references'))
+        console.log($(ui.item))
+        console.log( $(ui.item).prev())//.find('.thumbstep').data('references'))
+        $("#"+ $thumbStep.data('references')).insertAfter("#" + $(ui.item).prev().find('.thumbstep').data('references'));
+      }
+    })
+
   });
   
 }
 
-function deepCopyStyles($orig){
+var resizeThumbs = function(){
+  var $thumb = $("#timeline .thumb").eq(0);
+  var outerWidth =  parseInt($thumb.css("padding-left").replace("px", "")) + parseInt($thumb.css("padding-right").replace("px", ""));
+  outerWidth +=  parseInt($thumb.css("margin-left").replace("px", "")) + parseInt($thumb.css("margin-right").replace("px", ""))
+  outerWidth +=  parseInt($thumb.css("border-left-width").replace("px", "")) + parseInt($thumb.css("border-right-width").replace("px", ""));
+  var thumbContentWidth = $("#timeline").innerWidth() - (outerWidth);
+
+  $thumbs.each( function(index){
+    var $this = $(this)
+    , scaleFactor =  thumbContentWidth / $this.outerWidth();
+
+    this.style["-webkit-transform"] = "scale("+scaleFactor+")";
+    $this.parent()
+      .css({
+        "width"  : parseInt($this.outerWidth() * scaleFactor) + "px",
+        "height" : parseInt($this.outerHeight() * scaleFactor) + "px" 
+      });
+  });
+}
+
+
+/** @function createThumb
+*   @description: creates a clone of the original element,
+*   appends '-thumb' to the original id and removes any
+*   classes for the cloned element and its children
+*   it also add a data-references attribute to the referenced
+*   step
+*/
+var createThumb = function($orig){
   var $clone = $orig.clone();
-  $clone.eq(0).css(css($orig));
-  $clone.eq(0).attr("class","")
+
+  $clone
+    //change id only if not empty
+    .attr("id", ($(this).attr("id")== undefined || $(this).attr("id")== '') ? '' : $(this).attr("id") + "-thumb")
+    .attr("class","thumbstep")
+    //copy original computed style
+    .css(css($orig))
+    //add reference to original slide
+    .data('references', $orig.attr('id'))
 
   var $cloneChildren = $clone.find('*');
+  //copy original computed style for children
   $orig.find('*').each(function(index){
-    $cloneChildren.eq(index).attr("class", "")
-    $cloneChildren.eq(index).css(css($(this)));
+
+    $cloneChildren.eq(index)
+      //change id only if not empty
+      .attr("id", ($(this).attr("id")== undefined || $(this).attr("id")== '') ? '' : $(this).attr("id") + "-thumb")
+      .attr("class", "")
+      //copy original computed style
+      .css(css($(this)));
   });
 
-  return $clone[0]
+  return $clone
 
 }
 
-function css(a){
+var css = function(a){
     var o = {};
     var rules = window.getComputedStyle(a.get(0));
      o = $.extend(o, css2json(rules));
@@ -77,7 +131,7 @@ function css(a){
     // }
     return o;
 }
-function css2json(css){
+var css2json = function(css){
     var s = {};
     if(!css) return s;
     if(css instanceof CSSStyleDeclaration) {
