@@ -84,14 +84,7 @@
 
 </div>
 
-<div class="timeline" id="timeline">
-
-<!--   <div class="primary">
-    <button class="button back" title="Go to presentation">
-      <span class="iconic i-arrow"></span>
-    </button>
-  </div>
-  <div class="divider"></div> -->
+<div class="thumbs-bar" id="thumbs-bar">
 
   <div class="primary">
     <button class="button add" title="Add new slide">
@@ -99,6 +92,9 @@
     </button>
   </div>
   <div class="divider"></div>
+
+  <div id="dragbar"></div>
+  <div id="thumb-holder"></div>
 
 
 </div>

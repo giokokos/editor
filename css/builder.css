@@ -778,9 +778,9 @@ a.back-button:hover {
             Timeline
 ***********************************************/
 
-.timeline {
+.thumbs-bar {
   position: absolute;
-  width: 150px;
+  width: 200px;
   height: 100%;
   right: 0;
   top: 0;
@@ -789,14 +789,17 @@ a.back-button:hover {
   background: rgb(40, 41, 41);
   font-size: 17px;
   border-right: 1px solid rgba(0,0,0,0.1);
-  -webkit-transition: all 0.3s ease;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  text-align: center;
+/*  -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -ms-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
-}
+*/}
 
-#timeline #dragbar{
+#thumbs-bar #dragbar{
    background-color: #888;
    height:100%;
    float: left;
@@ -804,14 +807,18 @@ a.back-button:hover {
    cursor: col-resize;
 }
 
-#timeline .thumb{
+#thumbs-bar .thumb{
   background : white;
   border : 2px solid white;
-  margin : 5 5px 5px 7px;
+  margin : 5px 5px 7px 7px;
   padding : 10px;
 }
 
-.timeline .primary button {
+#thumbs-bar .thumb.ui-sortable-helper{
+    cursor: move;
+}
+
+.thumbs-bar .primary button {
   display: inline-block;
   width: 79%;
   height: 60px;

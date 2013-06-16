@@ -211,13 +211,29 @@ var builder = (function () {
     //render the layout HTML
     dust.render('layout', {}, function(err,out){
       $('body').append(out)
-          //initialize the layoutManager which manages the alignment panel
+      
+      //initialize the layoutManager which manages the alignment panel
       var layoutManager = new LayoutManager(
       { 
         selection : selection,
         redrawFunction : config.redrawFunction
       }, jQuery);
+
+      var thumbsManager = new ThumbManager(
+      { 
+        sels : {
+          thumbsBarId: "#thumbs-bar",
+          thumbsHolderId    : "#thumb-holder",
+          thumbContainerClass  : "thumb",
+          slideThumbClass : "thumb-step",
+          dragBarId: "#thumbs-bar #dragbar",
+        }
+      }, jQuery);
     })
+
+    $(document).on('thumbmanager:thumb-clicked', function(event){
+      console.log(event.originalEvent.detail.slideRefId)
+    });
 
     $('.button.save').on('click', function () { asqEditor.save(); });
     $('.button.overview').on('click', function () { config['goto']('overview'); });
