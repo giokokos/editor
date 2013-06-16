@@ -20,15 +20,15 @@ function LayoutManager (options, $){
   , icons = {
 
       vertical : {
-        left : "layout/img/AlignColumnLeft.png",
-        center: "layout/img/AlignColumnCenter.png",
-        right: "layout/img/AlignColumnRight.png",
+        left : "img/AlignColumnLeft.png",
+        center: "img/AlignColumnCenter.png",
+        right: "img/AlignColumnRight.png",
       },
 
       horizontal : {
-        top : "layout/img/AlignRowTop.png",
-        center: "layout/img/AlignRowCenter.png",
-        bottom: "layout/img/AlignRowBottom.png",
+        top : "img/AlignRowTop.png",
+        center: "img/AlignRowCenter.png",
+        bottom: "img/AlignRowBottom.png",
       }
      
   };
