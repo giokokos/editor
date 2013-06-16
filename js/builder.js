@@ -232,7 +232,28 @@ var builder = (function () {
     })
 
     $(document).on('thumbmanager:thumb-clicked', function(event){
+      console.log(event.originalEvent.detail.thumbId)
       console.log(event.originalEvent.detail.slideRefId)
+    });
+
+    $(document).on('thumbmanager:thumb-sorted', function(event){
+      console.log(event.originalEvent.detail.thumbId)
+      console.log(event.originalEvent.detail.slideRefId)
+      console.log(event.originalEvent.detail.newIndex)
+
+      var detail    = event.originalEvent.detail
+      , thumbId     = detail.thumbId
+      , slideRefId  = detail.slideRefId
+      , newIndex    = detail.newIndex;
+
+
+      //ignore overview slide
+      if(newIndex>0){
+        $("#"+slideRefId).insertAfter($(".step:not(#overview)").eq(newIndex-1))
+      }else{
+        $("#"+slideRefId).insertBefore($(".step:not(#overview)").eq(0))
+      }
+
     });
 
     $('.button.save').on('click', function () { asqEditor.save(); });

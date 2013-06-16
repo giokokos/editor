@@ -1,6 +1,3 @@
-// since this works with selectors this object must be called
-// after the dom has loaded
-
 var ThumbManager = function (options, $){
   this.options = options;
 
@@ -44,14 +41,16 @@ var ThumbManager = function (options, $){
   */
   ThumbManager.prototype.init = function(){
     this.validateAndSetOptions(this.options)
-    var that = this;
-    var sels = this.sels;
+    var that = this
+    , sels = this.sels;
 
     // setup resize listeners
 
     $(sels.thumbsBarId).on("click", '.' + sels.slideThumbClass, function(e){
-      var slideRef = $(this).data('references')
-      triggerEvent(document, "thumbmanager:thumb-clicked", {slideRefId: slideRef}) 
+      var thumbId = $(this).attr('id')
+      , slideRefId = $(this).data('references');
+
+      triggerEvent(document, "thumbmanager:thumb-clicked", {thumbId: thumbId, slideRefId: slideRefId}) 
     });
 
     $(sels.dragBarId).on("mousedown.dragbar",function(e){
@@ -97,9 +96,15 @@ var ThumbManager = function (options, $){
     $(sels.thumbsHolderId).sortable({
       stop: function(event, ui)
       {
-        var thumbSel = (sels.slideThumbClass)
-        var $thumbStep = $(ui.item).find('.' + thumbSel)
-        $("#"+ $thumbStep.data('references')).insertAfter("#" + $(ui.item).prev().find('.' + thumbSel).data('references'));
+
+        var $thumbStep  = $(ui.item).find('.' + sels.slideThumbClass)
+        , thumbId       = $thumbStep.attr('id')
+        , slideRefId    = $thumbStep.data('references')
+        , newIndex      = $(ui.item).index();
+
+        console.log($thumbStep)
+
+        triggerEvent(document, "thumbmanager:thumb-sorted", {thumbId : thumbId, slideRefId : slideRefId, newIndex : newIndex}) 
       }
     })
   
@@ -142,12 +147,13 @@ var ThumbManager = function (options, $){
   *   step
   */
   ThumbManager.prototype.createThumb = function($orig){
-    var $clone = $orig.clone()
-    , that = this;
+    var that = this
+    , $clone = $orig.clone()
+    , cloneId = $clone.attr("id");
 
     $clone
       //change id only if not empty
-      .attr("id", ($(this).attr("id")== undefined || $(this).attr("id")== '') ? '' : $(this).attr("id") + "-thumb")
+      .attr("id", (cloneId === undefined || cloneId == '') ? '' : cloneId + "-thumb")
       .attr("class",that.sels.slideThumbClass)
       //copy original computed style
       .css(that.css($orig))
@@ -157,10 +163,10 @@ var ThumbManager = function (options, $){
     var $cloneChildren = $clone.find('*');
     //copy original computed style for children
     $orig.find('*').each(function(index){
-
+      var id = $cloneChildren.eq(index).attr("id");
       $cloneChildren.eq(index)
         //change id only if not empty
-        .attr("id", ($(this).attr("id")== undefined || $(this).attr("id")== '') ? '' : $(this).attr("id") + "-thumb")
+        .attr("id", (id === undefined || id == '') ? '' : id + "-thumb")
         .attr("class", "")
         //copy original computed style
         .css(that.css($(this)));
@@ -215,7 +221,11 @@ var ThumbManager = function (options, $){
     el.dispatchEvent(event);
   };
 
-  this.init()
+  var that = this;
+  $(function(){
+    that.init()
+  })
+  
 
 }
 
